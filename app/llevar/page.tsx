@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getCategorias, getProductos, createPedido } from '@/lib/data'
 import { Categoria, Producto } from '@/lib/types'
 import MenuCard from '@/components/MenuCard'
+import AvisoComanda from '@/components/AvisoComanda'
 import { useCart } from '@/context/CartContext'
 
 type Step = 'menu' | 'auth' | 'datos' | 'confirmado'
@@ -275,6 +276,7 @@ export default function LlevarPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <AvisoComanda />
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-2xl mx-auto px-4">
           <div className="h-14 flex items-center justify-between">

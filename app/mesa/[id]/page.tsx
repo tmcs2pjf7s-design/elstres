@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation'
 import { getCategorias, getProductos, getMesas, createPedido, getPedidosActivos } from '@/lib/data'
 import { Categoria, Producto, Mesa, Pedido } from '@/lib/types'
 import MenuCard from '@/components/MenuCard'
+import AvisoComanda from '@/components/AvisoComanda'
 import { useCart } from '@/context/CartContext'
 
 type Step = 'menu' | 'carrito' | 'auth' | 'datos' | 'confirmado'
@@ -292,6 +293,7 @@ export default function MesaPage() {
   // ── PANTALLA MENÚ (PRINCIPAL) ─────────────────────────────────
   return (
     <div className="min-h-screen bg-gray-50 pb-28">
+      <AvisoComanda />
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-2xl mx-auto px-4">
           <div className="h-14 flex items-center justify-between">
