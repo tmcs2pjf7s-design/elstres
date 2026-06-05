@@ -17,7 +17,8 @@ export default function MenuPage() {
     })
   }, [])
 
-  const filtrados = productos.filter(p => p.disponible && p.categoria_id === cat)
+  const categoriasVisibles = categorias.filter(c => c.tipo !== 'suplemento')
+  const filtrados = productos.filter(p => p.disponible && p.categoria_id === cat && (p as any).categoria_tipo !== 'suplemento')
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -28,7 +29,7 @@ export default function MenuPage() {
             <span className="text-lg font-black">Menú</span>
           </div>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3 -mx-1 px-1">
-            {categorias.map(c => (
+            {categoriasVisibles.map(c => (
               <button key={c.id} onClick={() => setCat(c.id)}
                 className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap ${cat === c.id ? 'bg-accent text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}>
                 <span>{c.icono}</span>

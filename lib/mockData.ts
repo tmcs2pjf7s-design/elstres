@@ -1,14 +1,14 @@
 import { Categoria, Producto, Mesa, Pedido } from './types'
 
 export const mockCategorias: Categoria[] = [
-  { id: 'cat-1', nombre: 'Bocadillos', orden: 1, icono: '🥖' },
-  { id: 'cat-2', nombre: 'Bocadillos Calientes', orden: 2, icono: '🌭' },
-  { id: 'cat-3', nombre: 'Al Plato', orden: 3, icono: '🍽️' },
-  { id: 'cat-4', nombre: 'Tapas Calientes', orden: 4, icono: '🍟' },
-  { id: 'cat-5', nombre: 'Platos Combinados', orden: 5, icono: '🥗' },
-  { id: 'cat-6', nombre: 'Bebidas', orden: 6, icono: '🥤' },
-  { id: 'cat-7', nombre: 'Copas y Licores', orden: 7, icono: '🍸' },
-  { id: 'cat-8', nombre: 'Vinos y Vermut', orden: 8, icono: '🍷' },
+  { id: 'cat-1', nombre: 'Bocadillos', orden: 1, icono: '🥖', tipo: 'normal' },
+  { id: 'cat-2', nombre: 'Bocadillos Calientes', orden: 2, icono: '🌭', tipo: 'normal' },
+  { id: 'cat-3', nombre: 'Al Plato', orden: 3, icono: '🍽️', tipo: 'normal' },
+  { id: 'cat-4', nombre: 'Tapas Calientes', orden: 4, icono: '🍟', tipo: 'normal' },
+  { id: 'cat-5', nombre: 'Platos Combinados', orden: 5, icono: '🥗', tipo: 'normal' },
+  { id: 'cat-6', nombre: 'Bebidas', orden: 6, icono: '🥤', tipo: 'normal' },
+  { id: 'cat-7', nombre: 'Copas y Licores', orden: 7, icono: '🍸', tipo: 'normal' },
+  { id: 'cat-8', nombre: 'Vinos y Vermut', orden: 8, icono: '🍷', tipo: 'normal' },
 ]
 
 const vf = (v: number, f: number) => [

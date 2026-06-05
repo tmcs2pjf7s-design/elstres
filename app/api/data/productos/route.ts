@@ -13,7 +13,12 @@ function parseProducto(row: any) {
 
 export async function GET() {
   try {
-    const { rows } = await pool.query('SELECT * FROM productos ORDER BY nombre')
+    const { rows } = await pool.query(`
+      SELECT p.*, c.tipo AS categoria_tipo, c.nombre AS categoria_nombre
+      FROM productos p
+      LEFT JOIN categorias c ON p.categoria_id = c.id
+      ORDER BY p.nombre
+    `)
     return NextResponse.json(rows.map(parseProducto))
   } catch {
     return NextResponse.json([], { status: 500 })

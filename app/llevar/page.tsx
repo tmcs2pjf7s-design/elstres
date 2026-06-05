@@ -45,7 +45,9 @@ export default function LlevarPage() {
     }
   }, [cliente])
 
-  const filtrados = productos.filter(p => p.disponible && p.categoria_id === cat)
+  const suplementos = productos.filter(p => (p as any).categoria_tipo === 'suplemento' && p.disponible)
+  const categoriasVisibles = categorias.filter(c => c.tipo !== 'suplemento')
+  const filtrados = productos.filter(p => p.disponible && p.categoria_id === cat && (p as any).categoria_tipo !== 'suplemento')
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -298,7 +300,7 @@ export default function LlevarPage() {
             )}
           </div>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3">
-            {categorias.map(c => (
+            {categoriasVisibles.map(c => (
               <button key={c.id} onClick={() => setCat(c.id)}
                 className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-semibold transition-colors ${cat === c.id ? 'bg-accent text-white' : 'bg-gray-100 text-gray-600'}`}>
                 {c.icono} {c.nombre}
@@ -316,7 +318,7 @@ export default function LlevarPage() {
               <p className="text-gray-400 text-sm">Cargando...</p>
             </div>
           )}
-          {filtrados.map(p => <MenuCard key={p.id} producto={p} />)}
+          {filtrados.map(p => <MenuCard key={p.id} producto={p} suplementos={suplementos} />)}
         </div>
       </main>
 

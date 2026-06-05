@@ -3,6 +3,7 @@ export interface Categoria {
   nombre: string
   orden: number
   icono: string
+  tipo: 'normal' | 'suplemento'
 }
 
 export interface Producto {
