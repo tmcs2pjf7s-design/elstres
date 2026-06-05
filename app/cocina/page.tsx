@@ -7,7 +7,7 @@ import { imprimirPedido } from '@/lib/print'
 import PedidoCard from '@/components/PedidoCard'
 
 const COLS: { estado: EstadoPedido; label: string; color: string }[] = [
-  { estado: 'pendiente',      label: '🔴 Nuevos',     color: 'border-red-500'    },
+  { estado: 'confirmado',     label: '🔴 Nuevos',     color: 'border-red-500'    },
   { estado: 'en_preparacion', label: '🟡 Preparando', color: 'border-yellow-500' },
   { estado: 'listo',          label: '🟢 Listos',     color: 'border-green-500'  },
 ]
@@ -56,7 +56,7 @@ export default function CocinaPage() {
       setPedidos(nuevos)
       if (iniciado.current) {
         for (const p of nuevos) {
-          if (!idsConocidos.current.has(p.id) && p.estado === 'pendiente') {
+          if (!idsConocidos.current.has(p.id) && p.estado === 'confirmado') {
             beep()
             imprimirPedido(p, impresorasRef.current)
           }
@@ -78,7 +78,7 @@ export default function CocinaPage() {
     setPedidos(prev => prev.map(p => p.id === id ? { ...p, estado } : p))
   }
 
-  const pendientes = pedidos.filter(p => p.estado === 'pendiente').length
+  const pendientes = pedidos.filter(p => p.estado === 'confirmado').length
 
   if (loading) return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center">

@@ -10,10 +10,10 @@ interface Props {
 }
 
 const SIG: Partial<Record<EstadoPedido, { estado: EstadoPedido; label: string }>> = {
-  pendiente:      { estado: 'en_preparacion', label: '▶ Iniciar'      },
-  confirmado:     { estado: 'en_preparacion', label: '▶ Iniciar'      },
-  en_preparacion: { estado: 'listo',          label: '✓ Marcar listo' },
-  listo:          { estado: 'entregado',       label: '✓ Entregado'   },
+  pendiente:      { estado: 'confirmado',     label: '✓ Verificar y enviar' },
+  confirmado:     { estado: 'en_preparacion', label: '▶ Iniciar preparación' },
+  en_preparacion: { estado: 'listo',          label: '✓ Marcar listo'        },
+  listo:          { estado: 'entregado',       label: '✓ Entregado'          },
 }
 
 export default function PedidoCard({ pedido, onEstado, hora = new Date(), dark = false }: Props) {
@@ -60,8 +60,9 @@ export default function PedidoCard({ pedido, onEstado, hora = new Date(), dark =
           {sig && onEstado && (
             <button onClick={() => onEstado(pedido.id, sig.estado)}
               className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-colors active:scale-95 ${
-                pedido.estado === 'pendiente' ? 'bg-red-500 hover:bg-red-400' :
+                pedido.estado === 'confirmado'     ? 'bg-red-500 hover:bg-red-400' :
                 pedido.estado === 'en_preparacion' ? 'bg-green-500 hover:bg-green-400' :
+                pedido.estado === 'pendiente'      ? 'bg-orange-500 hover:bg-orange-400' :
                 'bg-white/10 hover:bg-white/20'
               } text-white`}>
               {sig.label}
@@ -132,8 +133,9 @@ export default function PedidoCard({ pedido, onEstado, hora = new Date(), dark =
         {sig && onEstado && (
           <button onClick={() => onEstado(pedido.id, sig.estado)}
             className={`px-4 py-1.5 rounded-xl text-sm font-semibold transition-colors ${
-              sig.estado === 'listo' ? 'bg-green-500 text-white hover:bg-green-600' :
+              sig.estado === 'listo'          ? 'bg-green-500 text-white hover:bg-green-600' :
               sig.estado === 'en_preparacion' ? 'bg-accent text-white hover:bg-accent-dark' :
+              sig.estado === 'confirmado'     ? 'bg-orange-500 text-white hover:bg-orange-600' :
               'bg-gray-800 text-white hover:bg-gray-900'
             }`}>
             {sig.label}

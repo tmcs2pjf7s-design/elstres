@@ -1,12 +1,24 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { getMesas, getPedidosActivos, getCategorias, getProductos, createPedido, updateEstadoPedido } from '@/lib/data'
-
 import { Mesa, Pedido, EstadoPedido, Categoria, Producto } from '@/lib/types'
 import PedidoCard from '@/components/PedidoCard'
 
 type Vista = 'mesas' | 'pedidos' | 'nueva-comanda'
+
+function beepVerificar() {
+  try {
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)()
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.connect(gain); gain.connect(ctx.destination)
+    osc.frequency.value = 660
+    gain.gain.setValueAtTime(0.3, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4)
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4)
+  } catch {}
+}
 
 export default function ComanderoPage() {
   const [mesas, setMesas] = useState<Mesa[]>([])
@@ -19,10 +31,13 @@ export default function ComanderoPage() {
   const [carrito, setCarrito] = useState<{ producto: Producto; qty: number }[]>([])
   const [enviando, setEnviando] = useState(false)
   const [hora, setHora] = useState(new Date())
+  const idsConocidos = useRef<Set<string>>(new Set())
+  const iniciado = useRef(false)
 
   const cargarPedidos = useCallback(async () => {
     const data = await getPedidosActivos()
     setPedidos(data)
+    return data
   }, [])
 
   useEffect(() => {
@@ -33,9 +48,22 @@ export default function ComanderoPage() {
         setCategorias(cats)
         setProductos(prods)
         if (cats.length) setCat(cats[0].id)
+        ps.forEach(p => idsConocidos.current.add(p.id))
+        iniciado.current = true
       })
 
-    const interval = setInterval(cargarPedidos, 5000)
+    const interval = setInterval(async () => {
+      const nuevos = await getPedidosActivos()
+      setPedidos(nuevos)
+      if (iniciado.current) {
+        for (const p of nuevos) {
+          if (!idsConocidos.current.has(p.id) && p.estado === 'pendiente') {
+            beepVerificar()
+          }
+          idsConocidos.current.add(p.id)
+        }
+      }
+    }, 4000)
     return () => clearInterval(interval)
   }, [cargarPedidos])
 
@@ -44,6 +72,11 @@ export default function ComanderoPage() {
     return () => clearInterval(t)
   }, [])
 
+  // Pedidos de mesa pendientes de verificación
+  const pendientesVerificar = pedidos.filter(
+    p => p.estado === 'pendiente' && p.tipo === 'mesa'
+  )
+
   const pedidosMesa = mesaSel
     ? pedidos.filter(p => p.mesa_id === mesaSel.id && !['entregado', 'cancelado'].includes(p.estado))
     : []
@@ -51,6 +84,10 @@ export default function ComanderoPage() {
   const cambiarEstado = async (id: string, estado: EstadoPedido) => {
     await updateEstadoPedido(id, estado)
     setPedidos(prev => prev.map(p => p.id === id ? { ...p, estado } : p))
+  }
+
+  const verificarPedido = async (id: string) => {
+    await cambiarEstado(id, 'confirmado')
   }
 
   const agregarCarrito = (p: Producto) => {
@@ -83,7 +120,7 @@ export default function ComanderoPage() {
   }
 
   const productosFiltrados = productos.filter(p => p.disponible && p.categoria_id === cat)
-  const totalCarrito = carrito.reduce((s, i) => s + (i.producto.variantes?.[0]?.precio ?? i.producto.precio) * i.qty, 0)
+  const totalCarrito = carrito.reduce((s, i) => s + Number(i.producto.variantes?.[0]?.precio ?? i.producto.precio) * i.qty, 0)
   const itemsCarrito = carrito.reduce((s, i) => s + i.qty, 0)
 
   return (
@@ -109,10 +146,76 @@ export default function ComanderoPage() {
 
       <main className="max-w-2xl mx-auto px-4 py-4">
 
-        {/* MESAS */}
+        {/* ── ALERTA PENDIENTES DE VERIFICAR ─────────────────── */}
+        {pendientesVerificar.length > 0 && (
+          <div className="mb-5 bg-orange-50 border-2 border-orange-300 rounded-2xl overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 bg-orange-500">
+              <div className="flex items-center gap-2">
+                <span className="text-white text-lg animate-pulse">🔔</span>
+                <span className="text-white font-black text-sm">
+                  {pendientesVerificar.length} pedido{pendientesVerificar.length > 1 ? 's' : ''} esperando verificación
+                </span>
+              </div>
+              <span className="text-orange-100 text-xs font-medium">Ir a la mesa y confirmar</span>
+            </div>
+            <div className="divide-y divide-orange-100">
+              {pendientesVerificar.map(p => (
+                <div key={p.id} className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl font-black">#{p.numero_orden}</span>
+                        <span className="text-sm font-semibold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-lg">
+                          {p.mesa?.tipo === 'barra' ? `🍺 Barra ${p.mesa?.numero}` : `🪑 Mesa ${p.mesa?.numero ?? '?'}`}
+                        </span>
+                      </div>
+                      {p.cliente_nombre && (
+                        <p className="text-sm text-gray-500 mt-0.5">{p.cliente_nombre}</p>
+                      )}
+                    </div>
+                    <span className="text-sm font-bold text-orange-600">{Number(p.total ?? 0).toFixed(2)}€</span>
+                  </div>
+
+                  <ul className="space-y-1 mb-4">
+                    {(p.items ?? []).map((item, i) => (
+                      <li key={i} className="flex justify-between text-sm">
+                        <span>
+                          <span className="font-bold">{item.cantidad}×</span>
+                          {' '}{item.producto?.nombre ?? '—'}
+                          {item.notas && <span className="text-gray-400 text-xs ml-1">({item.notas})</span>}
+                        </span>
+                        <span className="text-gray-400">{(Number(item.precio ?? 0) * item.cantidad).toFixed(2)}€</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {p.notas && (
+                    <p className="text-xs bg-amber-50 text-amber-800 border border-amber-200 rounded-xl px-3 py-2 mb-3">
+                      📝 {p.notas}
+                    </p>
+                  )}
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => verificarPedido(p.id)}
+                      className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-xl text-sm font-bold transition-colors active:scale-95">
+                      ✓ Verificar y enviar a cocina
+                    </button>
+                    <button
+                      onClick={() => cambiarEstado(p.id, 'cancelado')}
+                      className="px-3 py-2.5 rounded-xl text-sm font-semibold bg-red-50 text-red-500 hover:bg-red-100 transition-colors">
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── MESAS ──────────────────────────────────────────── */}
         {vista === 'mesas' && (
           <div>
-            {/* Mesas */}
             {mesas.filter(m => m.tipo !== 'barra').length > 0 && (
               <>
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">🪑 Mesas</p>
@@ -120,20 +223,26 @@ export default function ComanderoPage() {
                   {mesas.filter(m => m.tipo !== 'barra').map(mesa => {
                     const activos = pedidos.filter(
                       p => p.mesa_id === mesa.id && !['entregado', 'cancelado'].includes(p.estado)
-                    ).length
+                    )
+                    const tienePendiente = activos.some(p => p.estado === 'pendiente')
                     return (
                       <button key={mesa.id}
                         onClick={() => { setMesaSel(mesa); setVista('pedidos') }}
                         className={`rounded-2xl p-4 flex flex-col items-center gap-1 border-2 transition-all ${
-                          activos > 0 ? 'bg-accent/5 border-accent text-accent' :
+                          tienePendiente ? 'bg-orange-50 border-orange-400 text-orange-700 animate-pulse' :
+                          activos.length > 0 ? 'bg-accent/5 border-accent text-accent' :
                           mesa.estado === 'reservada' ? 'bg-blue-50 border-blue-200 text-blue-600' :
                           'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
                         }`}>
                         <span className="text-2xl font-black">{mesa.numero}</span>
                         <span className="text-xs font-medium">{mesa.capacidad} pax</span>
-                        {activos > 0 ? (
+                        {tienePendiente ? (
+                          <span className="text-xs bg-orange-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                            ⚡ Verificar
+                          </span>
+                        ) : activos.length > 0 ? (
                           <span className="text-xs bg-accent text-white px-1.5 py-0.5 rounded-full font-bold">
-                            {activos} pedido{activos > 1 ? 's' : ''}
+                            {activos.length} pedido{activos.length > 1 ? 's' : ''}
                           </span>
                         ) : mesa.estado === 'reservada' ? (
                           <span className="text-xs">Reservada</span>
@@ -146,7 +255,6 @@ export default function ComanderoPage() {
                 </div>
               </>
             )}
-            {/* Barra */}
             {mesas.filter(m => m.tipo === 'barra').length > 0 && (
               <>
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">🍺 Barra</p>
@@ -154,19 +262,23 @@ export default function ComanderoPage() {
                   {mesas.filter(m => m.tipo === 'barra').map(mesa => {
                     const activos = pedidos.filter(
                       p => p.mesa_id === mesa.id && !['entregado', 'cancelado'].includes(p.estado)
-                    ).length
+                    )
+                    const tienePendiente = activos.some(p => p.estado === 'pendiente')
                     return (
                       <button key={mesa.id}
                         onClick={() => { setMesaSel(mesa); setVista('pedidos') }}
                         className={`rounded-2xl p-4 flex flex-col items-center gap-1 border-2 transition-all ${
-                          activos > 0 ? 'bg-blue-50 border-blue-400 text-blue-700' :
+                          tienePendiente ? 'bg-orange-50 border-orange-400 text-orange-700 animate-pulse' :
+                          activos.length > 0 ? 'bg-blue-50 border-blue-400 text-blue-700' :
                           'bg-white border-blue-100 text-blue-500 hover:border-blue-300'
                         }`}>
                         <span className="text-xl">🍺</span>
                         <span className="text-xl font-black">{mesa.numero}</span>
-                        {activos > 0 ? (
+                        {tienePendiente ? (
+                          <span className="text-xs bg-orange-500 text-white px-1.5 py-0.5 rounded-full font-bold">⚡ Verificar</span>
+                        ) : activos.length > 0 ? (
                           <span className="text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full font-bold">
-                            {activos} pedido{activos > 1 ? 's' : ''}
+                            {activos.length} pedido{activos.length > 1 ? 's' : ''}
                           </span>
                         ) : (
                           <span className="text-xs text-blue-300">Libre</span>
@@ -180,7 +292,7 @@ export default function ComanderoPage() {
           </div>
         )}
 
-        {/* PEDIDOS */}
+        {/* ── PEDIDOS ─────────────────────────────────────────── */}
         {vista === 'pedidos' && (
           <div>
             {mesaSel ? (
@@ -237,7 +349,7 @@ export default function ComanderoPage() {
           </div>
         )}
 
-        {/* NUEVA COMANDA */}
+        {/* ── NUEVA COMANDA ───────────────────────────────────── */}
         {vista === 'nueva-comanda' && (
           <div className="pb-28">
             <div className="flex items-center gap-3 mb-4">
@@ -261,13 +373,13 @@ export default function ComanderoPage() {
             <div className="space-y-2">
               {productosFiltrados.map(p => {
                 const qty = carrito.find(i => i.producto.id === p.id)?.qty ?? 0
-                const precio = p.variantes?.[0]?.precio ?? p.precio
+                const precio = Number(p.variantes?.[0]?.precio ?? p.precio)
                 return (
                   <div key={p.id} className="bg-white rounded-xl px-4 py-3 border border-gray-100 flex items-center gap-3">
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-sm truncate">{p.nombre}</p>
                       <p className="text-accent text-sm font-bold">
-                        {precio.toFixed(2)}€{p.variantes ? <span className="text-gray-400 font-normal text-xs"> +</span> : ''}
+                        {precio.toFixed(2)}€{p.variantes ? <span className="text-gray-400 font-normal text-xs"> +vars</span> : ''}
                       </p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
