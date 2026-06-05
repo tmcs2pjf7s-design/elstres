@@ -15,6 +15,7 @@ function AdminMenuContent() {
   const [categorias, setCategorias] = useState<Categoria[]>([])
   const [productos, setProductos] = useState<Producto[]>([])
   const [catFiltro, setCatFiltro] = useState('todos')
+  const [busqueda, setBusqueda] = useState('')
   const [editando, setEditando] = useState<Producto | null>(null)
   const [nuevo, setNuevo] = useState(false)
   const [form, setForm] = useState<Omit<Producto, 'id'> | null>(null)
@@ -27,7 +28,9 @@ function AdminMenuContent() {
     })
   }, [])
 
-  const filtrados = catFiltro === 'todos' ? productos : productos.filter(p => p.categoria_id === catFiltro)
+  const filtrados = productos
+    .filter(p => catFiltro === 'todos' || p.categoria_id === catFiltro)
+    .filter(p => !busqueda || p.nombre.toLowerCase().includes(busqueda.toLowerCase()))
 
   const abrirNuevo = () => { setNuevo(true); setEditando(null); setForm(emptyForm(categorias)) }
   const abrirEditar = (p: Producto) => { setEditando(p); setNuevo(false); setForm({ ...p }) }
@@ -70,7 +73,25 @@ function AdminMenuContent() {
       </header>
 
       <main className="max-w-5xl mx-auto px-5 py-6">
-        {/* Filtros */}
+        {/* Buscador */}
+        <div className="relative mb-4">
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+          <input
+            type="search"
+            value={busqueda}
+            onChange={e => setBusqueda(e.target.value)}
+            placeholder="Buscar producto..."
+            className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-accent bg-white"
+          />
+          {busqueda && (
+            <button onClick={() => setBusqueda('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg leading-none">
+              ×
+            </button>
+          )}
+        </div>
+
+        {/* Filtros categoría */}
         <div className="flex gap-2 overflow-x-auto scrollbar-hide mb-5">
           <button onClick={() => setCatFiltro('todos')}
             className={`flex-shrink-0 px-4 py-1.5 rounded-xl text-sm font-semibold transition-colors ${catFiltro === 'todos' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'}`}>
@@ -130,6 +151,13 @@ function AdminMenuContent() {
               </button>
             </div>
           </div>
+        )}
+
+        {/* Resultados */}
+        {busqueda && (
+          <p className="text-sm text-gray-500 mb-3">
+            {filtrados.length} resultado{filtrados.length !== 1 ? 's' : ''} para <strong>"{busqueda}"</strong>
+          </p>
         )}
 
         {/* Tabla */}
