@@ -103,8 +103,54 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-gray-900 py-8 text-center text-gray-500 text-sm">
-        © 2026 Frankfurt Els Tr3s · Todos los derechos reservados
+      <footer className="bg-gray-900 py-10 text-gray-500 text-sm">
+        <div className="max-w-6xl mx-auto px-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
+            {/* Marca */}
+            <div>
+              <p className="text-white font-black text-lg mb-2">Frankfurt Els Tr3s</p>
+              <p className="text-gray-400 text-xs leading-relaxed">
+                Frankfurts, bocadillos y hamburguesas al momento.<br />
+                Tapas, torradas y postres de Terrassa.
+              </p>
+            </div>
+            {/* Dirección */}
+            <div>
+              <p className="text-white font-semibold text-xs uppercase tracking-wider mb-2">Dónde estamos</p>
+              <address className="not-italic text-gray-400 text-xs leading-relaxed">
+                Passeig de Lluís Muncunill, 9, local 6<br />
+                08225 Terrassa, Barcelona
+              </address>
+              <a
+                href="https://maps.google.com/?q=Passeig+de+Lluís+Muncunill+9+Terrassa"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-2 text-xs text-accent hover:underline"
+              >
+                Ver en Google Maps →
+              </a>
+            </div>
+            {/* Legal */}
+            <div>
+              <p className="text-white font-semibold text-xs uppercase tracking-wider mb-2">Legal</p>
+              <ul className="space-y-1.5">
+                <li>
+                  <Link href="/privacidad" className="text-gray-400 text-xs hover:text-white transition-colors">
+                    Política de privacidad
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/cookies" className="text-gray-400 text-xs hover:text-white transition-colors">
+                    Política de cookies
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-6 text-center text-gray-600 text-xs">
+            © 2026 Frankfurt Els Tr3s · Passeig de Lluís Muncunill, 9, local 6 · 08225 Terrassa · Todos los derechos reservados
+          </div>
+        </div>
       </footer>
     </div>
   )
