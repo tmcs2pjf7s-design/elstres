@@ -465,7 +465,7 @@ export const mockPedidos: Pedido[] = [
     id: 'ped-1',
     tipo: 'mesa',
     mesa_id: 'mesa-3',
-    mesa: { id: 'mesa-3', numero: 3, capacidad: 4, estado: 'ocupada' },
+    mesa: { id: 'mesa-3', numero: 3, capacidad: 4, estado: 'ocupada', tipo: 'mesa' as const },
     estado: 'en_preparacion',
     total: 12.40,
     numero_orden: 1,
