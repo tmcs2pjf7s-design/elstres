@@ -109,10 +109,13 @@ export default function Home() {
             {/* Marca */}
             <div>
               <p className="text-white font-black text-lg mb-2">Frankfurt Els Tr3s</p>
-              <p className="text-gray-400 text-xs leading-relaxed">
+              <p className="text-gray-400 text-xs leading-relaxed mb-3">
                 Frankfurts, bocadillos y hamburguesas al momento.<br />
                 Tapas, torradas y postres de Terrassa.
               </p>
+              <a href="tel:930042165" className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white text-xs transition-colors">
+                <span>📞</span> 930 042 165
+              </a>
             </div>
             {/* Dirección */}
             <div>
@@ -147,8 +150,22 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-6 text-center text-gray-600 text-xs">
-            © 2026 Frankfurt Els Tr3s · Passeig de Lluís Muncunill, 9, local 6 · 08225 Terrassa · Todos los derechos reservados
+          <div className="border-t border-gray-800 pt-6 text-center text-gray-600 text-xs space-y-2">
+            <p>© 2026 Frankfurt Els Tr3s · Passeig de Lluís Muncunill, 9, local 6 · 08225 Terrassa · Todos los derechos reservados</p>
+            <p>
+              Web creada por{' '}
+              <span className="text-gray-400 font-semibold">RushSystems</span>
+              {' · '}Patrocinado por{' '}
+              <a
+                href="https://nomecreo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 font-semibold hover:text-white transition-colors"
+              >
+                nomecreo.com
+              </a>
+              {' '}— Servicios TI y Ciberseguridad para empresas
+            </p>
           </div>
         </div>
       </footer>
