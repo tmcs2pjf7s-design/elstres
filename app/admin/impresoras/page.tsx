@@ -6,6 +6,98 @@ import { getImpresoras, upsertImpresora, deleteImpresora, getCategorias } from '
 import { Impresora, Categoria, TipoImpresora, ProtocoloImpresora } from '@/lib/types'
 import { testImpresora, printVentana, buildTicketHtml } from '@/lib/print'
 
+function ModalDescargaWindows({ onClose }: { onClose: () => void }) {
+  const pasos = [
+    { n: 1, titulo: 'Descarga BXLPrint Agent', desc: 'Ve a bixolon.com → Support → Software → BXLPrint Agent. Descarga la versión para Windows.' },
+    { n: 2, titulo: 'Instala el programa', desc: 'Ejecuta el instalador como administrador. El agente se instala como servicio de Windows y arranca solo.' },
+    { n: 3, titulo: 'Conecta la impresora', desc: 'Conecta la Bixolon al mismo WiFi que el ordenador del local. Anota la IP (aparece en el menú de la impresora → Network).' },
+    { n: 4, titulo: 'Añade la impresora aquí', desc: 'Vuelve a este panel, pulsa "+ Añadir impresora", elige Bixolon SRP, introduce el nombre y la IP.' },
+    { n: 5, titulo: 'Test de impresión', desc: 'Pulsa "🖨 Test" en la impresora configurada. Si sale el ticket, ¡todo listo!' },
+  ]
+
+  return (
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+      onClick={onClose}>
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="bg-gray-900 rounded-t-3xl p-6 text-white">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🖥️</span>
+              <div>
+                <h2 className="text-lg font-black">Software de impresión Windows</h2>
+                <p className="text-gray-400 text-xs">BXLPrint Agent — Bixolon</p>
+              </div>
+            </div>
+            <button onClick={onClose} className="text-gray-400 hover:text-white text-2xl leading-none">×</button>
+          </div>
+          <p className="text-sm text-gray-300 leading-relaxed">
+            Para imprimir tickets automáticamente desde el navegador necesitas instalar
+            <strong className="text-white"> BXLPrint Agent</strong> en el ordenador Windows del local.
+            Es gratuito y tarda 2 minutos.
+          </p>
+        </div>
+
+        {/* Download button */}
+        <div className="p-6 border-b border-gray-100">
+          <a
+            href="https://www.bixolon.com/board.php?board_code=pds_software&cate=PRT&pageNum=1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between w-full bg-gray-900 hover:bg-gray-700 text-white px-5 py-4 rounded-2xl transition-colors group"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">⬇️</span>
+              <div className="text-left">
+                <p className="font-bold text-sm">Descargar BXLPrint Agent</p>
+                <p className="text-gray-400 text-xs">bixolon.com · Descarga gratuita</p>
+              </div>
+            </div>
+            <span className="text-gray-400 group-hover:text-white text-sm">↗</span>
+          </a>
+
+          <p className="text-xs text-gray-400 mt-3 text-center">
+            Windows 10 / 11 · Compatible con Bixolon SRP-350, SRP-380, SRP-Q300 y otros
+          </p>
+        </div>
+
+        {/* Pasos */}
+        <div className="p-6">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Guía de instalación</p>
+          <div className="space-y-4">
+            {pasos.map(p => (
+              <div key={p.n} className="flex gap-4">
+                <div className="w-7 h-7 rounded-full bg-gray-900 text-white text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">
+                  {p.n}
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">{p.titulo}</p>
+                  <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{p.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Epson info */}
+          <div className="mt-6 bg-blue-50 rounded-2xl p-4">
+            <p className="text-sm font-bold text-blue-800 mb-1">¿Tienes una Epson TM?</p>
+            <p className="text-xs text-blue-600 leading-relaxed">
+              Las Epson TM-T20, TM-T88 y TM-m30 se conectan directamente por WiFi — no necesitas instalar nada.
+              Solo conéctala a la red del local, anota su IP y añádela como <strong>Epson TM</strong>.
+            </p>
+          </div>
+
+          <button onClick={onClose}
+            className="w-full mt-5 bg-gray-100 text-gray-700 py-3 rounded-2xl font-semibold text-sm hover:bg-gray-200 transition-colors">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const PROTOCOLOS: { value: ProtocoloImpresora; label: string; icon: string; desc: string; setup: string }[] = [
   {
     value: 'bixolon',
@@ -48,6 +140,7 @@ function ImpresorasContent() {
   const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState<string | null>(null)
   const [testResult, setTestResult] = useState<Record<string, boolean | null>>({})
+  const [showDescarga, setShowDescarga] = useState(false)
 
   useEffect(() => {
     Promise.all([getImpresoras(), getCategorias()]).then(([imps, cats]) => {
@@ -115,10 +208,16 @@ function ImpresorasContent() {
             <Link href="/admin" className="text-gray-400 text-sm font-medium">← Admin</Link>
             <span className="font-black text-lg">🖨️ Impresoras</span>
           </div>
-          <button onClick={abrirNuevo}
-            className="bg-accent text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-accent-dark transition-colors">
-            + Añadir impresora
-          </button>
+          <div className="flex gap-2">
+            <button onClick={() => setShowDescarga(true)}
+              className="flex items-center gap-1.5 bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-700 transition-colors">
+              🖥️ Descargar para Windows
+            </button>
+            <button onClick={abrirNuevo}
+              className="bg-accent text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-accent-dark transition-colors">
+              + Añadir impresora
+            </button>
+          </div>
         </div>
       </header>
 
@@ -301,6 +400,8 @@ function ImpresorasContent() {
           </div>
         )}
       </main>
+
+      {showDescarga && <ModalDescargaWindows onClose={() => setShowDescarga(false)} />}
     </div>
   )
 }
