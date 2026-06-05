@@ -89,7 +89,7 @@ export default function CookiesPage() {
             <p>
               Para cualquier consulta sobre esta política:<br />
               <strong>Frankfurt Els Tr3s</strong> · Passeig de Lluís Muncunill, 9, local 6, 08225 Terrassa<br />
-              <a href="mailto:info@frankfurtels3s.com" className="text-accent hover:underline">info@frankfurtels3s.com</a>
+              <a href="mailto:elstresmuncunil@gmail.com" className="text-accent hover:underline">elstresmuncunil@gmail.com</a>
             </p>
           </section>
 

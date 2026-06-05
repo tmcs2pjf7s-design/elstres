@@ -26,7 +26,7 @@ export default function PrivacidadPage() {
               <strong>Frankfurt Els Tr3s</strong><br />
               Passeig de Lluís Muncunill, 9, local 6<br />
               08225 Terrassa, Barcelona<br />
-              Contacto: <a href="mailto:info@frankfurtels3s.com" className="text-accent hover:underline">info@frankfurtels3s.com</a>
+              Contacto: <a href="mailto:elstresmuncunil@gmail.com" className="text-accent hover:underline">elstresmuncunil@gmail.com</a>
             </p>
           </section>
 
@@ -74,7 +74,7 @@ export default function PrivacidadPage() {
               <li><strong>Portabilidad:</strong> recibir tus datos en formato estructurado.</li>
               <li><strong>Oposición:</strong> oponerte al tratamiento de tus datos.</li>
             </ul>
-            <p className="mt-3">Para ejercer estos derechos, escríbenos a <a href="mailto:info@frankfurtels3s.com" className="text-accent hover:underline">info@frankfurtels3s.com</a>. También puedes reclamar ante la <strong>Agencia Española de Protección de Datos</strong> (<a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">aepd.es</a>).</p>
+            <p className="mt-3">Para ejercer estos derechos, escríbenos a <a href="mailto:elstresmuncunil@gmail.com" className="text-accent hover:underline">elstresmuncunil@gmail.com</a>. También puedes reclamar ante la <strong>Agencia Española de Protección de Datos</strong> (<a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">aepd.es</a>).</p>
           </section>
 
           <section>
