@@ -58,8 +58,8 @@ export default function Home() {
 
           <div className="hidden lg:grid grid-cols-2 gap-4">
             {[
-              'https://images.unsplash.com/photo-1546833998-877b37c2e5c6?w=300&q=80',
-              'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=300&q=80',
+              '/foto1.png',
+              '/foto2.png',
               'https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=300&q=80',
               'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&q=80',
             ].map((src, i) => (
