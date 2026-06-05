@@ -99,10 +99,10 @@ function AdminContent() {
         <h2 className="font-black text-lg mb-4">Accesos rápidos</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
           {[
-            { href: '/cocina',    icon: '👨‍🍳', label: 'Cocina',      sub: 'Tiempo real' },
-            { href: '/comandero', icon: '🧑‍💼', label: 'Comandero',   sub: 'Gestión mesas' },
-            { href: '/llevar',    icon: '🛵', label: 'Para llevar', sub: 'Hacer pedido' },
-            { href: '/menu',      icon: '📋', label: 'Ver menú',    sub: 'Carta digital' },
+            { href: '/cocina',           icon: '👨‍🍳', label: 'Cocina',      sub: 'Tiempo real' },
+            { href: '/comandero',        icon: '🧑‍💼', label: 'Comandero',   sub: 'Gestión mesas' },
+            { href: '/llevar',           icon: '🛵', label: 'Para llevar', sub: 'Hacer pedido' },
+            { href: '/admin/historial',  icon: '📊', label: 'Historial',   sub: 'Cierre de caja' },
           ].map(a => (
             <Link key={a.href} href={a.href}
               className="flex flex-col items-center gap-2 bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-md transition-shadow text-center">
@@ -135,6 +135,13 @@ function AdminContent() {
             <div>
               <h3 className="font-bold">Impresoras</h3>
               <p className="text-sm text-gray-500">Conectar por WiFi · Cocina, barra, ticket</p>
+            </div>
+          </Link>
+          <Link href="/admin/historial" className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+            <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-2xl">📊</div>
+            <div>
+              <h3 className="font-bold">Historial y caja</h3>
+              <p className="text-sm text-gray-500">Pedidos del día · Cierre de caja</p>
             </div>
           </Link>
         </div>
