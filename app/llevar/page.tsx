@@ -58,12 +58,18 @@ export default function LlevarPage() {
     searchTimer.current = setTimeout(async () => {
       try {
         const res = await fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=6&countrycodes=es`,
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q + ' Terrassa')}&format=json&addressdetails=1&limit=8&countrycodes=es&viewbox=1.99,41.52,2.13,41.59&bounded=1`,
           { headers: { 'Accept-Language': 'es' } }
         )
         const data = await res.json()
-        setSugerencias(data)
-        setShowSugg(data.length > 0)
+        // Solo resultados dentro de Terrassa
+        const terrassa = data.filter((item: any) => {
+          const a = item.address ?? {}
+          const ciudad = (a.city ?? a.town ?? a.municipality ?? a.village ?? '').toLowerCase()
+          return ciudad.includes('terrassa') || ciudad.includes('tarrasa')
+        })
+        setSugerencias(terrassa)
+        setShowSugg(terrassa.length > 0)
       } catch {}
       setBuscandoDir(false)
     }, 450)
