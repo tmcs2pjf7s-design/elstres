@@ -36,7 +36,7 @@ export default function Carrito({ onConfirmar, loading }: Props) {
 
           <div className="flex-1 overflow-y-auto p-5 space-y-4">
             {items.map(item => {
-              const precio = item.variante?.precio ?? item.producto.precio
+              const precio = Number(item.variante?.precio ?? item.producto.precio)
               const key = item.variante ? `${item.producto.id}-${item.variante.nombre}` : item.producto.id
               return (
                 <div key={key} className="flex items-center gap-4">

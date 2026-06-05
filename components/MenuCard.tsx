@@ -8,7 +8,7 @@ export default function MenuCard({ producto }: { producto: Producto }) {
   const [showVariantes, setShowVariantes] = useState(false)
 
   const tieneVariantes = producto.variantes && producto.variantes.length > 0
-  const precioBase = tieneVariantes ? producto.variantes![0].precio : producto.precio
+  const precioBase = Number(tieneVariantes ? producto.variantes![0].precio : producto.precio)
   const cartItems = items.filter(i => i.producto.id === producto.id)
   const totalQty = cartItems.reduce((s, i) => s + i.cantidad, 0)
 
@@ -33,7 +33,7 @@ export default function MenuCard({ producto }: { producto: Producto }) {
             <div className="flex gap-1.5 mt-2 flex-wrap">
               {producto.variantes!.map(v => (
                 <span key={v.nombre} className="text-xs bg-orange-50 text-accent px-2 py-0.5 rounded-lg font-semibold">
-                  {v.nombre} {v.precio.toFixed(2)}€
+                  {v.nombre} {Number(v.precio).toFixed(2)}€
                 </span>
               ))}
             </div>
@@ -95,7 +95,7 @@ export default function MenuCard({ producto }: { producto: Producto }) {
                       {v.nombre === 'Viena' ? 'Bocadillo pequeño' : 'Bocadillo grande'}
                     </p>
                   </div>
-                  <span className="text-2xl font-black text-accent">{v.precio.toFixed(2)}€</span>
+                  <span className="text-2xl font-black text-accent">{Number(v.precio).toFixed(2)}€</span>
                 </button>
               ))}
             </div>

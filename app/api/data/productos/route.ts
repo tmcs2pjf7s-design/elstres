@@ -1,10 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pool } from '@/lib/db'
 
+function parseProducto(row: any) {
+  return {
+    ...row,
+    precio: parseFloat(row.precio),
+    variantes: row.variantes
+      ? row.variantes.map((v: any) => ({ ...v, precio: parseFloat(v.precio) }))
+      : null,
+  }
+}
+
 export async function GET() {
   try {
     const { rows } = await pool.query('SELECT * FROM productos ORDER BY nombre')
-    return NextResponse.json(rows)
+    return NextResponse.json(rows.map(parseProducto))
   } catch {
     return NextResponse.json([], { status: 500 })
   }

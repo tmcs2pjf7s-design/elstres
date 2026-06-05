@@ -1,11 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pool } from '@/lib/db'
 
+function parsePedido(row: any) {
+  return {
+    ...row,
+    total: parseFloat(row.total ?? 0),
+    mesa: row.mesa?.id ? row.mesa : undefined,
+    items: (row.items ?? [])
+      .filter((i: any) => i.id !== null)
+      .map((i: any) => ({ ...i, precio: parseFloat(i.precio ?? 0) })),
+  }
+}
+
 export async function GET() {
   try {
     const { rows } = await pool.query(`
       SELECT p.*,
-        json_build_object('id', m.id, 'numero', m.numero, 'capacidad', m.capacidad, 'estado', m.estado) AS mesa,
+        json_build_object('id', m.id, 'numero', m.numero, 'capacidad', m.capacidad, 'estado', m.estado, 'tipo', m.tipo) AS mesa,
         json_agg(
           json_build_object(
             'id', pi.id, 'pedido_id', pi.pedido_id, 'producto_id', pi.producto_id,
@@ -24,11 +35,7 @@ export async function GET() {
       GROUP BY p.id, m.id
       ORDER BY p.created_at ASC
     `)
-    return NextResponse.json(rows.map(r => ({
-      ...r,
-      mesa: r.mesa?.id ? r.mesa : undefined,
-      items: r.items?.filter((i: any) => i.id !== null) ?? [],
-    })))
+    return NextResponse.json(rows.map(parsePedido))
   } catch (e) {
     console.error(e)
     return NextResponse.json([], { status: 500 })

@@ -116,7 +116,7 @@ export default function PedidoCard({ pedido, onEstado, hora = new Date(), dark =
               {' '}<span className="text-gray-700">{item.producto?.nombre ?? '—'}</span>
               {item.notas && <span className="text-gray-400 text-xs ml-1">({item.notas})</span>}
             </span>
-            <span className="text-gray-400">{((item.precio ?? 0) * item.cantidad).toFixed(2)}€</span>
+            <span className="text-gray-400">{(Number(item.precio ?? 0) * item.cantidad).toFixed(2)}€</span>
           </li>
         ))}
       </ul>
