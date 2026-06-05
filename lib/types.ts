@@ -22,6 +22,7 @@ export interface Mesa {
   numero: number
   capacidad: number
   estado: 'libre' | 'ocupada' | 'reservada'
+  tipo: 'mesa' | 'barra'
 }
 
 export type TipoPedido = 'mesa' | 'llevar'

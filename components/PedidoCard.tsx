@@ -21,7 +21,10 @@ export default function PedidoCard({ pedido, onEstado, hora = new Date(), dark =
   const mins = Math.floor((hora.getTime() - new Date(pedido.created_at).getTime()) / 60000)
   const urgente = pedido.estado === 'pendiente' && mins >= 5
   const total = (pedido.total ?? 0).toFixed(2)
-  const tipo = pedido.tipo === 'mesa' ? `Mesa ${pedido.mesa?.numero ?? '?'}` : '🛵 Llevar'
+  const esBarra = pedido.mesa?.tipo === 'barra'
+  const tipo = pedido.tipo === 'mesa'
+    ? (esBarra ? `🍺 Barra ${pedido.mesa?.numero ?? '?'}` : `Mesa ${pedido.mesa?.numero ?? '?'}`)
+    : '🛵 Llevar'
 
   if (dark) {
     return (
@@ -84,8 +87,12 @@ export default function PedidoCard({ pedido, onEstado, hora = new Date(), dark =
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-2xl font-black">#{pedido.numero_orden}</span>
             {pedido.tipo === 'mesa' && pedido.mesa && (
-              <span className="text-sm font-semibold bg-gray-100 text-gray-700 px-2 py-0.5 rounded-lg">
-                Mesa {pedido.mesa.numero}
+              <span className={`text-sm font-semibold px-2 py-0.5 rounded-lg ${
+                pedido.mesa.tipo === 'barra'
+                  ? 'bg-blue-50 text-blue-700'
+                  : 'bg-gray-100 text-gray-700'
+              }`}>
+                {pedido.mesa.tipo === 'barra' ? '🍺' : '🪑'} {pedido.mesa.tipo === 'barra' ? 'Barra' : 'Mesa'} {pedido.mesa.numero}
               </span>
             )}
             {pedido.tipo === 'llevar' && (

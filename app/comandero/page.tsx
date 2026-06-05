@@ -112,35 +112,71 @@ export default function ComanderoPage() {
         {/* MESAS */}
         {vista === 'mesas' && (
           <div>
-            <p className="text-sm text-gray-500 mb-4 font-medium">Selecciona una mesa</p>
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-              {mesas.map(mesa => {
-                const activos = pedidos.filter(
-                  p => p.mesa_id === mesa.id && !['entregado', 'cancelado'].includes(p.estado)
-                ).length
-                return (
-                  <button key={mesa.id}
-                    onClick={() => { setMesaSel(mesa); setVista('pedidos') }}
-                    className={`rounded-2xl p-4 flex flex-col items-center gap-1 border-2 transition-all ${
-                      activos > 0 ? 'bg-accent/5 border-accent text-accent' :
-                      mesa.estado === 'reservada' ? 'bg-blue-50 border-blue-200 text-blue-600' :
-                      'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
-                    }`}>
-                    <span className="text-2xl font-black">{mesa.numero}</span>
-                    <span className="text-xs font-medium">{mesa.capacidad} pax</span>
-                    {activos > 0 ? (
-                      <span className="text-xs bg-accent text-white px-1.5 py-0.5 rounded-full font-bold">
-                        {activos} pedido{activos > 1 ? 's' : ''}
-                      </span>
-                    ) : mesa.estado === 'reservada' ? (
-                      <span className="text-xs">Reservada</span>
-                    ) : (
-                      <span className="text-xs text-gray-400">Libre</span>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
+            {/* Mesas */}
+            {mesas.filter(m => m.tipo !== 'barra').length > 0 && (
+              <>
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">🪑 Mesas</p>
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-6">
+                  {mesas.filter(m => m.tipo !== 'barra').map(mesa => {
+                    const activos = pedidos.filter(
+                      p => p.mesa_id === mesa.id && !['entregado', 'cancelado'].includes(p.estado)
+                    ).length
+                    return (
+                      <button key={mesa.id}
+                        onClick={() => { setMesaSel(mesa); setVista('pedidos') }}
+                        className={`rounded-2xl p-4 flex flex-col items-center gap-1 border-2 transition-all ${
+                          activos > 0 ? 'bg-accent/5 border-accent text-accent' :
+                          mesa.estado === 'reservada' ? 'bg-blue-50 border-blue-200 text-blue-600' :
+                          'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
+                        }`}>
+                        <span className="text-2xl font-black">{mesa.numero}</span>
+                        <span className="text-xs font-medium">{mesa.capacidad} pax</span>
+                        {activos > 0 ? (
+                          <span className="text-xs bg-accent text-white px-1.5 py-0.5 rounded-full font-bold">
+                            {activos} pedido{activos > 1 ? 's' : ''}
+                          </span>
+                        ) : mesa.estado === 'reservada' ? (
+                          <span className="text-xs">Reservada</span>
+                        ) : (
+                          <span className="text-xs text-gray-400">Libre</span>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </>
+            )}
+            {/* Barra */}
+            {mesas.filter(m => m.tipo === 'barra').length > 0 && (
+              <>
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">🍺 Barra</p>
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                  {mesas.filter(m => m.tipo === 'barra').map(mesa => {
+                    const activos = pedidos.filter(
+                      p => p.mesa_id === mesa.id && !['entregado', 'cancelado'].includes(p.estado)
+                    ).length
+                    return (
+                      <button key={mesa.id}
+                        onClick={() => { setMesaSel(mesa); setVista('pedidos') }}
+                        className={`rounded-2xl p-4 flex flex-col items-center gap-1 border-2 transition-all ${
+                          activos > 0 ? 'bg-blue-50 border-blue-400 text-blue-700' :
+                          'bg-white border-blue-100 text-blue-500 hover:border-blue-300'
+                        }`}>
+                        <span className="text-xl">🍺</span>
+                        <span className="text-xl font-black">{mesa.numero}</span>
+                        {activos > 0 ? (
+                          <span className="text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                            {activos} pedido{activos > 1 ? 's' : ''}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-blue-300">Libre</span>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </>
+            )}
           </div>
         )}
 
@@ -153,7 +189,9 @@ export default function ComanderoPage() {
                   <div className="flex items-center gap-3">
                     <button onClick={() => { setMesaSel(null); setVista('mesas') }} className="text-gray-400 text-sm font-medium">← Mesas</button>
                     <div>
-                      <h2 className="font-black text-lg">Mesa {mesaSel.numero}</h2>
+                      <h2 className="font-black text-lg">
+                        {mesaSel.tipo === 'barra' ? `🍺 Barra ${mesaSel.numero}` : `Mesa ${mesaSel.numero}`}
+                      </h2>
                       <p className="text-sm text-gray-500">{pedidosMesa.length} pedido(s) activo(s)</p>
                     </div>
                   </div>
@@ -205,7 +243,9 @@ export default function ComanderoPage() {
             <div className="flex items-center gap-3 mb-4">
               <button onClick={() => setVista('pedidos')} className="text-gray-400 text-sm font-medium">← Volver</button>
               <h2 className="font-black text-lg">
-                Nueva comanda {mesaSel ? `· Mesa ${mesaSel.numero}` : ''}
+                Nueva comanda {mesaSel
+                  ? `· ${mesaSel.tipo === 'barra' ? `🍺 Barra ${mesaSel.numero}` : `Mesa ${mesaSel.numero}`}`
+                  : ''}
               </h2>
             </div>
 

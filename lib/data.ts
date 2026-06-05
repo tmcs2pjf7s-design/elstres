@@ -73,6 +73,27 @@ export async function updateMesaEstado(id: string, estado: Mesa['estado']): Prom
   } catch {}
 }
 
+export async function createMesa(numero: number, capacidad: number, tipo: 'mesa' | 'barra'): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const res = await fetch(`${BASE}/mesas`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ numero, capacidad, tipo }),
+    })
+    const data = await res.json()
+    if (!res.ok) return { ok: false, error: data.error }
+    return { ok: true }
+  } catch {
+    return { ok: false, error: 'Error de conexión' }
+  }
+}
+
+export async function deleteMesa(id: string): Promise<void> {
+  try {
+    await fetch(`${BASE}/mesas/${id}`, { method: 'DELETE' })
+  } catch {}
+}
+
 export async function upsertProducto(p: Partial<Producto> & { nombre: string; precio: number }): Promise<void> {
   await post('/productos', p)
 }
