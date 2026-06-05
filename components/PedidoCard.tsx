@@ -23,7 +23,8 @@ export default function PedidoCard({ pedido, onEstado, hora = new Date(), dark =
   const total = (pedido.total ?? 0).toFixed(2)
   const esBarra = pedido.mesa?.tipo === 'barra'
   const mesaLabel = pedido.mesa ? `${esBarra ? '🍺 Barra' : 'Mesa'} ${pedido.mesa.numero}` : `Mesa ?`
-  const tipo = pedido.tipo === 'mesa' ? mesaLabel : '🛵 Llevar'
+  const esDomicilio = pedido.tipo === 'llevar' && pedido.tipo_entrega === 'domicilio'
+  const tipo = pedido.tipo === 'mesa' ? mesaLabel : esDomicilio ? '🛵 Domicilio' : '🏪 Recogida'
 
   if (dark) {
     return (
@@ -122,6 +123,11 @@ export default function PedidoCard({ pedido, onEstado, hora = new Date(), dark =
         ))}
       </ul>
 
+      {esDomicilio && pedido.direccion_entrega && (
+        <p className="text-xs bg-blue-50 text-blue-800 border border-blue-200 rounded-xl px-3 py-2 mb-2">
+          📍 {pedido.direccion_entrega}
+        </p>
+      )}
       {pedido.notas && (
         <p className="text-xs bg-amber-50 text-amber-800 border border-amber-200 rounded-xl px-3 py-2 mb-3">
           📝 {pedido.notas}

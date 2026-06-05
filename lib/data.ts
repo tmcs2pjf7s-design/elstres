@@ -42,14 +42,12 @@ export async function getPedidosActivos(): Promise<Pedido[]> {
 export async function createPedido(
   tipo: 'mesa' | 'llevar',
   items: CartItem[],
-  opts: { mesa_id?: string; cliente_nombre?: string; cliente_telefono?: string; notas?: string }
+  opts: { mesa_id?: string; cliente_nombre?: string; cliente_telefono?: string; notas?: string; tipo_entrega?: 'recogida' | 'domicilio'; direccion_entrega?: string }
 ): Promise<number> {
   const total = parseFloat(
     items.reduce((s, i) => s + (i.variante?.precio ?? i.producto.precio) * i.cantidad, 0).toFixed(2)
   )
-  const data = await post<{ numero_orden: number }>('/pedidos', {
-    tipo, total, items, ...opts,
-  })
+  const data = await post<{ numero_orden: number }>('/pedidos', { tipo, total, items, ...opts })
   return data?.numero_orden ?? Math.floor(Math.random() * 900) + 100
 }
 

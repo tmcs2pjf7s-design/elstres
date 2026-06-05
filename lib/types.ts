@@ -45,9 +45,13 @@ export interface PedidoItem {
   notas?: string
 }
 
+export type TipoEntrega = 'recogida' | 'domicilio'
+
 export interface Pedido {
   id: string
   tipo: TipoPedido
+  tipo_entrega?: TipoEntrega
+  direccion_entrega?: string
   mesa_id?: string
   mesa?: Mesa
   estado: EstadoPedido

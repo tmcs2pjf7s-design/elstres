@@ -45,14 +45,15 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const client = await pool.connect()
   try {
-    const { tipo, total, items, mesa_id, cliente_nombre, cliente_telefono, notas } = await req.json()
+    const { tipo, total, items, mesa_id, cliente_nombre, cliente_telefono, notas, tipo_entrega, direccion_entrega } = await req.json()
     // Mesa orders wait for waiter verification; takeaway goes straight to kitchen
     const estadoInicial = tipo === 'llevar' ? 'confirmado' : 'pendiente'
     await client.query('BEGIN')
     const { rows } = await client.query(
-      `INSERT INTO pedidos (tipo, total, mesa_id, cliente_nombre, cliente_telefono, notas, estado)
-       VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id, numero_orden`,
-      [tipo, total, mesa_id ?? null, cliente_nombre ?? null, cliente_telefono ?? null, notas ?? null, estadoInicial]
+      `INSERT INTO pedidos (tipo, total, mesa_id, cliente_nombre, cliente_telefono, notas, estado, tipo_entrega, direccion_entrega)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id, numero_orden`,
+      [tipo, total, mesa_id ?? null, cliente_nombre ?? null, cliente_telefono ?? null, notas ?? null, estadoInicial,
+       tipo_entrega ?? 'recogida', direccion_entrega ?? null]
     )
     const pedido = rows[0]
     for (const item of items) {
