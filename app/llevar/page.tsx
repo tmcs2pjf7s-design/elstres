@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { getCategorias, getProductos, createPedido } from '@/lib/data'
 import { Categoria, Producto } from '@/lib/types'
@@ -21,6 +21,10 @@ export default function LlevarPage() {
   const [numPedido, setNumPedido] = useState(0)
   const [tipoEntrega, setTipoEntrega] = useState<TipoEntrega>('recogida')
   const [direccion, setDireccion] = useState({ calle: '', piso: '', cp: '', ciudad: 'Terrassa', notas: '' })
+  const [sugerencias, setSugerencias] = useState<any[]>([])
+  const [showSugg, setShowSugg] = useState(false)
+  const [buscandoDir, setBuscandoDir] = useState(false)
+  const searchTimer = useRef<ReturnType<typeof setTimeout>>()
   const [pago, setPago] = useState<'bar' | 'online'>('bar')
   const [form, setForm] = useState({ nombre: '', telefono: '', notas: '' })
   const [cliente, setCliente] = useState<Cliente | null>(null)
@@ -45,6 +49,39 @@ export default function LlevarPage() {
   useEffect(() => {
     if (cliente) setForm(f => ({ ...f, nombre: cliente.nombre, telefono: cliente.telefono ?? '' }))
   }, [cliente])
+
+  const buscarDireccion = (q: string) => {
+    setDireccion(d => ({ ...d, calle: q }))
+    clearTimeout(searchTimer.current)
+    if (q.length < 4) { setSugerencias([]); setShowSugg(false); return }
+    setBuscandoDir(true)
+    searchTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&addressdetails=1&limit=6&countrycodes=es`,
+          { headers: { 'Accept-Language': 'es' } }
+        )
+        const data = await res.json()
+        setSugerencias(data)
+        setShowSugg(data.length > 0)
+      } catch {}
+      setBuscandoDir(false)
+    }, 450)
+  }
+
+  const seleccionarSugerencia = (item: any) => {
+    const a = item.address ?? {}
+    const calle = [a.road, a.house_number].filter(Boolean).join(', ')
+    setDireccion({
+      calle: calle || item.display_name.split(',')[0],
+      piso: '',
+      cp: a.postcode ?? '',
+      ciudad: a.city ?? a.town ?? a.municipality ?? a.village ?? 'Terrassa',
+      notas: '',
+    })
+    setSugerencias([])
+    setShowSugg(false)
+  }
 
   const suplementos = productos.filter(p => (p as any).categoria_tipo === 'suplemento' && p.disponible)
   const categoriasVisibles = categorias.filter(c => c.tipo !== 'suplemento')
@@ -337,11 +374,54 @@ export default function LlevarPage() {
             {tipoEntrega === 'domicilio' && (
               <div className="bg-white rounded-2xl p-4 border border-blue-100 shadow-sm space-y-4">
                 <h2 className="font-bold text-sm text-blue-600 uppercase tracking-wider">📍 Dirección de entrega</h2>
-                <div>
-                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">Calle y número *</label>
-                  <input type="text" required value={direccion.calle}
-                    onChange={e => setDireccion(d => ({ ...d, calle: e.target.value }))} placeholder="Carrer Major, 15"
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
+                <div className="relative">
+                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">Buscar dirección *</label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      autoComplete="off"
+                      value={direccion.calle}
+                      onChange={e => buscarDireccion(e.target.value)}
+                      onBlur={() => setTimeout(() => setShowSugg(false), 200)}
+                      onFocus={() => sugerencias.length > 0 && setShowSugg(true)}
+                      placeholder="Carrer Major, 15, Terrassa…"
+                      className="w-full border border-gray-200 rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:border-accent"
+                    />
+                    {buscandoDir && (
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <span className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin block" />
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Dropdown sugerencias */}
+                  {showSugg && sugerencias.length > 0 && (
+                    <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-2xl shadow-xl z-50 overflow-hidden">
+                      {sugerencias.map((item, i) => {
+                        const a = item.address ?? {}
+                        const linea1 = [a.road, a.house_number].filter(Boolean).join(', ') || item.display_name.split(',')[0]
+                        const linea2 = [a.postcode, a.city ?? a.town ?? a.municipality ?? a.village].filter(Boolean).join(' ')
+                        return (
+                          <button
+                            key={i}
+                            type="button"
+                            onMouseDown={() => seleccionarSugerencia(item)}
+                            className="w-full flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left border-b border-gray-50 last:border-0">
+                            <span className="text-gray-400 mt-0.5 flex-shrink-0">📍</span>
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-gray-800 truncate">{linea1}</p>
+                              {linea2 && <p className="text-xs text-gray-400 truncate">{linea2}</p>}
+                            </div>
+                          </button>
+                        )
+                      })}
+                      <div className="px-4 py-2 bg-gray-50 flex items-center gap-1.5">
+                        <span className="text-xs text-gray-400">Resultados de</span>
+                        <span className="text-xs font-semibold text-gray-500">OpenStreetMap</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
