@@ -10,10 +10,10 @@ const cfg: Record<EstadoPedido, { label: string; cls: string }> = {
 }
 
 export default function EstadoBadge({ estado }: { estado: EstadoPedido }) {
-  const { label, cls } = cfg[estado]
+  const entry = cfg[estado] ?? { label: estado, cls: 'bg-gray-100 text-gray-600' }
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${cls}`}>
-      {label}
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${entry.cls}`}>
+      {entry.label}
     </span>
   )
 }

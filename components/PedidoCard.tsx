@@ -22,9 +22,8 @@ export default function PedidoCard({ pedido, onEstado, hora = new Date(), dark =
   const urgente = pedido.estado === 'pendiente' && mins >= 5
   const total = (pedido.total ?? 0).toFixed(2)
   const esBarra = pedido.mesa?.tipo === 'barra'
-  const tipo = pedido.tipo === 'mesa'
-    ? (esBarra ? `🍺 Barra ${pedido.mesa?.numero ?? '?'}` : `Mesa ${pedido.mesa?.numero ?? '?'}`)
-    : '🛵 Llevar'
+  const mesaLabel = pedido.mesa ? `${esBarra ? '🍺 Barra' : 'Mesa'} ${pedido.mesa.numero}` : `Mesa ?`
+  const tipo = pedido.tipo === 'mesa' ? mesaLabel : '🛵 Llevar'
 
   if (dark) {
     return (

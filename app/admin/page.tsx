@@ -27,17 +27,16 @@ function AdminContent() {
   useEffect(() => {
     setAdminEmail(localStorage.getItem('adminSession') ?? '')
     Promise.all([
-      fetch('/api/data/stats').then(r => r.ok ? r.json() : null),
+      fetch('/api/data/stats').then(r => r.ok ? r.json() : null).catch(() => null),
       getPedidosActivos(),
       getProductos(),
       getMesas(),
     ]).then(([s, ps, prods, ms]) => {
       if (s) setStats(s)
-      setPedidos(ps)
-      setProductos(prods)
-      setMesas(ms)
-      setLoading(false)
-    })
+      setPedidos(ps ?? [])
+      setProductos(prods ?? [])
+      setMesas(ms ?? [])
+    }).catch(() => {}).finally(() => setLoading(false))
   }, [])
 
   const handleLogout = () => {
@@ -48,7 +47,7 @@ function AdminContent() {
   const statCards = stats
     ? [
         { label: 'Pedidos hoy',    value: stats.pedidos_hoy,                       icon: '📋', color: 'bg-blue-50 text-blue-700' },
-        { label: 'Ingresos hoy',   value: `${stats.ingresos_hoy.toFixed(0)}€`,     icon: '💰', color: 'bg-green-50 text-green-700' },
+        { label: 'Ingresos hoy',   value: `${(stats.ingresos_hoy ?? 0).toFixed(0)}€`,  icon: '💰', color: 'bg-green-50 text-green-700' },
         { label: 'Mesas ocupadas', value: `${stats.mesas_ocupadas}/${stats.mesas_total}`, icon: '🪑', color: 'bg-orange-50 text-orange-700' },
         { label: 'Pedidos activos',value: stats.pedidos_activos,                   icon: '⚡', color: 'bg-yellow-50 text-yellow-700' },
       ]
