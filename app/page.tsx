@@ -33,8 +33,11 @@ export default function Home() {
               Frankfurt<br />
               <span className="text-accent">Els Tr3s.</span>
             </h1>
-            <p className="text-base sm:text-xl text-gray-500 mb-8 max-w-md leading-relaxed">
-              Los mejores bocadillos de Frankfurt y hamburguesas.
+            <p className="text-base sm:text-xl text-gray-500 mb-2 max-w-md leading-relaxed">
+              Frankfurts, bocadillos y hamburguesas al momento.
+            </p>
+            <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-md leading-relaxed">
+              Disfruta de nuestras tapas, torradas y una selección de los mejores postres de Terrassa.
               Pide desde tu mesa o llévate tu pedido.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
