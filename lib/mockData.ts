@@ -457,6 +457,7 @@ export const mockMesas: Mesa[] = Array.from({ length: 12 }, (_, i) => ({
   numero: i + 1,
   capacidad: i < 4 ? 2 : i < 10 ? 4 : 6,
   estado: i === 2 ? 'ocupada' : i === 5 ? 'reservada' : i === 8 ? 'ocupada' : 'libre',
+  tipo: 'mesa' as const,
 }))
 
 export const mockPedidos: Pedido[] = [
