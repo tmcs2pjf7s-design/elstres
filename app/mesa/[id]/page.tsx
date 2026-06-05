@@ -144,7 +144,7 @@ export default function MesaPage() {
           <div className="flex bg-gray-100 rounded-2xl p-1 mb-6">
             {(['login', 'register'] as const).map(m => (
               <button key={m} onClick={() => { setAuthMode(m); setAuthError('') }}
-                className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors ${authMode === m && authMode !== 'guest' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'}`}>
+                className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors ${authMode === m ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'}`}>
                 {m === 'login' ? 'Iniciar sesión' : 'Registrarse'}
               </button>
             ))}
