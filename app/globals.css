@@ -12,3 +12,52 @@
   .scrollbar-hide::-webkit-scrollbar { display: none; }
   .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 }
+
+/* ── Intro splash: Can Roca "Próximamente" ─────────────────────── */
+@keyframes intro-enter {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes intro-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes intro-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.012); }
+}
+@keyframes intro-reveal-mask {
+  from { opacity: 0.92; }
+  to { opacity: 0; }
+}
+@keyframes intro-glow-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+@keyframes intro-shimmer-sweep {
+  0%, 12% { transform: translate(-120%, -120%) rotate(20deg); opacity: 0; }
+  20% { opacity: 0.55; }
+  38%, 100% { transform: translate(160%, 160%) rotate(20deg); opacity: 0; }
+}
+@keyframes intro-hint-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.intro-anim-enter { animation: intro-enter 900ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.intro-anim-float { animation: intro-float 6s ease-in-out 900ms infinite; }
+.intro-anim-breathe { animation: intro-breathe 14s ease-in-out infinite; }
+.intro-anim-reveal-mask { animation: intro-reveal-mask 650ms ease-out 380ms both; }
+.intro-anim-glow { animation: intro-glow-pulse 3.2s ease-in-out 900ms infinite; }
+.intro-anim-shimmer { animation: intro-shimmer-sweep 5.5s ease-in-out 1.4s infinite; }
+.intro-anim-hint { animation: intro-hint-fade 700ms ease-out 1600ms both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-anim-enter { animation: intro-enter 500ms ease-out both; }
+  .intro-anim-float,
+  .intro-anim-breathe,
+  .intro-anim-shimmer,
+  .intro-anim-glow { animation: none; }
+  .intro-anim-reveal-mask { animation: intro-reveal-mask 1ms linear 0ms both; }
+  .intro-anim-hint { animation: intro-hint-fade 500ms ease-out 300ms both; }
+}

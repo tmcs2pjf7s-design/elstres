@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useLanguage } from '@/context/LanguageContext'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import IntroCanRoca from '@/components/IntroCanRoca'
 
 const HERO_IMAGES = [
   { src: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80', alt: 'Frankfurt artesanal' },
@@ -21,6 +22,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <IntroCanRoca />
+
       {/* Navbar */}
       <nav className="fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-gray-100 z-40">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
