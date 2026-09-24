@@ -41,12 +41,19 @@ export default function MenuPage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-4 pb-8">
-        {cat === '' && (
-          <div className="flex flex-col items-center justify-center py-20 gap-3">
-            <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-400 text-sm">Cargando menú...</p>
+        {cat === '' ? (
+          <div className="space-y-2">
+            {Array.from({ length: 7 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 px-4 py-3.5 animate-pulse">
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-gray-200 rounded-lg w-2/5" />
+                  <div className="h-3 bg-gray-100 rounded-lg w-3/4" />
+                  <div className="h-4 bg-gray-100 rounded-lg w-14 mt-1" />
+                </div>
+              </div>
+            ))}
           </div>
-        )}
+        ) : (
         <div className="space-y-2">
           {filtrados.map(p => (
             <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 px-4 py-3.5">
@@ -70,6 +77,7 @@ export default function MenuPage() {
             </div>
           ))}
         </div>
+        )}
       </main>
     </div>
   )

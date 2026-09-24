@@ -133,9 +133,6 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
                   className="w-full flex items-center justify-between bg-gray-50 hover:bg-accent/5 active:bg-accent/10 border-2 border-transparent hover:border-accent rounded-2xl px-5 py-4 transition-all">
                   <div className="text-left">
                     <p className="font-bold text-gray-900 text-base">{v.nombre}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      {v.nombre === 'Viena' ? 'Bocadillo pequeño' : 'Bocadillo grande'}
-                    </p>
                   </div>
                   <span className="text-2xl font-black text-accent">{Number(v.precio).toFixed(2)}€</span>
                 </button>

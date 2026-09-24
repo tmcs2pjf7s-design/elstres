@@ -36,11 +36,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   const updateQty = (productoId: string, qty: number, variante?: Variante) => {
-    if (qty <= 0) return removeItem(productoId, variante)
     const key = cartKey(productoId, variante)
-    setItems(prev => prev.map(i =>
-      cartKey(i.producto.id, i.variante) === key ? { ...i, cantidad: qty } : i
-    ))
+    setItems(prev => qty <= 0
+      ? prev.filter(i => cartKey(i.producto.id, i.variante) !== key)
+      : prev.map(i => cartKey(i.producto.id, i.variante) === key ? { ...i, cantidad: qty } : i)
+    )
   }
 
   const clearCart = () => setItems([])

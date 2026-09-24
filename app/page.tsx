@@ -1,5 +1,30 @@
 import Link from 'next/link'
 
+const HERO_IMAGES = [
+  { src: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80', alt: 'Frankfurt artesanal' },
+  { src: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80', alt: 'Hamburguesa artesanal' },
+  { src: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=400&q=80', alt: 'Bocadillos y tapas' },
+  { src: 'https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&q=80', alt: 'Tapas y entrantes' },
+]
+
+const FEATURES = [
+  {
+    icon: '📱',
+    title: 'Escanea el QR',
+    desc: 'Escanea el QR de tu mesa, elige lo que quieres y pide directamente desde tu móvil.',
+  },
+  {
+    icon: '⚡',
+    title: 'Tiempo real',
+    desc: 'La cocina recibe tu pedido al instante. Sigue su estado en vivo desde tu pantalla.',
+  },
+  {
+    icon: '🛵',
+    title: 'Para llevar',
+    desc: 'Haz tu pedido online antes de llegar. Estará listo cuando aparezcas.',
+  },
+]
+
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -7,15 +32,18 @@ export default function Home() {
       <nav className="fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-gray-100 z-40">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <span className="text-lg font-black tracking-tight">Frankfurt Els Tr3s</span>
-          <div className="flex items-center gap-1">
-            <Link href="/menu" className="text-sm text-gray-600 hover:text-gray-900 font-medium px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors">
+          <div className="flex items-center gap-2">
+            <Link
+              href="/menu"
+              className="text-sm text-gray-600 hover:text-gray-900 font-medium px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors"
+            >
               Menú
             </Link>
-            <Link href="/llevar" className="text-sm text-gray-600 hover:text-gray-900 font-medium px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors hidden sm:block">
-              Para llevar
-            </Link>
-            <Link href="/admin/login" className="text-sm bg-gray-900 text-white px-4 py-2 rounded-xl font-medium hover:bg-gray-700 transition-colors">
-              Entrar
+            <Link
+              href="/llevar"
+              className="text-sm bg-accent text-white px-4 py-2 rounded-xl font-semibold hover:bg-accent-dark transition-colors"
+            >
+              Pedir para llevar
             </Link>
           </div>
         </div>
@@ -45,7 +73,7 @@ export default function Home() {
                 href="/llevar"
                 className="bg-accent text-white px-7 py-4 rounded-2xl font-bold text-base hover:bg-accent-dark transition-colors shadow-lg shadow-orange-200 text-center active:scale-95"
               >
-                🛵 Pedir para llevar
+                Pedir para llevar
               </Link>
               <Link
                 href="/menu"
@@ -57,13 +85,13 @@ export default function Home() {
           </div>
 
           <div className="hidden lg:grid grid-cols-2 gap-4">
-            {[
-              '/foto1.png',
-              '/foto2.png',
-              'https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=300&q=80',
-              'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&q=80',
-            ].map((src, i) => (
-              <img key={i} src={src} alt="" className={`rounded-2xl object-cover w-full h-48 shadow-md ${i === 1 ? 'mt-8' : ''}`} />
+            {HERO_IMAGES.map((img, i) => (
+              <img
+                key={img.src}
+                src={img.src}
+                alt={img.alt}
+                className={`rounded-2xl object-cover w-full h-48 shadow-md${i === 1 ? ' mt-8' : ''}`}
+              />
             ))}
           </div>
         </div>
@@ -77,12 +105,11 @@ export default function Home() {
             Sin esperas, sin confusiones. Tecnología al servicio de la buena mesa.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { icon: '📱', title: 'Escanea el QR', desc: 'Escanea el QR de tu mesa, elige lo que quieres y pide directamente desde tu móvil.' },
-              { icon: '⚡', title: 'Tiempo real', desc: 'La cocina recibe tu pedido al instante. Sigue su estado en vivo desde tu pantalla.' },
-              { icon: '🛵', title: 'Para llevar', desc: 'Haz tu pedido online antes de llegar. Estará listo cuando aparezcas.' },
-            ].map(f => (
-              <div key={f.title} className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
+            {FEATURES.map(f => (
+              <div
+                key={f.title}
+                className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+              >
                 <div className="text-4xl mb-3">{f.icon}</div>
                 <h3 className="text-base sm:text-lg font-bold mb-2">{f.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
@@ -96,9 +123,11 @@ export default function Home() {
       <section className="py-10 bg-accent sm:hidden">
         <div className="px-5 text-center">
           <p className="text-white/80 text-sm font-medium mb-3">¿Listo para pedir?</p>
-          <Link href="/llevar"
-            className="inline-block bg-white text-accent px-8 py-4 rounded-2xl font-black text-base w-full active:scale-95 transition-transform">
-            🛵 Pedir para llevar
+          <Link
+            href="/llevar"
+            className="inline-block bg-white text-accent px-8 py-4 rounded-2xl font-black text-base w-full active:scale-95 transition-transform"
+          >
+            Pedir para llevar
           </Link>
         </div>
       </section>
@@ -113,7 +142,10 @@ export default function Home() {
                 Frankfurts, bocadillos y hamburguesas al momento.<br />
                 Tapas, torradas y postres de Terrassa.
               </p>
-              <a href="tel:930042165" className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white text-xs transition-colors">
+              <a
+                href="tel:930042165"
+                className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white text-xs transition-colors"
+              >
                 <span>📞</span> 930 042 165
               </a>
             </div>
@@ -165,6 +197,11 @@ export default function Home() {
                 nomecreo.com
               </a>
               {' '}— Servicios TI y Ciberseguridad para empresas
+            </p>
+            <p>
+              <Link href="/admin/login" className="text-gray-700 hover:text-gray-500 transition-colors">
+                Área de trabajo
+              </Link>
             </p>
           </div>
         </div>
