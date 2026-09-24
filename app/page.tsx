@@ -24,7 +24,7 @@ export default function Home() {
       {/* Navbar */}
       <nav className="fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-gray-100 z-40">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="text-lg font-black tracking-tight">Frankfurt Els Tr3s</span>
+          <span className="font-display font-bold text-xl text-gray-900 tracking-tight">Frankfurt Els Tr3s</span>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <Link
@@ -51,7 +51,7 @@ export default function Home() {
             <p className="text-accent text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
               {t('home.hero.badge')}
             </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-gray-900 mb-5 leading-[1.05]">
+            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-gray-900 mb-5 leading-[1.05]">
               Frankfurt<br />
               <span className="text-accent">Els Tr3s.</span>
             </h1>
@@ -93,7 +93,7 @@ export default function Home() {
       {/* Features */}
       <section className="py-16 sm:py-24 bg-gray-50">
         <div className="max-w-6xl mx-auto px-5">
-          <h2 className="text-2xl sm:text-3xl font-black text-center mb-3">{t('home.features.title')}</h2>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl text-center mb-3">{t('home.features.title')}</h2>
           <p className="text-gray-500 text-center mb-10 sm:mb-14 max-w-xl mx-auto text-sm sm:text-base">
             {t('home.features.subtitle')}
           </p>
@@ -130,7 +130,7 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
             {/* Marca */}
             <div>
-              <p className="text-white font-black text-lg mb-2">Frankfurt Els Tr3s</p>
+              <p className="font-display font-bold text-white text-lg mb-2">Frankfurt Els Tr3s</p>
               <p className="text-gray-400 text-xs leading-relaxed mb-3">
                 {t('home.footer.tagline1')}<br />
                 {t('home.footer.tagline2')}

@@ -11,7 +11,7 @@ export default function CookiesContent() {
       <header className="bg-white border-b border-gray-100">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center gap-3">
           <Link href="/" className="text-gray-400 text-sm font-medium hover:text-gray-700">{t('legal.backHome')}</Link>
-          <span className="font-black text-lg">Frankfurt Els Tr3s</span>
+          <span className="font-display font-bold text-lg">Frankfurt Els Tr3s</span>
           <LanguageSwitcher className="ml-auto" />
         </div>
       </header>

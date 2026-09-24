@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Baloo_2 } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/context/CartContext'
 import { LanguageProvider } from '@/context/LanguageContext'
 
 const inter = Inter({ subsets: ['latin'] })
+const baloo = Baloo_2({ subsets: ['latin'], weight: ['600', '700', '800'], variable: '--font-baloo' })
 
 export const metadata: Metadata = {
   title: 'Frankfurt Els Tr3s · Terrassa',
@@ -28,7 +29,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className={`${inter.className} bg-gray-50 text-gray-900 antialiased`}>
+      <body className={`${inter.className} ${baloo.variable} bg-gray-50 text-gray-900 antialiased`}>
         <LanguageProvider>
           <CartProvider>{children}</CartProvider>
         </LanguageProvider>

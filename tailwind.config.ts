@@ -12,6 +12,9 @@ const config: Config = {
         accent: '#e85d04',
         'accent-dark': '#c44d03',
       },
+      fontFamily: {
+        display: ['var(--font-baloo)', 'system-ui', 'sans-serif'],
+      },
     },
   },
   plugins: [],

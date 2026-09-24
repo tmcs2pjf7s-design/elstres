@@ -303,7 +303,7 @@ export default function MesaPage() {
         <div className="max-w-2xl mx-auto px-4">
           <div className="h-14 flex items-center justify-between">
             <div>
-              <span className="font-black text-lg">Frankfurt Els Tr3s</span>
+              <span className="font-display font-bold text-lg">Frankfurt Els Tr3s</span>
               {mesa && <span className="ml-2 text-sm text-gray-400 font-medium">{mesaLabel}</span>}
             </div>
             <div className="flex items-center gap-2">
