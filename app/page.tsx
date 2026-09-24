@@ -199,7 +199,7 @@ export default function Home() {
               {' '}— Servicios TI y Ciberseguridad para empresas
             </p>
             <p>
-              <Link href="/admin/login" className="text-gray-700 hover:text-gray-500 transition-colors">
+              <Link href="/admin/login" className="text-gray-500 hover:text-white transition-colors">
                 Área de trabajo
               </Link>
             </p>
