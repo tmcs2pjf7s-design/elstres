@@ -20,8 +20,8 @@ const FEATURES = [
   },
   {
     icon: '🛵',
-    title: 'Para llevar',
-    desc: 'Haz tu pedido online antes de llegar. Estará listo cuando aparezcas.',
+    title: 'Para llevar (próximamente)',
+    desc: 'Muy pronto podrás hacer tu pedido online antes de llegar y recogerlo listo.',
   },
 ]
 
@@ -39,12 +39,12 @@ export default function Home() {
             >
               Menú
             </Link>
-            <Link
-              href="/llevar"
-              className="text-sm bg-accent text-white px-4 py-2 rounded-xl font-semibold hover:bg-accent-dark transition-colors"
+            <span
+              className="text-sm bg-gray-200 text-gray-500 px-4 py-2 rounded-xl font-semibold cursor-not-allowed select-none"
+              title="Próximamente"
             >
-              Pedir para llevar
-            </Link>
+              Para llevar · Próximamente
+            </span>
           </div>
         </div>
       </nav>
@@ -69,12 +69,12 @@ export default function Home() {
               Pide desde tu mesa o llévate tu pedido.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                href="/llevar"
-                className="bg-accent text-white px-7 py-4 rounded-2xl font-bold text-base hover:bg-accent-dark transition-colors shadow-lg shadow-orange-200 text-center active:scale-95"
+              <span
+                className="bg-gray-100 text-gray-400 px-7 py-4 rounded-2xl font-bold text-base text-center cursor-not-allowed select-none"
+                title="Próximamente"
               >
-                Pedir para llevar
-              </Link>
+                Para llevar · Próximamente
+              </span>
               <Link
                 href="/menu"
                 className="bg-gray-100 text-gray-900 px-7 py-4 rounded-2xl font-bold text-base hover:bg-gray-200 transition-colors text-center active:scale-95"
@@ -123,12 +123,12 @@ export default function Home() {
       <section className="py-10 bg-accent sm:hidden">
         <div className="px-5 text-center">
           <p className="text-white/80 text-sm font-medium mb-3">¿Listo para pedir?</p>
-          <Link
-            href="/llevar"
-            className="inline-block bg-white text-accent px-8 py-4 rounded-2xl font-black text-base w-full active:scale-95 transition-transform"
+          <span
+            className="inline-block bg-white/60 text-accent/60 px-8 py-4 rounded-2xl font-black text-base w-full cursor-not-allowed select-none"
+            title="Próximamente"
           >
-            Pedir para llevar
-          </Link>
+            Para llevar · Próximamente
+          </span>
         </div>
       </section>
 
