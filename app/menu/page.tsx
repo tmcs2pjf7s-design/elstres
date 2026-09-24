@@ -3,8 +3,11 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { getCategorias, getProductos } from '@/lib/data'
 import { Categoria, Producto } from '@/lib/types'
+import { useLanguage } from '@/context/LanguageContext'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 export default function MenuPage() {
+  const { t } = useLanguage()
   const [categorias, setCategorias] = useState<Categoria[]>([])
   const [productos, setProductos] = useState<Producto[]>([])
   const [cat, setCat] = useState('')
@@ -25,8 +28,9 @@ export default function MenuPage() {
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4">
           <div className="h-14 flex items-center gap-3">
-            <Link href="/" className="text-gray-400 hover:text-gray-900 font-medium text-sm p-1">← Inicio</Link>
-            <span className="text-lg font-black">Menú</span>
+            <Link href="/" className="text-gray-400 hover:text-gray-900 font-medium text-sm p-1">{t('menu.back')}</Link>
+            <span className="text-lg font-black">{t('menu.title')}</span>
+            <LanguageSwitcher className="ml-auto" />
           </div>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3 -mx-1 px-1">
             {categoriasVisibles.map(c => (

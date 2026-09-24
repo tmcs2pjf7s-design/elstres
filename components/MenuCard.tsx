@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Producto, Variante } from '@/lib/types'
 import { useCart } from '@/context/CartContext'
+import { useLanguage } from '@/context/LanguageContext'
 
 interface Props {
   producto: Producto
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function MenuCard({ producto, suplementos = [] }: Props) {
+  const { t } = useLanguage()
   const { addItem, items, updateQty } = useCart()
   const [showVariantes, setShowVariantes] = useState(false)
   const [showSups, setShowSups] = useState(false)
@@ -126,7 +128,7 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
             <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
             <h3 className="font-black text-xl mb-1">{producto.nombre}</h3>
             {producto.descripcion && <p className="text-gray-400 text-sm mb-5">{producto.descripcion}</p>}
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Elige el tamaño</p>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">{t('menuCard.chooseSize')}</p>
             <div className="space-y-3 mb-2">
               {producto.variantes!.map(v => (
                 <button key={v.nombre} onClick={() => handleVariante(v)}
@@ -138,7 +140,7 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
                 </button>
               ))}
             </div>
-            <button onClick={() => setShowVariantes(false)} className="w-full py-4 text-gray-400 text-sm font-semibold">Cancelar</button>
+            <button onClick={() => setShowVariantes(false)} className="w-full py-4 text-gray-400 text-sm font-semibold">{t('menuCard.cancel')}</button>
           </div>
         </div>
       )}
@@ -154,7 +156,7 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
             {variantePendiente && (
               <span className="inline-block text-xs bg-accent/10 text-accent font-semibold px-2 py-0.5 rounded-lg mb-3">{variantePendiente.nombre}</span>
             )}
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Añadir suplementos (opcional)</p>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{t('menuCard.addSupplements')}</p>
 
             <div className="space-y-2 mb-5">
               {suplementos.map(sup => {
@@ -180,17 +182,17 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
 
             {supsSel.size > 0 && (
               <p className="text-xs text-gray-500 text-center mb-3">
-                +{suplementos.filter(s => supsSel.has(s.id)).reduce((t, s) => t + Number(s.precio), 0).toFixed(2)}€ en suplementos
+                +{suplementos.filter(s => supsSel.has(s.id)).reduce((sum, s) => sum + Number(s.precio), 0).toFixed(2)}€ {t('menuCard.supplementsTotal')}
               </p>
             )}
 
             <button onClick={() => confirmarConSups(variantePendiente)}
               className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-base hover:bg-accent-dark transition-colors active:scale-95">
-              {supsSel.size > 0 ? `Añadir con suplementos` : 'Añadir sin suplementos'}
+              {supsSel.size > 0 ? t('menuCard.addWithSupplements') : t('menuCard.addWithoutSupplements')}
             </button>
             <button onClick={() => { setShowSups(false); setSupsSel(new Set()) }}
               className="w-full py-3 text-gray-400 text-sm font-semibold mt-1">
-              Cancelar
+              {t('menuCard.cancel')}
             </button>
           </div>
         </div>

@@ -1,9 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const STORAGE_KEY = 'aviso_comanda_ok'
 
 export default function AvisoComanda() {
+  const { t } = useLanguage()
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -27,27 +29,27 @@ export default function AvisoComanda() {
         <div className="bg-accent px-6 pt-6 pb-5 text-white">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-3xl">🍽️</span>
-            <h2 className="text-lg font-black leading-snug">Antes de realizar tu pedido</h2>
+            <h2 className="text-lg font-black leading-snug">{t('avisoComanda.title')}</h2>
           </div>
         </div>
 
         {/* Body */}
         <div className="px-6 py-5">
           <p className="text-gray-700 text-sm leading-relaxed">
-            Le informamos que <strong>una vez solicitada la comanda, no se podrán realizar cambios</strong>.
+            {t('avisoComanda.p1Pre')} <strong>{t('avisoComanda.p1Bold')}</strong>.
           </p>
           <p className="text-gray-600 text-sm leading-relaxed mt-3">
-            Por respeto a la calidad y la integridad de nuestros platos, <strong>no realizamos cambios en los ingredientes o la preparación</strong> de los mismos.
+            {t('avisoComanda.p2Pre')} <strong>{t('avisoComanda.p2Bold')}</strong> {t('avisoComanda.p2Post')}
           </p>
           <p className="text-gray-500 text-sm leading-relaxed mt-3">
-            Agradecemos su comprensión y esperamos que disfrute su experiencia culinaria en nuestro establecimiento.
+            {t('avisoComanda.p3')}
           </p>
 
           <button
             onClick={aceptar}
             className="mt-6 w-full bg-accent hover:bg-accent-dark text-white py-4 rounded-2xl font-bold text-base transition-colors active:scale-95"
           >
-            Entendido, continuar
+            {t('avisoComanda.accept')}
           </button>
         </div>
       </div>

@@ -6,6 +6,8 @@ import { Categoria, Producto } from '@/lib/types'
 import MenuCard from '@/components/MenuCard'
 import AvisoComanda from '@/components/AvisoComanda'
 import { useCart } from '@/context/CartContext'
+import { useLanguage } from '@/context/LanguageContext'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 type Step = 'menu' | 'entrega' | 'auth' | 'datos' | 'confirmado'
 type TipoEntrega = 'recogida' | 'domicilio'
@@ -13,6 +15,7 @@ type TipoEntrega = 'recogida' | 'domicilio'
 interface Cliente { id: string; nombre: string; email: string; telefono: string }
 
 export default function LlevarPage() {
+  const { t } = useLanguage()
   const [categorias, setCategorias] = useState<Categoria[]>([])
   const [productos, setProductos] = useState<Producto[]>([])
   const [cat, setCat] = useState('')
@@ -104,12 +107,12 @@ export default function LlevarPage() {
         : { nombre: authForm.nombre, email: authForm.email, password: authForm.password, telefono: authForm.telefono }
       const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Error de autenticación')
+      if (!res.ok) throw new Error(data.error || t('common.auth.error'))
       localStorage.setItem('clienteSession', JSON.stringify(data.cliente))
       setCliente(data.cliente)
       setStep('datos')
     } catch (err: unknown) {
-      setAuthError(err instanceof Error ? err.message : 'Error de autenticación')
+      setAuthError(err instanceof Error ? err.message : t('common.auth.error'))
     } finally {
       setAuthLoading(false)
     }
@@ -139,7 +142,7 @@ export default function LlevarPage() {
       clearCart()
       setStep('confirmado')
     } catch {
-      alert('Error al enviar el pedido. Inténtalo de nuevo.')
+      alert(t('common.errors.order'))
     } finally {
       setLoading(false)
     }
@@ -154,31 +157,31 @@ export default function LlevarPage() {
         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl mb-6">
           {tipoEntrega === 'domicilio' ? '🛵' : '🏪'}
         </div>
-        <h1 className="text-2xl font-black mb-1">¡Pedido recibido!</h1>
+        <h1 className="text-2xl font-black mb-1">{t('llevar.confirmed.title')}</h1>
         <p className="text-gray-500 mb-4">
-          {tipoEntrega === 'domicilio' ? 'Entrega a domicilio' : 'Recogida en local'} · {form.nombre}
+          {tipoEntrega === 'domicilio' ? t('llevar.confirmed.domicilio') : t('llevar.confirmed.recogida')} · {form.nombre}
         </p>
         <div className="bg-accent/10 rounded-2xl px-10 py-5 mb-4">
-          <p className="text-sm text-gray-500 mb-1">Número de pedido</p>
+          <p className="text-sm text-gray-500 mb-1">{t('common.orderNumber')}</p>
           <p className="text-5xl font-black text-accent">#{numPedido}</p>
         </div>
         {tipoEntrega === 'domicilio' ? (
           <div className="bg-blue-50 rounded-2xl px-6 py-4 mb-4 max-w-xs">
-            <p className="text-sm font-bold text-blue-800 mb-1">📍 Dirección de entrega</p>
+            <p className="text-sm font-bold text-blue-800 mb-1">{t('llevar.confirmed.addressTitle')}</p>
             <p className="text-xs text-blue-600">{direccion.calle}{direccion.piso ? `, ${direccion.piso}` : ''}</p>
             <p className="text-xs text-blue-600">{direccion.cp} {direccion.ciudad}</p>
           </div>
         ) : (
           <p className="text-sm font-semibold mb-1">
-            {pago === 'bar' ? '💵 Pagas al recoger' : '💳 Pago online confirmado'}
+            {pago === 'bar' ? t('llevar.confirmed.payBar') : t('llevar.confirmed.payOnline')}
           </p>
         )}
         {form.telefono && (
           <p className="text-gray-400 text-sm max-w-xs leading-relaxed mt-2">
-            Te avisaremos al <strong>{form.telefono}</strong> cuando esté listo.
+            {t('llevar.confirmed.notifyPre')} <strong>{form.telefono}</strong> {t('llevar.confirmed.notifyPost')}
           </p>
         )}
-        <Link href="/" className="mt-8 text-accent font-semibold text-sm">← Volver al inicio</Link>
+        <Link href="/" className="mt-8 text-accent font-semibold text-sm">{t('llevar.confirmed.backHome')}</Link>
       </div>
     )
   }
@@ -189,8 +192,8 @@ export default function LlevarPage() {
       <div className="min-h-screen bg-gray-50">
         <header className="bg-white border-b border-gray-100">
           <div className="max-w-lg mx-auto px-4 h-14 flex items-center gap-3">
-            <button onClick={() => setStep('menu')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">← Volver</button>
-            <span className="font-black text-lg">¿Cómo lo quieres?</span>
+            <button onClick={() => setStep('menu')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">{t('common.back')}</button>
+            <span className="font-black text-lg">{t('llevar.entrega.title')}</span>
           </div>
         </header>
         <main className="max-w-lg mx-auto px-4 py-8">
@@ -206,9 +209,9 @@ export default function LlevarPage() {
                 tipoEntrega === 'recogida' ? 'bg-accent/10' : 'bg-gray-100'
               }`}>🏪</div>
               <div>
-                <p className="font-black text-lg">Recoger en local</p>
+                <p className="font-black text-lg">{t('llevar.entrega.pickupTitle')}</p>
                 <p className="text-gray-500 text-sm mt-0.5">Passeig de Lluís Muncunill, 9</p>
-                <p className="text-gray-400 text-xs mt-1">Listo en aprox. 15–20 min</p>
+                <p className="text-gray-400 text-xs mt-1">{t('llevar.entrega.pickupTime')}</p>
               </div>
               <div className={`ml-auto w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                 tipoEntrega === 'recogida' ? 'bg-accent border-accent' : 'border-gray-300'
@@ -228,9 +231,9 @@ export default function LlevarPage() {
                 tipoEntrega === 'domicilio' ? 'bg-accent/10' : 'bg-gray-100'
               }`}>🛵</div>
               <div>
-                <p className="font-black text-lg">A domicilio</p>
-                <p className="text-gray-500 text-sm mt-0.5">Te lo llevamos a casa</p>
-                <p className="text-gray-400 text-xs mt-1">Aprox. 30–45 min</p>
+                <p className="font-black text-lg">{t('llevar.entrega.domicilioTitle')}</p>
+                <p className="text-gray-500 text-sm mt-0.5">{t('llevar.entrega.domicilioDesc')}</p>
+                <p className="text-gray-400 text-xs mt-1">{t('llevar.entrega.domicilioTime')}</p>
               </div>
               <div className={`ml-auto w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                 tipoEntrega === 'domicilio' ? 'bg-accent border-accent' : 'border-gray-300'
@@ -243,7 +246,7 @@ export default function LlevarPage() {
           <button
             onClick={() => cliente ? setStep('datos') : setStep('auth')}
             className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors shadow-lg shadow-orange-200">
-            Continuar · {total.toFixed(2)}€
+            {t('llevar.entrega.continue')} · {total.toFixed(2)}€
           </button>
         </main>
       </div>
@@ -256,8 +259,8 @@ export default function LlevarPage() {
       <div className="min-h-screen bg-gray-50">
         <header className="bg-white border-b border-gray-100">
           <div className="max-w-lg mx-auto px-4 h-14 flex items-center gap-3">
-            <button onClick={() => setStep('entrega')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">← Volver</button>
-            <span className="font-black text-lg">Tu cuenta</span>
+            <button onClick={() => setStep('entrega')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">{t('common.back')}</button>
+            <span className="font-black text-lg">{t('llevar.auth.title')}</span>
           </div>
         </header>
         <main className="max-w-sm mx-auto px-4 py-8">
@@ -265,7 +268,7 @@ export default function LlevarPage() {
             {(['login', 'register'] as const).map(m => (
               <button key={m} onClick={() => { setAuthMode(m); setAuthError('') }}
                 className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors ${authMode === m ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'}`}>
-                {m === 'login' ? 'Iniciar sesión' : 'Registrarse'}
+                {m === 'login' ? t('common.auth.login') : t('common.auth.register')}
               </button>
             ))}
           </div>
@@ -273,27 +276,27 @@ export default function LlevarPage() {
             {authMode === 'register' && (
               <>
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">Nombre *</label>
+                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('common.auth.name')}</label>
                   <input type="text" required value={authForm.nombre}
-                    onChange={e => setAuthForm(f => ({ ...f, nombre: e.target.value }))} placeholder="Tu nombre"
+                    onChange={e => setAuthForm(f => ({ ...f, nombre: e.target.value }))} placeholder={t('common.auth.namePlaceholder')}
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">Teléfono</label>
+                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('common.auth.phone')}</label>
                   <input type="tel" value={authForm.telefono}
-                    onChange={e => setAuthForm(f => ({ ...f, telefono: e.target.value }))} placeholder="600 000 000"
+                    onChange={e => setAuthForm(f => ({ ...f, telefono: e.target.value }))} placeholder={t('common.auth.phonePlaceholder')}
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
                 </div>
               </>
             )}
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-gray-500">Email *</label>
+              <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('common.auth.email')}</label>
               <input type="email" required value={authForm.email}
-                onChange={e => setAuthForm(f => ({ ...f, email: e.target.value }))} placeholder="correo@ejemplo.com"
+                onChange={e => setAuthForm(f => ({ ...f, email: e.target.value }))} placeholder={t('common.auth.emailPlaceholder')}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-gray-500">Contraseña *</label>
+              <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('common.auth.password')}</label>
               <input type="password" required value={authForm.password}
                 onChange={e => setAuthForm(f => ({ ...f, password: e.target.value }))} placeholder="••••••••"
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
@@ -301,11 +304,11 @@ export default function LlevarPage() {
             {authError && <p className="text-red-500 text-sm bg-red-50 rounded-xl px-4 py-3">{authError}</p>}
             <button type="submit" disabled={authLoading}
               className="w-full bg-accent text-white py-3.5 rounded-2xl font-bold hover:bg-accent-dark transition-colors disabled:opacity-50">
-              {authLoading ? 'Cargando...' : authMode === 'login' ? 'Entrar' : 'Crear cuenta'}
+              {authLoading ? t('common.auth.loading') : authMode === 'login' ? t('common.auth.submitLogin') : t('common.auth.submitRegister')}
             </button>
           </form>
           <button onClick={() => setStep('datos')} className="w-full mt-4 py-3 text-gray-400 text-sm font-medium">
-            Continuar sin cuenta →
+            {t('llevar.auth.continueWithoutAccount')}
           </button>
         </main>
       </div>
@@ -318,19 +321,19 @@ export default function LlevarPage() {
       <div className="min-h-screen bg-gray-50">
         <header className="bg-white border-b border-gray-100">
           <div className="max-w-lg mx-auto px-4 h-14 flex items-center gap-3">
-            <button onClick={() => setStep('entrega')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">← Volver</button>
-            <span className="font-black text-lg">Confirmar pedido</span>
+            <button onClick={() => setStep('entrega')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">{t('common.back')}</button>
+            <span className="font-black text-lg">{t('common.confirmOrder')}</span>
             <span className={`ml-auto text-xs font-semibold px-3 py-1 rounded-full ${
               tipoEntrega === 'domicilio' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
             }`}>
-              {tipoEntrega === 'domicilio' ? '🛵 Domicilio' : '🏪 Recogida'}
+              {tipoEntrega === 'domicilio' ? t('llevar.datos.badgeDomicilio') : t('llevar.datos.badgeRecogida')}
             </span>
           </div>
         </header>
         <main className="max-w-lg mx-auto px-4 py-6 space-y-4">
           {/* Resumen carrito */}
           <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <h2 className="font-bold mb-3 text-sm text-gray-500 uppercase tracking-wider">Resumen</h2>
+            <h2 className="font-bold mb-3 text-sm text-gray-500 uppercase tracking-wider">{t('common.summary')}</h2>
             <ul className="space-y-2 mb-3">
               {items.map(item => {
                 const precio = Number(item.variante?.precio ?? item.producto.precio)
@@ -346,7 +349,7 @@ export default function LlevarPage() {
               })}
             </ul>
             <div className="flex justify-between font-bold pt-3 border-t">
-              <span>Total</span>
+              <span>{t('common.total')}</span>
               <span className="text-accent">{total.toFixed(2)}€</span>
             </div>
           </div>
@@ -354,24 +357,24 @@ export default function LlevarPage() {
           <form onSubmit={handleDatos} className="space-y-4">
             {/* Datos personales */}
             <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm space-y-4">
-              <h2 className="font-bold text-sm text-gray-500 uppercase tracking-wider">Tus datos</h2>
+              <h2 className="font-bold text-sm text-gray-500 uppercase tracking-wider">{t('llevar.datos.yourData')}</h2>
               {cliente ? (
                 <div className="flex items-center justify-between bg-green-50 rounded-xl px-4 py-3">
                   <span className="text-sm font-medium text-green-800">👤 {cliente.nombre}</span>
-                  <button type="button" onClick={cerrarSesion} className="text-xs text-gray-400 hover:text-gray-600">Salir</button>
+                  <button type="button" onClick={cerrarSesion} className="text-xs text-gray-400 hover:text-gray-600">{t('common.logoutShort')}</button>
                 </div>
               ) : (
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">Nombre *</label>
+                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('common.auth.name')}</label>
                   <input type="text" required value={form.nombre}
-                    onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} placeholder="Tu nombre"
+                    onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} placeholder={t('common.auth.namePlaceholder')}
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
                 </div>
               )}
               <div>
-                <label className="block text-xs font-semibold mb-1.5 text-gray-500">Teléfono *</label>
+                <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('llevar.datos.phone')}</label>
                 <input type="tel" required value={form.telefono}
-                  onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} placeholder="600 000 000"
+                  onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} placeholder={t('common.auth.phonePlaceholder')}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
               </div>
             </div>
@@ -379,9 +382,9 @@ export default function LlevarPage() {
             {/* Dirección — solo si domicilio */}
             {tipoEntrega === 'domicilio' && (
               <div className="bg-white rounded-2xl p-4 border border-blue-100 shadow-sm space-y-4">
-                <h2 className="font-bold text-sm text-blue-600 uppercase tracking-wider">📍 Dirección de entrega</h2>
+                <h2 className="font-bold text-sm text-blue-600 uppercase tracking-wider">{t('llevar.datos.addressSection')}</h2>
                 <div className="relative">
-                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">Buscar dirección *</label>
+                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('llevar.datos.searchAddress')}</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -391,7 +394,7 @@ export default function LlevarPage() {
                       onChange={e => buscarDireccion(e.target.value)}
                       onBlur={() => setTimeout(() => setShowSugg(false), 200)}
                       onFocus={() => sugerencias.length > 0 && setShowSugg(true)}
-                      placeholder="Carrer Major, 15, Terrassa…"
+                      placeholder={t('llevar.datos.addressPlaceholder')}
                       className="w-full border border-gray-200 rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:border-accent"
                     />
                     {buscandoDir && (
@@ -423,7 +426,7 @@ export default function LlevarPage() {
                         )
                       })}
                       <div className="px-4 py-2 bg-gray-50 flex items-center gap-1.5">
-                        <span className="text-xs text-gray-400">Resultados de</span>
+                        <span className="text-xs text-gray-400">{t('llevar.datos.resultsFrom')}</span>
                         <span className="text-xs font-semibold text-gray-500">OpenStreetMap</span>
                       </div>
                     </div>
@@ -431,28 +434,28 @@ export default function LlevarPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold mb-1.5 text-gray-500">Piso / Puerta</label>
+                    <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('llevar.datos.floor')}</label>
                     <input type="text" value={direccion.piso}
-                      onChange={e => setDireccion(d => ({ ...d, piso: e.target.value }))} placeholder="3º 2ª"
+                      onChange={e => setDireccion(d => ({ ...d, piso: e.target.value }))} placeholder={t('llevar.datos.floorPlaceholder')}
                       className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold mb-1.5 text-gray-500">Código postal *</label>
+                    <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('llevar.datos.postalCode')}</label>
                     <input type="text" required value={direccion.cp}
                       onChange={e => setDireccion(d => ({ ...d, cp: e.target.value }))} placeholder="08225"
                       className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">Ciudad *</label>
+                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('llevar.datos.city')}</label>
                   <input type="text" required value={direccion.ciudad}
                     onChange={e => setDireccion(d => ({ ...d, ciudad: e.target.value }))}
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">Notas de entrega</label>
+                  <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('llevar.datos.deliveryNotes')}</label>
                   <input type="text" value={direccion.notas}
-                    onChange={e => setDireccion(d => ({ ...d, notas: e.target.value }))} placeholder="Portero automático 3B, sin ascensor…"
+                    onChange={e => setDireccion(d => ({ ...d, notas: e.target.value }))} placeholder={t('llevar.datos.deliveryNotesPlaceholder')}
                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent" />
                 </div>
               </div>
@@ -460,36 +463,36 @@ export default function LlevarPage() {
 
             {/* Notas del pedido */}
             <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-              <label className="block text-xs font-semibold mb-1.5 text-gray-500">Notas del pedido (opcional)</label>
+              <label className="block text-xs font-semibold mb-1.5 text-gray-500">{t('llevar.datos.orderNotes')}</label>
               <textarea value={form.notas} onChange={e => setForm(f => ({ ...f, notas: e.target.value }))}
-                rows={2} placeholder="Alergias, peticiones…"
+                rows={2} placeholder={t('llevar.datos.orderNotesPlaceholder')}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent resize-none" />
             </div>
 
             {/* Método de pago */}
             <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-              <label className="block text-xs font-semibold mb-2 text-gray-500">Método de pago</label>
+              <label className="block text-xs font-semibold mb-2 text-gray-500">{t('llevar.datos.paymentMethod')}</label>
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" onClick={() => setPago('bar')}
                   className={`flex flex-col items-center gap-1.5 p-4 rounded-2xl border-2 transition-all ${pago === 'bar' ? 'border-accent bg-accent/5' : 'border-gray-200 bg-white'}`}>
                   <span className="text-2xl">💵</span>
-                  <span className="text-sm font-semibold">{tipoEntrega === 'domicilio' ? 'Al entregar' : 'Al recoger'}</span>
-                  <span className="text-xs text-gray-400">Efectivo o tarjeta</span>
+                  <span className="text-sm font-semibold">{tipoEntrega === 'domicilio' ? t('llevar.datos.payAtDelivery') : t('llevar.datos.payAtPickup')}</span>
+                  <span className="text-xs text-gray-400">{t('llevar.datos.cashOrCard')}</span>
                 </button>
                 <button type="button" onClick={() => setPago('online')}
                   className={`flex flex-col items-center gap-1.5 p-4 rounded-2xl border-2 transition-all ${pago === 'online' ? 'border-accent bg-accent/5' : 'border-gray-200 bg-white'}`}>
                   <span className="text-2xl">💳</span>
-                  <span className="text-sm font-semibold">Pagar online</span>
-                  <span className="text-xs text-gray-400">Próximamente</span>
+                  <span className="text-sm font-semibold">{t('llevar.datos.payOnline')}</span>
+                  <span className="text-xs text-gray-400">{t('llevar.datos.comingSoon')}</span>
                 </button>
               </div>
             </div>
 
             <button type="submit" disabled={loading || pago === 'online'}
               className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-lg shadow-orange-200">
-              {loading ? 'Enviando...' : `Confirmar pedido · ${total.toFixed(2)}€`}
+              {loading ? t('common.sending') : `${t('llevar.datos.submit')} · ${total.toFixed(2)}€`}
             </button>
-            {pago === 'online' && <p className="text-center text-xs text-gray-400">El pago online estará disponible próximamente</p>}
+            {pago === 'online' && <p className="text-center text-xs text-gray-400">{t('llevar.datos.onlineNote')}</p>}
           </form>
         </main>
       </div>
@@ -504,17 +507,20 @@ export default function LlevarPage() {
         <div className="max-w-2xl mx-auto px-4">
           <div className="h-14 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Link href="/" className="text-gray-400 hover:text-gray-900 text-sm font-medium">← Inicio</Link>
-              <span className="font-black text-lg">Para llevar 🛵</span>
+              <Link href="/" className="text-gray-400 hover:text-gray-900 text-sm font-medium">{t('menu.back')}</Link>
+              <span className="font-black text-lg">{t('llevar.menu.title')} 🛵</span>
             </div>
-            {cliente ? (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">👤 {cliente.nombre}</span>
-                <button onClick={cerrarSesion} className="text-xs text-gray-400 hover:text-gray-600">Salir</button>
-              </div>
-            ) : (
-              <button onClick={() => setStep('auth')} className="text-xs text-accent font-semibold">Iniciar sesión</button>
-            )}
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              {cliente ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full font-medium">👤 {cliente.nombre}</span>
+                  <button onClick={cerrarSesion} className="text-xs text-gray-400 hover:text-gray-600">{t('common.logoutShort')}</button>
+                </div>
+              ) : (
+                <button onClick={() => setStep('auth')} className="text-xs text-accent font-semibold">{t('common.loginShort')}</button>
+              )}
+            </div>
           </div>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3">
             {categoriasVisibles.map(c => (
@@ -532,7 +538,7 @@ export default function LlevarPage() {
           {filtrados.length === 0 && cat === '' && (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
               <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-              <p className="text-gray-400 text-sm">Cargando...</p>
+              <p className="text-gray-400 text-sm">{t('llevar.menu.loading')}</p>
             </div>
           )}
           {filtrados.map(p => <MenuCard key={p.id} producto={p} suplementos={suplementos} />)}
@@ -544,7 +550,7 @@ export default function LlevarPage() {
           onClick={() => setStep('entrega')}
           className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-accent text-white px-6 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 font-semibold hover:bg-accent-dark transition-colors">
           <span className="bg-white text-accent text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">{count}</span>
-          Continuar
+          {t('llevar.menu.continue')}
           <span className="font-bold">{total.toFixed(2)}€</span>
         </button>
       )}

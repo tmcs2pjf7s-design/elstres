@@ -5,3 +5,5 @@ node_modules/
 *.log
 dist/
 .vercel
+next-env.d.ts
+tsconfig.tsbuildinfo

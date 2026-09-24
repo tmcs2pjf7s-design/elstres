@@ -1,4 +1,7 @@
+'use client'
 import Link from 'next/link'
+import { useLanguage } from '@/context/LanguageContext'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 
 const HERO_IMAGES = [
   { src: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80', alt: 'Frankfurt artesanal' },
@@ -7,25 +10,15 @@ const HERO_IMAGES = [
   { src: 'https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&q=80', alt: 'Tapas y entrantes' },
 ]
 
-const FEATURES = [
-  {
-    icon: '📱',
-    title: 'Escanea el QR',
-    desc: 'Escanea el QR de tu mesa, elige lo que quieres y pide directamente desde tu móvil.',
-  },
-  {
-    icon: '⚡',
-    title: 'Tiempo real',
-    desc: 'La cocina recibe tu pedido al instante. Sigue su estado en vivo desde tu pantalla.',
-  },
-  {
-    icon: '🛵',
-    title: 'Para llevar (próximamente)',
-    desc: 'Muy pronto podrás hacer tu pedido online antes de llegar y recogerlo listo.',
-  },
-]
-
 export default function Home() {
+  const { t } = useLanguage()
+
+  const FEATURES = [
+    { icon: '📱', title: t('home.features.qr.title'), desc: t('home.features.qr.desc') },
+    { icon: '⚡', title: t('home.features.realtime.title'), desc: t('home.features.realtime.desc') },
+    { icon: '🛵', title: t('home.features.llevar.title'), desc: t('home.features.llevar.desc') },
+  ]
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navbar */}
@@ -33,17 +26,18 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <span className="text-lg font-black tracking-tight">Frankfurt Els Tr3s</span>
           <div className="flex items-center gap-2">
+            <LanguageSwitcher />
             <Link
               href="/menu"
               className="text-sm text-gray-600 hover:text-gray-900 font-medium px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors"
             >
-              Menú
+              {t('home.nav.menu')}
             </Link>
             <span
               className="text-sm bg-gray-200 text-gray-500 px-4 py-2 rounded-xl font-semibold cursor-not-allowed select-none"
-              title="Próximamente"
+              title={t('home.llevarBadge')}
             >
-              Para llevar · Próximamente
+              {t('home.llevarBadge')}
             </span>
           </div>
         </div>
@@ -55,31 +49,30 @@ export default function Home() {
         <div className="relative max-w-6xl mx-auto px-5 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
           <div>
             <p className="text-accent text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
-              Bienvenidos
+              {t('home.hero.badge')}
             </p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-gray-900 mb-5 leading-[1.05]">
               Frankfurt<br />
               <span className="text-accent">Els Tr3s.</span>
             </h1>
             <p className="text-base sm:text-xl text-gray-500 mb-2 max-w-md leading-relaxed">
-              Frankfurts, bocadillos y hamburguesas al momento.
+              {t('home.hero.subtitle1')}
             </p>
             <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-md leading-relaxed">
-              Disfruta de nuestras tapas, torradas y una selección de los mejores postres de Terrassa.
-              Pide desde tu mesa o llévate tu pedido.
+              {t('home.hero.subtitle2')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <span
                 className="bg-gray-100 text-gray-400 px-7 py-4 rounded-2xl font-bold text-base text-center cursor-not-allowed select-none"
-                title="Próximamente"
+                title={t('home.llevarBadge')}
               >
-                Para llevar · Próximamente
+                {t('home.llevarBadge')}
               </span>
               <Link
                 href="/menu"
                 className="bg-gray-100 text-gray-900 px-7 py-4 rounded-2xl font-bold text-base hover:bg-gray-200 transition-colors text-center active:scale-95"
               >
-                Ver menú
+                {t('home.hero.ctaMenu')}
               </Link>
             </div>
           </div>
@@ -100,9 +93,9 @@ export default function Home() {
       {/* Features */}
       <section className="py-16 sm:py-24 bg-gray-50">
         <div className="max-w-6xl mx-auto px-5">
-          <h2 className="text-2xl sm:text-3xl font-black text-center mb-3">Una nueva forma de pedir</h2>
+          <h2 className="text-2xl sm:text-3xl font-black text-center mb-3">{t('home.features.title')}</h2>
           <p className="text-gray-500 text-center mb-10 sm:mb-14 max-w-xl mx-auto text-sm sm:text-base">
-            Sin esperas, sin confusiones. Tecnología al servicio de la buena mesa.
+            {t('home.features.subtitle')}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {FEATURES.map(f => (
@@ -122,12 +115,12 @@ export default function Home() {
       {/* Mobile CTA */}
       <section className="py-10 bg-accent sm:hidden">
         <div className="px-5 text-center">
-          <p className="text-white/80 text-sm font-medium mb-3">¿Listo para pedir?</p>
+          <p className="text-white/80 text-sm font-medium mb-3">{t('home.mobileCta.question')}</p>
           <span
             className="inline-block bg-white/60 text-accent/60 px-8 py-4 rounded-2xl font-black text-base w-full cursor-not-allowed select-none"
-            title="Próximamente"
+            title={t('home.llevarBadge')}
           >
-            Para llevar · Próximamente
+            {t('home.llevarBadge')}
           </span>
         </div>
       </section>
@@ -139,8 +132,8 @@ export default function Home() {
             <div>
               <p className="text-white font-black text-lg mb-2">Frankfurt Els Tr3s</p>
               <p className="text-gray-400 text-xs leading-relaxed mb-3">
-                Frankfurts, bocadillos y hamburguesas al momento.<br />
-                Tapas, torradas y postres de Terrassa.
+                {t('home.footer.tagline1')}<br />
+                {t('home.footer.tagline2')}
               </p>
               <a
                 href="tel:930042165"
@@ -151,7 +144,7 @@ export default function Home() {
             </div>
             {/* Dirección */}
             <div>
-              <p className="text-white font-semibold text-xs uppercase tracking-wider mb-2">Dónde estamos</p>
+              <p className="text-white font-semibold text-xs uppercase tracking-wider mb-2">{t('home.footer.whereTitle')}</p>
               <address className="not-italic text-gray-400 text-xs leading-relaxed">
                 Passeig de Lluís Muncunill, 9, local 6<br />
                 08225 Terrassa, Barcelona
@@ -162,32 +155,32 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="inline-block mt-2 text-xs text-accent hover:underline"
               >
-                Ver en Google Maps →
+                {t('home.footer.mapsLink')}
               </a>
             </div>
             {/* Legal */}
             <div>
-              <p className="text-white font-semibold text-xs uppercase tracking-wider mb-2">Legal</p>
+              <p className="text-white font-semibold text-xs uppercase tracking-wider mb-2">{t('home.footer.legalTitle')}</p>
               <ul className="space-y-1.5">
                 <li>
                   <Link href="/privacidad" className="text-gray-400 text-xs hover:text-white transition-colors">
-                    Política de privacidad
+                    {t('home.footer.privacy')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/cookies" className="text-gray-400 text-xs hover:text-white transition-colors">
-                    Política de cookies
+                    {t('home.footer.cookies')}
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 pt-6 text-center text-gray-600 text-xs space-y-2">
-            <p>© 2026 Frankfurt Els Tr3s · Passeig de Lluís Muncunill, 9, local 6 · 08225 Terrassa · Todos los derechos reservados</p>
+            <p>{t('home.footer.copyright')}</p>
             <p>
-              Web creada por{' '}
+              {t('home.footer.madeBy')}{' '}
               <span className="text-gray-400 font-semibold">RushSystems</span>
-              {' · '}Patrocinado por{' '}
+              {' · '}{t('home.footer.sponsoredBy')}{' '}
               <a
                 href="https://nomecreo.com"
                 target="_blank"
@@ -196,11 +189,11 @@ export default function Home() {
               >
                 nomecreo.com
               </a>
-              {' '}— Servicios TI y Ciberseguridad para empresas
+              {' '}{t('home.footer.sponsorDesc')}
             </p>
             <p>
               <Link href="/admin/login" className="text-gray-500 hover:text-white transition-colors">
-                Área de trabajo
+                {t('home.footer.adminLink')}
               </Link>
             </p>
           </div>
