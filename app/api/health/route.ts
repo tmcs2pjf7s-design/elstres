@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import { pool } from '@/lib/db'
+import { pool, connectionString } from '@/lib/db'
 
 export async function GET() {
-  const raw = process.env.DATABASE_URL ?? ''
+  const raw = connectionString ?? ''
   let host = null, port = null, database = null
   try {
     const u = new URL(raw)
@@ -12,8 +12,12 @@ export async function GET() {
   } catch {}
 
   const result: Record<string, unknown> = {
-    database_url_set: raw.length > 0,
-    database_url_looks_quoted: raw.startsWith('"') || raw.startsWith("'"),
+    source: process.env.DATABASE_URL ? 'DATABASE_URL'
+      : process.env.POSTGRES_URL ? 'POSTGRES_URL'
+      : process.env.POSTGRES_URL_NON_POOLING ? 'POSTGRES_URL_NON_POOLING'
+      : 'none',
+    connection_string_set: raw.length > 0,
+    connection_string_looks_quoted: raw.startsWith('"') || raw.startsWith("'"),
     host, port, database,
   }
 
