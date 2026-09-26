@@ -115,12 +115,41 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Cervecería — sección ambiental de escritorio */}
+      <section className="relative py-24 sm:py-32 overflow-hidden">
+        <img
+          src="/hero/bg-tirador.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25" />
+        <div className="relative max-w-3xl mx-auto px-5 text-center">
+          <p className="text-accent text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
+            {t('home.cerveceria.badge')}
+          </p>
+          <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-4">
+            {t('home.cerveceria.title')}
+          </h2>
+          <p className="text-white/80 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+            {t('home.cerveceria.desc')}
+          </p>
+        </div>
+      </section>
+
       {/* Mobile CTA */}
-      <section className="py-10 bg-accent sm:hidden">
-        <div className="px-5 text-center">
-          <p className="text-white/80 text-sm font-medium mb-3">{t('home.mobileCta.question')}</p>
+      <section className="relative py-16 sm:hidden overflow-hidden">
+        <img
+          src="/hero/bg-cerveza.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/10" />
+        <div className="relative px-5 text-center">
+          <p className="text-white/90 text-sm font-medium mb-3">{t('home.mobileCta.question')}</p>
           <span
-            className="inline-block bg-white/60 text-accent/60 px-8 py-4 rounded-2xl font-black text-base w-full cursor-not-allowed select-none"
+            className="inline-block bg-white/85 text-gray-500 px-8 py-4 rounded-2xl font-black text-base w-full cursor-not-allowed select-none backdrop-blur-sm"
             title={t('home.llevarBadge')}
           >
             {t('home.llevarBadge')}
