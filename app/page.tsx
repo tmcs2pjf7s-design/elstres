@@ -5,10 +5,9 @@ import LanguageSwitcher from '@/components/LanguageSwitcher'
 import IntroCanRoca from '@/components/IntroCanRoca'
 
 const HERO_IMAGES = [
-  { src: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80', alt: 'Frankfurt artesanal' },
-  { src: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80', alt: 'Hamburguesa artesanal' },
-  { src: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=400&q=80', alt: 'Bocadillos y tapas' },
-  { src: 'https://images.unsplash.com/photo-1551782450-17144efb9c50?w=400&q=80', alt: 'Tapas y entrantes' },
+  { src: '/hero/hero-bocadillo.jpg', alt: 'Bocadillo de calamares con mayonesa' },
+  { src: '/hero/hero-tinto-verano.jpg', alt: 'Tinto de verano' },
+  { src: '/hero/hero-patatas-bravas.jpg', alt: 'Patatas bravas' },
 ]
 
 export default function Home() {
@@ -81,14 +80,21 @@ export default function Home() {
           </div>
 
           <div className="hidden lg:grid grid-cols-2 gap-4">
-            {HERO_IMAGES.map((img, i) => (
-              <img
-                key={img.src}
-                src={img.src}
-                alt={img.alt}
-                className={`rounded-2xl object-cover w-full h-48 shadow-md${i === 1 ? ' mt-8' : ''}`}
-              />
-            ))}
+            <img
+              src={HERO_IMAGES[0].src}
+              alt={HERO_IMAGES[0].alt}
+              className="col-span-2 rounded-2xl object-cover w-full h-64 shadow-md"
+            />
+            <img
+              src={HERO_IMAGES[1].src}
+              alt={HERO_IMAGES[1].alt}
+              className="rounded-2xl object-cover w-full h-40 shadow-md"
+            />
+            <img
+              src={HERO_IMAGES[2].src}
+              alt={HERO_IMAGES[2].alt}
+              className="rounded-2xl object-cover w-full h-40 shadow-md"
+            />
           </div>
         </div>
       </section>
