@@ -6,6 +6,7 @@ import IntroCanRoca from '@/components/IntroCanRoca'
 
 const HERO_IMAGES = [
   { src: '/hero/hero-bocadillo.jpg', alt: 'Bocadillo de calamares con mayonesa' },
+  { src: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=400&q=80', alt: 'Tarta de queso' },
   { src: '/hero/hero-tinto-verano.jpg', alt: 'Tinto de verano' },
   { src: '/hero/hero-patatas-bravas.jpg', alt: 'Patatas bravas' },
 ]
@@ -80,21 +81,14 @@ export default function Home() {
           </div>
 
           <div className="hidden lg:grid grid-cols-2 gap-4">
-            <img
-              src={HERO_IMAGES[0].src}
-              alt={HERO_IMAGES[0].alt}
-              className="col-span-2 rounded-2xl object-cover w-full h-64 shadow-md"
-            />
-            <img
-              src={HERO_IMAGES[1].src}
-              alt={HERO_IMAGES[1].alt}
-              className="rounded-2xl object-cover w-full h-40 shadow-md"
-            />
-            <img
-              src={HERO_IMAGES[2].src}
-              alt={HERO_IMAGES[2].alt}
-              className="rounded-2xl object-cover w-full h-40 shadow-md"
-            />
+            {HERO_IMAGES.map((img, i) => (
+              <img
+                key={img.src}
+                src={img.src}
+                alt={img.alt}
+                className={`rounded-2xl object-cover w-full h-48 shadow-md${i === 1 ? ' mt-8' : ''}`}
+              />
+            ))}
           </div>
         </div>
       </section>
