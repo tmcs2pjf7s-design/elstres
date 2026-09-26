@@ -189,6 +189,27 @@ export default function Home() {
               >
                 {t('home.footer.mapsLink')}
               </a>
+
+              <div className="mt-4 pt-4 border-t border-gray-800">
+                <p className="text-white/90 text-xs font-semibold mb-1 flex items-center gap-1.5">
+                  {t('home.footer.location2Name')}
+                  <span className="bg-white/10 text-gray-400 text-[10px] font-semibold px-1.5 py-0.5 rounded-full normal-case tracking-normal">
+                    {t('home.footer.comingSoon')}
+                  </span>
+                </p>
+                <address className="not-italic text-gray-400 text-xs leading-relaxed">
+                  Parc de les Nacions Unides, 18, local<br />
+                  08225 Terrassa, Barcelona
+                </address>
+                <a
+                  href="https://maps.google.com/?q=Parc+de+les+Nacions+Unides+18+Terrassa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-2 text-xs text-accent hover:underline"
+                >
+                  {t('home.footer.mapsLink')}
+                </a>
+              </div>
             </div>
             {/* Legal */}
             <div>
