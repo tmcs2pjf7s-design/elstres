@@ -10,6 +10,7 @@ create table if not exists categorias (
   nombre text not null,
   orden integer default 0,
   icono text default '🍽️',
+  tipo text default 'normal' check (tipo in ('normal','suplemento')),
   created_at timestamptz default now()
 );
 
@@ -31,6 +32,7 @@ create table if not exists mesas (
   numero integer not null unique,
   capacidad integer default 4,
   estado text default 'libre' check (estado in ('libre','ocupada','reservada')),
+  tipo text default 'mesa' check (tipo in ('mesa','barra')),
   created_at timestamptz default now()
 );
 
@@ -45,7 +47,32 @@ create table if not exists pedidos (
   cliente_nombre text,
   cliente_telefono text,
   notas text,
+  tipo_entrega text default 'recogida' check (tipo_entrega in ('recogida','domicilio')),
+  direccion_entrega text,
   numero_orden serial,
+  created_at timestamptz default now()
+);
+
+create table if not exists usuarios (
+  id uuid default gen_random_uuid() primary key,
+  nombre text not null,
+  email text not null unique,
+  telefono text,
+  password_hash text not null,
+  salt text not null,
+  rol text not null default 'cliente' check (rol in ('admin','cliente')),
+  created_at timestamptz default now()
+);
+
+create table if not exists impresoras (
+  id uuid default gen_random_uuid() primary key,
+  nombre text not null,
+  ip text not null,
+  puerto integer default 9100,
+  tipo text not null check (tipo in ('cocina','barra','ticket')),
+  protocolo text not null default 'ventana' check (protocolo in ('bixolon','epson','ventana')),
+  activa boolean default true,
+  categorias_ids uuid[] default '{}',
   created_at timestamptz default now()
 );
 
@@ -249,3 +276,24 @@ from cat, (values
   ('Martini Negro',     '', 3.95),
   ('Vermut Casero',     '', 3.95)
 ) as t(nombre, descripcion, precio);
+
+-- ============================================================
+-- SEED: Categoría de suplementos (extras para bocadillos) + productos
+-- ============================================================
+insert into categorias (nombre, orden, icono, tipo) values
+  ('Suplementos', 13, '➕', 'suplemento');
+
+with cat as (select id from categorias where nombre='Suplementos')
+insert into productos (categoria_id, nombre, descripcion, precio, disponible, tiempo_prep) select
+  cat.id, nombre, '', precio, true, 2
+from cat, (values
+  ('Queso',            1.10),
+  ('Cebolla',          0.90),
+  ('Pimiento',         1.10),
+  ('Champiñones',      1.10),
+  ('Huevo',            1.00),
+  ('Alioli',           1.10),
+  ('Pan',              1.25),
+  ('Pan sin gluten',   1.25),
+  ('Pan con tomate',   1.70)
+) as t(nombre, precio);
