@@ -5,7 +5,8 @@ export async function GET() {
   try {
     const { rows } = await pool.query('SELECT * FROM mesas ORDER BY tipo, numero')
     return NextResponse.json(rows)
-  } catch {
+  } catch (e) {
+    console.error('GET /api/data/mesas failed:', e)
     return NextResponse.json([], { status: 500 })
   }
 }

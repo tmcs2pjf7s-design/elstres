@@ -20,7 +20,8 @@ export async function GET() {
       ORDER BY p.nombre
     `)
     return NextResponse.json(rows.map(parseProducto))
-  } catch {
+  } catch (e) {
+    console.error('GET /api/data/productos failed:', e)
     return NextResponse.json([], { status: 500 })
   }
 }

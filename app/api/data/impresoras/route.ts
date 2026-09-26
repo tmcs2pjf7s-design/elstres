@@ -5,7 +5,8 @@ export async function GET() {
   try {
     const { rows } = await pool.query('SELECT * FROM impresoras ORDER BY created_at')
     return NextResponse.json(rows)
-  } catch {
+  } catch (e) {
+    console.error('GET /api/data/impresoras failed:', e)
     return NextResponse.json([], { status: 500 })
   }
 }
