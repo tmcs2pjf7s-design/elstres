@@ -74,8 +74,12 @@ export default function CocinaPage() {
   }, [])
 
   const cambiarEstado = async (id: string, estado: EstadoPedido) => {
-    await updateEstadoPedido(id, estado)
-    setPedidos(prev => prev.map(p => p.id === id ? { ...p, estado } : p))
+    const ok = await updateEstadoPedido(id, estado)
+    if (ok) {
+      setPedidos(prev => prev.map(p => p.id === id ? { ...p, estado } : p))
+    } else {
+      alert('No se pudo actualizar el pedido. Inténtalo de nuevo.')
+    }
   }
 
   const pendientes = pedidos.filter(p => p.estado === 'confirmado').length

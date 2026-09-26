@@ -64,6 +64,9 @@ export async function POST(req: NextRequest) {
          item.variante?.precio ?? item.producto.precio, item.variante?.nombre ?? null]
       )
     }
+    if (tipo === 'mesa' && mesa_id) {
+      await client.query(`UPDATE mesas SET estado='ocupada' WHERE id=$1 AND estado != 'ocupada'`, [mesa_id])
+    }
     await client.query('COMMIT')
     return NextResponse.json({ numero_orden: pedido.numero_orden })
   } catch (e) {

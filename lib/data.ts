@@ -51,14 +51,17 @@ export async function createPedido(
   return data?.numero_orden ?? Math.floor(Math.random() * 900) + 100
 }
 
-export async function updateEstadoPedido(id: string, estado: EstadoPedido): Promise<void> {
+export async function updateEstadoPedido(id: string, estado: EstadoPedido): Promise<boolean> {
   try {
-    await fetch(`${BASE}/pedidos/${id}`, {
+    const res = await fetch(`${BASE}/pedidos/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ estado }),
     })
-  } catch {}
+    return res.ok
+  } catch {
+    return false
+  }
 }
 
 export async function updateMesaEstado(id: string, estado: Mesa['estado']): Promise<void> {

@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { getMesas, getPedidosActivos, getCategorias, getProductos, createPedido, updateEstadoPedido } from '@/lib/data'
+import { getMesas, getPedidosActivos, getCategorias, getProductos, createPedido, updateEstadoPedido, updateMesaEstado } from '@/lib/data'
 import { Mesa, Pedido, EstadoPedido, Categoria, Producto } from '@/lib/types'
 import PedidoCard from '@/components/PedidoCard'
 
@@ -95,9 +95,14 @@ export default function ComanderoPage() {
   const itemsMesa = pedidosMesa.flatMap(p => p.items ?? [])
 
   const cambiarEstado = async (id: string, estado: EstadoPedido) => {
-    await updateEstadoPedido(id, estado)
-    setPedidos(prev => prev.map(p => p.id === id ? { ...p, estado } : p))
-    estadosConocidos.current.set(id, estado)
+    const ok = await updateEstadoPedido(id, estado)
+    if (ok) {
+      setPedidos(prev => prev.map(p => p.id === id ? { ...p, estado } : p))
+      estadosConocidos.current.set(id, estado)
+    } else {
+      alert('No se pudo actualizar el pedido. Inténtalo de nuevo.')
+    }
+    return ok
   }
 
   const agregarCarrito = (p: Producto) => {
@@ -115,6 +120,8 @@ export default function ComanderoPage() {
     try {
       const items = carrito.map(i => ({ producto: i.producto, cantidad: i.qty, variante: undefined as undefined }))
       await createPedido('mesa', items, { mesa_id: mesaSel.id })
+      // El servidor marca la mesa como 'ocupada' al crear el pedido; reflejarlo también aquí
+      setMesas(prev => prev.map(m => m.id === mesaSel.id ? { ...m, estado: 'ocupada' } : m))
       setCarrito([])
       await cargarPedidos()
       setVista('pedidos')
@@ -421,8 +428,13 @@ export default function ComanderoPage() {
                   onClick={async () => {
                     if (!confirm(`¿Marcar toda la mesa ${mesaSel.numero} como pagada y liberar?`)) return
                     for (const p of pedidosMesa) {
-                      if (p.estado !== 'cancelado') await cambiarEstado(p.id, 'entregado')
+                      if (p.estado !== 'cancelado') {
+                        const ok = await cambiarEstado(p.id, 'entregado')
+                        if (!ok) return
+                      }
                     }
+                    await updateMesaEstado(mesaSel.id, 'libre')
+                    setMesas(prev => prev.map(m => m.id === mesaSel.id ? { ...m, estado: 'libre' } : m))
                     await cargarPedidos()
                     setVista('mesas')
                     setMesaSel(null)
