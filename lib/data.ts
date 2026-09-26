@@ -39,6 +39,14 @@ export async function getPedidosActivos(): Promise<Pedido[]> {
   return (await get<Pedido[]>('/pedidos')) ?? mockPedidos
 }
 
+// Todos los pedidos de una fecha (incluye entregados y cancelados) —
+// necesario para facturar una mesa, ya que getPedidosActivos() excluye
+// los pedidos ya entregados.
+export async function getPedidosDelDia(fecha: string): Promise<Pedido[]> {
+  const data = await get<{ pedidos: Pedido[] }>(`/historial?fecha=${fecha}`)
+  return data?.pedidos ?? []
+}
+
 export async function createPedido(
   tipo: 'mesa' | 'llevar',
   items: CartItem[],

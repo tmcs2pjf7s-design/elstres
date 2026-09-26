@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { getMesas, getPedidosActivos, getCategorias, getProductos, createPedido, updateEstadoPedido, updateMesaEstado } from '@/lib/data'
+import { getMesas, getPedidosActivos, getPedidosDelDia, getCategorias, getProductos, createPedido, updateEstadoPedido, updateMesaEstado } from '@/lib/data'
 import { Mesa, Pedido, EstadoPedido, Categoria, Producto } from '@/lib/types'
 import PedidoCard from '@/components/PedidoCard'
 
@@ -23,6 +23,7 @@ function beep(freq: number, dur: number) {
 export default function ComanderoPage() {
   const [mesas, setMesas] = useState<Mesa[]>([])
   const [pedidos, setPedidos] = useState<Pedido[]>([])
+  const [pedidosHoy, setPedidosHoy] = useState<Pedido[]>([])
   const [categorias, setCategorias] = useState<Categoria[]>([])
   const [productos, setProductos] = useState<Producto[]>([])
   const [vista, setVista] = useState<Vista>('mesas')
@@ -41,6 +42,16 @@ export default function ComanderoPage() {
     return data
   }, [])
 
+  // Pedidos de hoy incluyendo entregados — necesarios para facturar una
+  // mesa correctamente (getPedidosActivos() los excluye en cuanto se
+  // marcan como entregados, aunque la mesa siga sin pagar).
+  const cargarPedidosHoy = useCallback(async () => {
+    const hoy = new Date().toISOString().slice(0, 10)
+    const data = await getPedidosDelDia(hoy)
+    setPedidosHoy(data)
+    return data
+  }, [])
+
   useEffect(() => {
     Promise.all([getMesas(), getPedidosActivos(), getCategorias(), getProductos()])
       .then(([ms, ps, cats, prods]) => {
@@ -55,6 +66,7 @@ export default function ComanderoPage() {
         })
         iniciado.current = true
       })
+    cargarPedidosHoy()
 
     const interval = setInterval(async () => {
       const nuevos = await getPedidosActivos()
@@ -83,6 +95,11 @@ export default function ComanderoPage() {
     return () => clearInterval(t)
   }, [])
 
+  // Refresca los pedidos de hoy (incluidos entregados) al abrir la cuenta
+  useEffect(() => {
+    if (vista === 'cuenta') cargarPedidosHoy()
+  }, [vista, cargarPedidosHoy])
+
   const pendientesVerificar = pedidos.filter(p => p.estado === 'pendiente' && p.tipo === 'mesa')
   const listosEntregar = pedidos.filter(p => p.estado === 'listo')
 
@@ -90,15 +107,24 @@ export default function ComanderoPage() {
     ? pedidos.filter(p => p.mesa_id === mesaSel.id && !['entregado', 'cancelado'].includes(p.estado))
     : []
 
-  // Cuenta de mesa: todos los pedidos de hoy (incluido entregados) para calcular total
-  const totalMesa = pedidosMesa.reduce((s, p) => s + Number(p.total ?? 0), 0)
-  const itemsMesa = pedidosMesa.flatMap(p => p.items ?? [])
+  // Cuenta de mesa: todos los pedidos de hoy (incluido entregados) para calcular total.
+  // OJO: pedidosMesa (arriba) viene de getPedidosActivos(), que excluye los
+  // entregados — no vale para facturar, o el importe bajaría en cuanto se
+  // entregara algo. Para la cuenta usamos pedidosHoy, que sí los incluye.
+  const pedidosMesaFacturables = mesaSel
+    ? pedidosHoy.filter(p => p.mesa_id === mesaSel.id && p.estado !== 'cancelado')
+    : []
+  const totalMesa = pedidosMesaFacturables.reduce((s, p) => s + Number(p.total ?? 0), 0)
+  const itemsMesa = pedidosMesaFacturables.flatMap(p => p.items ?? [])
 
   const cambiarEstado = async (id: string, estado: EstadoPedido) => {
     const ok = await updateEstadoPedido(id, estado)
     if (ok) {
       setPedidos(prev => prev.map(p => p.id === id ? { ...p, estado } : p))
       estadosConocidos.current.set(id, estado)
+      // Un pedido recién entregado sale de getPedidosActivos() pero debe
+      // seguir contando en la cuenta de la mesa hasta que se cobre.
+      if (estado === 'entregado') cargarPedidosHoy()
     } else {
       alert('No se pudo actualizar el pedido. Inténtalo de nuevo.')
     }
@@ -378,20 +404,21 @@ export default function ComanderoPage() {
               <h2 className="font-black text-lg">Cuenta · {mesaLabel(mesaSel)}</h2>
             </div>
 
-            {pedidosMesa.length === 0 ? (
+            {pedidosMesaFacturables.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
                 <p className="text-4xl mb-3">🍽️</p>
-                <p className="text-gray-500">No hay pedidos activos en esta mesa</p>
+                <p className="text-gray-500">No hay pedidos en esta mesa</p>
               </div>
             ) : (
               <>
                 {/* Desglose por pedido */}
                 <div className="space-y-3 mb-4">
-                  {pedidosMesa.map(p => (
+                  {pedidosMesaFacturables.map(p => (
                     <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-bold text-sm">Comanda #{p.numero_orden}</span>
                         <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+                          p.estado === 'entregado' ? 'bg-gray-800 text-white' :
                           p.estado === 'listo' ? 'bg-green-100 text-green-700' :
                           p.estado === 'en_preparacion' ? 'bg-orange-100 text-orange-700' :
                           p.estado === 'confirmado' ? 'bg-blue-100 text-blue-700' :
@@ -420,7 +447,7 @@ export default function ComanderoPage() {
                     <span className="font-black text-xl">TOTAL MESA</span>
                     <span className="font-black text-3xl text-accent">{totalMesa.toFixed(2)}€</span>
                   </div>
-                  <p className="text-gray-400 text-xs mt-1">{pedidosMesa.reduce((s, p) => s + (p.items?.length ?? 0), 0)} productos · {pedidosMesa.length} comanda{pedidosMesa.length > 1 ? 's' : ''}</p>
+                  <p className="text-gray-400 text-xs mt-1">{pedidosMesaFacturables.reduce((s, p) => s + (p.items?.length ?? 0), 0)} productos · {pedidosMesaFacturables.length} comanda{pedidosMesaFacturables.length > 1 ? 's' : ''}</p>
                 </div>
 
                 {/* Cerrar mesa */}
@@ -436,6 +463,7 @@ export default function ComanderoPage() {
                     await updateMesaEstado(mesaSel.id, 'libre')
                     setMesas(prev => prev.map(m => m.id === mesaSel.id ? { ...m, estado: 'libre' } : m))
                     await cargarPedidos()
+                    await cargarPedidosHoy()
                     setVista('mesas')
                     setMesaSel(null)
                   }}
