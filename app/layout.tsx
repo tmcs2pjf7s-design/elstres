@@ -9,11 +9,11 @@ const baloo = Baloo_2({ subsets: ['latin'], weight: ['600', '700', '800'], varia
 
 export const metadata: Metadata = {
   title: 'Frankfurt Els Tr3s · Terrassa',
-  description: 'Frankfurts, bocadillos y hamburguesas al momento. Tapas, torradas y postres en Terrassa. Pide desde tu mesa o para llevar.',
+  description: 'Frankfurts, bocadillos y tapas al momento. Torradas y postres en Terrassa. Pide desde tu mesa o para llevar.',
   keywords: 'frankfurt, bocadillos, hamburguesas, tapas, terrassa, para llevar',
   openGraph: {
     title: 'Frankfurt Els Tr3s · Terrassa',
-    description: 'Frankfurts, bocadillos y hamburguesas al momento en Terrassa.',
+    description: 'Frankfurts, bocadillos y tapas al momento en Terrassa.',
     type: 'website',
     locale: 'es_ES',
     siteName: 'Frankfurt Els Tr3s',
