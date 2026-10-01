@@ -238,7 +238,14 @@ export default function Home() {
             <p>{t('home.footer.copyright')}</p>
             <p>
               {t('home.footer.madeBy')}{' '}
-              <span className="text-gray-400 font-semibold">RushSystems</span>
+              <a
+                href="https://rushsystems.es"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 font-semibold hover:text-white transition-colors"
+              >
+                RushSystems
+              </a>
               {' · '}{t('home.footer.sponsoredBy')}{' '}
               <a
                 href="https://nomecreo.com"
