@@ -13,7 +13,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'home.hero.badge': 'Bienvenidos',
     'home.hero.subtitle1': 'Frankfurts, bocadillos y tapas al momento.',
     'home.hero.subtitle2': 'Disfruta de nuestras torradas y una selección de los mejores postres de Terrassa. Pide desde tu mesa o llévate tu pedido.',
-    'home.hero.ctaMenu': 'Ver menú',
+    'home.hero.ctaMenu': 'Ver carta',
     'home.features.title': 'Una nueva forma de pedir',
     'home.features.subtitle': 'Sin esperas, sin confusiones. Tecnología al servicio de la buena mesa.',
     'home.features.qr.title': 'Escanea el QR',
