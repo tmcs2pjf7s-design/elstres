@@ -246,7 +246,7 @@ export default function Home() {
               >
                 RushSystems
               </a>
-              {' · '}{t('home.footer.sponsoredBy')}{' '}
+              {' · '}{t('home.footer.sponsorDesc')}{', '}{t('home.footer.sponsoredBy')}{' '}
               <a
                 href="https://nomecreo.com"
                 target="_blank"
@@ -255,7 +255,6 @@ export default function Home() {
               >
                 nomecreo.com
               </a>
-              {' '}{t('home.footer.sponsorDesc')}
             </p>
             <p>
               <Link href="/admin/login" className="text-gray-500 hover:text-white transition-colors">

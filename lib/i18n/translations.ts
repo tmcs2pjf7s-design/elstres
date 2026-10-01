@@ -38,7 +38,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'home.footer.copyright': '© 2026 Frankfurt Els Tr3s · Passeig de Lluís Muncunill, 9, local 6 · 08225 Terrassa · Todos los derechos reservados',
     'home.footer.madeBy': 'Web creada por',
     'home.footer.sponsoredBy': 'Patrocinado por',
-    'home.footer.sponsorDesc': '— Servicios TI y Ciberseguridad para empresas',
+    'home.footer.sponsorDesc': 'Servicios IT y Ciberseguridad para empresas',
     'home.footer.adminLink': 'Área de trabajo',
     'home.footer.suplementos': 'Suplementos',
 
@@ -286,7 +286,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'home.footer.copyright': '© 2026 Frankfurt Els Tr3s · Passeig de Lluís Muncunill, 9, local 6 · 08225 Terrassa · Tots els drets reservats',
     'home.footer.madeBy': 'Web creada per',
     'home.footer.sponsoredBy': 'Patrocinat per',
-    'home.footer.sponsorDesc': '— Serveis TI i Ciberseguretat per a empreses',
+    'home.footer.sponsorDesc': 'Serveis IT i Ciberseguretat per a empreses',
     'home.footer.adminLink': 'Àrea de treball',
     'home.footer.suplementos': 'Suplements',
 
@@ -534,7 +534,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'home.footer.copyright': '© 2026 Frankfurt Els Tr3s · Passeig de Lluís Muncunill, 9, local 6 · 08225 Terrassa · All rights reserved',
     'home.footer.madeBy': 'Website made by',
     'home.footer.sponsoredBy': 'Sponsored by',
-    'home.footer.sponsorDesc': '— IT Services and Cybersecurity for businesses',
+    'home.footer.sponsorDesc': 'IT Services and Cybersecurity for businesses',
     'home.footer.adminLink': 'Staff area',
     'home.footer.suplementos': 'Extras',
 
