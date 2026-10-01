@@ -40,6 +40,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'home.footer.sponsoredBy': 'Patrocinado por',
     'home.footer.sponsorDesc': '— Servicios TI y Ciberseguridad para empresas',
     'home.footer.adminLink': 'Área de trabajo',
+    'home.footer.suplementos': 'Suplementos',
 
     'menu.back': '← Inicio',
     'menu.title': 'Menú',
@@ -287,6 +288,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'home.footer.sponsoredBy': 'Patrocinat per',
     'home.footer.sponsorDesc': '— Serveis TI i Ciberseguretat per a empreses',
     'home.footer.adminLink': 'Àrea de treball',
+    'home.footer.suplementos': 'Suplements',
 
     'menu.back': '← Inici',
     'menu.title': 'Carta',
@@ -534,6 +536,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'home.footer.sponsoredBy': 'Sponsored by',
     'home.footer.sponsorDesc': '— IT Services and Cybersecurity for businesses',
     'home.footer.adminLink': 'Staff area',
+    'home.footer.suplementos': 'Extras',
 
     'menu.back': '← Home',
     'menu.title': 'Menu',

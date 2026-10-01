@@ -1,8 +1,11 @@
 'use client'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useLanguage } from '@/context/LanguageContext'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import IntroCanRoca from '@/components/IntroCanRoca'
+import { getProductos } from '@/lib/data'
+import { Producto } from '@/lib/types'
 
 const HERO_IMAGES = [
   { src: '/hero/hero-bocadillo.jpg', alt: 'Bocadillo de calamares con mayonesa' },
@@ -13,6 +16,13 @@ const HERO_IMAGES = [
 
 export default function Home() {
   const { t } = useLanguage()
+  const [suplementos, setSuplementos] = useState<Producto[]>([])
+
+  useEffect(() => {
+    getProductos().then(prods => {
+      setSuplementos(prods.filter(p => (p as any).categoria_tipo === 'suplemento' && p.disponible))
+    })
+  }, [])
 
   const FEATURES = [
     { icon: '📱', title: t('home.features.qr.title'), desc: t('home.features.qr.desc') },
@@ -255,6 +265,11 @@ export default function Home() {
                 {t('home.footer.adminLink')}
               </Link>
             </p>
+            {suplementos.length > 0 && (
+              <p className="text-[10px] text-gray-600 leading-relaxed pt-1">
+                {t('home.footer.suplementos')}: {suplementos.map(s => `${s.nombre} ${Number(s.precio).toFixed(2)}€`).join(' · ')}
+              </p>
+            )}
           </div>
         </div>
       </footer>
