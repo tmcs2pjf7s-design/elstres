@@ -23,6 +23,7 @@ export default function MenuPage() {
 
   const categoriasVisibles = categorias.filter(c => c.tipo !== 'suplemento')
   const filtrados = productos.filter(p => p.disponible && p.categoria_id === cat && (p as any).categoria_tipo !== 'suplemento')
+  const suplementos = productos.filter(p => p.disponible && (p as any).categoria_tipo === 'suplemento')
 
   return (
     <div className="min-h-screen bg-cream">
@@ -86,6 +87,12 @@ export default function MenuPage() {
             </div>
           ))}
         </div>
+        )}
+
+        {suplementos.length > 0 && (
+          <p className="text-[10px] text-gray-400 leading-relaxed mt-6 px-0.5">
+            {t('home.footer.suplementos')}: {suplementos.map(s => `${s.nombre} ${Number(s.precio).toFixed(2)}€`).join(' · ')}
+          </p>
         )}
       </main>
     </div>
