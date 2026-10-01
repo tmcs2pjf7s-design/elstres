@@ -301,10 +301,10 @@ export default function MesaPage() {
       <AvisoComanda />
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-2xl mx-auto px-4">
-          <div className="h-14 flex items-center justify-between">
-            <div>
-              <span className="font-display font-bold text-lg">Frankfurt Els Tr3s</span>
-              {mesa && <span className="ml-2 text-sm text-gray-400 font-medium">{mesaLabel}</span>}
+          <div className="min-h-14 py-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-display font-bold text-base sm:text-lg">Frankfurt Els Tr3s</span>
+              {mesa && <span className="text-sm text-gray-400 font-medium">{mesaLabel}</span>}
             </div>
             <div className="flex items-center gap-2">
               <LanguageSwitcher />

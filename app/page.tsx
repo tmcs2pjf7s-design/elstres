@@ -26,18 +26,18 @@ export default function Home() {
 
       {/* Navbar */}
       <nav className="fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-gray-100 z-40">
-        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="font-display font-bold text-xl text-gray-900 tracking-tight">Frankfurt Els Tr3s</span>
-          <div className="flex items-center gap-2">
+        <div className="max-w-6xl mx-auto px-4 min-h-14 py-2 flex items-center justify-between gap-2">
+          <span className="font-display font-bold text-base sm:text-xl text-gray-900 tracking-tight truncate">Frankfurt Els Tr3s</span>
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
             <LanguageSwitcher />
             <Link
               href="/menu"
-              className="text-sm text-gray-600 hover:text-gray-900 font-medium px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors"
+              className="text-sm text-gray-600 hover:text-gray-900 font-medium px-2.5 sm:px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors"
             >
               {t('home.nav.menu')}
             </Link>
             <span
-              className="text-sm bg-gray-200 text-gray-500 px-4 py-2 rounded-xl font-semibold cursor-not-allowed select-none"
+              className="hidden sm:inline-block text-sm bg-gray-200 text-gray-500 px-4 py-2 rounded-xl font-semibold cursor-not-allowed select-none"
               title={t('home.llevarBadge')}
             >
               {t('home.llevarBadge')}
@@ -47,9 +47,9 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="pt-14 min-h-screen flex items-center relative overflow-hidden bg-white">
+      <section className="pt-14 lg:min-h-screen flex items-center relative overflow-hidden bg-white">
         <div className="absolute inset-0 bg-gradient-to-br from-beige/60 via-white to-white" />
-        <div className="relative max-w-6xl mx-auto px-5 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
+        <div className="relative max-w-6xl mx-auto px-5 py-10 sm:py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
           <div>
             <p className="text-accent text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
               {t('home.hero.badge')}
@@ -79,6 +79,12 @@ export default function Home() {
               </Link>
             </div>
           </div>
+
+          <img
+            src={HERO_IMAGES[0].src}
+            alt={HERO_IMAGES[0].alt}
+            className="lg:hidden rounded-2xl object-cover w-full h-48 shadow-md"
+          />
 
           <div className="hidden lg:grid grid-cols-2 gap-4">
             {HERO_IMAGES.map((img, i) => (
