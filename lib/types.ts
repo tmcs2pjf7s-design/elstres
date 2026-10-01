@@ -16,6 +16,7 @@ export interface Producto {
   disponible: boolean
   tiempo_prep: number
   variantes?: Variante[]
+  alergenos?: string[]
 }
 
 export interface Mesa {

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Producto, Variante } from '@/lib/types'
 import { useCart } from '@/context/CartContext'
 import { useLanguage } from '@/context/LanguageContext'
+import AllergenBadges from '@/components/AllergenBadges'
 
 interface Props {
   producto: Producto
@@ -90,6 +91,7 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
           ) : (
             <p className="text-accent font-black text-base mt-1.5">{precioBase.toFixed(2)}€</p>
           )}
+          <AllergenBadges codigos={producto.alergenos} className="mt-1.5" />
         </div>
 
         <div className="flex-shrink-0">
@@ -127,7 +129,8 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
             onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
             <h3 className="font-black text-xl mb-1">{producto.nombre}</h3>
-            {producto.descripcion && <p className="text-gray-400 text-sm mb-5">{producto.descripcion}</p>}
+            {producto.descripcion && <p className="text-gray-400 text-sm mb-2">{producto.descripcion}</p>}
+            <AllergenBadges codigos={producto.alergenos} className="mb-4" />
             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">{t('menuCard.chooseSize')}</p>
             <div className="space-y-3 mb-2">
               {producto.variantes!.map(v => (

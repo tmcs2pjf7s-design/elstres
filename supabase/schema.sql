@@ -24,6 +24,7 @@ create table if not exists productos (
   disponible boolean default true,
   tiempo_prep integer default 10,
   variantes jsonb default null,
+  alergenos text[] default '{}',
   created_at timestamptz default now()
 );
 

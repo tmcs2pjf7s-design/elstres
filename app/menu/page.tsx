@@ -5,6 +5,7 @@ import { getCategorias, getProductos } from '@/lib/data'
 import { Categoria, Producto } from '@/lib/types'
 import { useLanguage } from '@/context/LanguageContext'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import AllergenBadges from '@/components/AllergenBadges'
 
 export default function MenuPage() {
   const { t } = useLanguage()
@@ -45,6 +46,9 @@ export default function MenuPage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-4 pb-8">
+        <p className="text-gray-400 text-[11px] leading-relaxed mb-3 px-0.5">
+          ℹ️ {t('menuCard.allergensNote')}
+        </p>
         {cat === '' ? (
           <div className="space-y-2">
             {Array.from({ length: 7 }).map((_, i) => (
@@ -77,6 +81,7 @@ export default function MenuPage() {
                 ) : (
                   <p className="text-accent font-black text-base mt-1">{p.precio.toFixed(2)}€</p>
                 )}
+                <AllergenBadges codigos={p.alergenos} className="mt-1.5" />
               </div>
             </div>
           ))}
