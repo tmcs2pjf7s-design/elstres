@@ -9,8 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        accent: '#e85d04',
-        'accent-dark': '#c44d03',
+        accent: '#8a6d1f',
+        'accent-dark': '#6e5518',
+        navy: '#0f2a47',
+        'navy-light': '#1d4269',
       },
       fontFamily: {
         display: ['var(--font-baloo)', 'system-ui', 'sans-serif'],

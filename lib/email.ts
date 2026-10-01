@@ -26,7 +26,7 @@ export async function enviarEmailVerificacion(
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
 <body style="margin:0;padding:0;background:#f9fafb;font-family:system-ui,-apple-system,sans-serif;">
   <div style="max-width:520px;margin:40px auto;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08);">
-    <div style="background:#e85d04;padding:32px 40px;text-align:center;">
+    <div style="background:#8a6d1f;padding:32px 40px;text-align:center;">
       <h1 style="margin:0;color:#fff;font-size:22px;font-weight:900;letter-spacing:-0.5px;">Frankfurt Els Tr3s</h1>
       <p style="margin:8px 0 0;color:rgba(255,255,255,.8);font-size:14px;">Passeig de Lluís Muncunill, 9 · Terrassa</p>
     </div>
@@ -38,7 +38,7 @@ export async function enviarEmailVerificacion(
       </p>
       <div style="text-align:center;margin:32px 0;">
         <a href="${enlace}"
-          style="background:#e85d04;color:#fff;text-decoration:none;padding:16px 36px;border-radius:16px;font-weight:700;font-size:16px;display:inline-block;">
+          style="background:#8a6d1f;color:#fff;text-decoration:none;padding:16px 36px;border-radius:16px;font-weight:700;font-size:16px;display:inline-block;">
           ✅ Confirmar mi cuenta
         </a>
       </div>

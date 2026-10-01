@@ -245,7 +245,7 @@ export default function LlevarPage() {
 
           <button
             onClick={() => cliente ? setStep('datos') : setStep('auth')}
-            className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors shadow-lg shadow-orange-200">
+            className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors shadow-lg shadow-amber-200">
             {t('llevar.entrega.continue')} · {total.toFixed(2)}€
           </button>
         </main>
@@ -489,7 +489,7 @@ export default function LlevarPage() {
             </div>
 
             <button type="submit" disabled={loading || pago === 'online'}
-              className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-lg shadow-orange-200">
+              className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-lg shadow-amber-200">
               {loading ? t('common.sending') : `${t('llevar.datos.submit')} · ${total.toFixed(2)}€`}
             </button>
             {pago === 'online' && <p className="text-center text-xs text-gray-400">{t('llevar.datos.onlineNote')}</p>}

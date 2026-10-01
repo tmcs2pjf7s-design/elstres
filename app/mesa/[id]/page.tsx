@@ -282,7 +282,7 @@ export default function MesaPage() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-lg shadow-orange-200">
+              className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-lg shadow-amber-200">
               {loading ? t('common.sending') : `${t('mesa.datos.submit')} · ${total.toFixed(2)}€`}
             </button>
           </form>
