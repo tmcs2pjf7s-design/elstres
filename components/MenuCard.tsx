@@ -82,7 +82,7 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
           {tieneVariantes ? (
             <div className="flex gap-1.5 mt-2 flex-wrap">
               {producto.variantes!.map(v => (
-                <span key={v.nombre} className="text-xs bg-orange-50 text-accent px-2 py-0.5 rounded-lg font-semibold">
+                <span key={v.nombre} className="text-xs bg-forest/10 text-accent px-2 py-0.5 rounded-lg font-semibold">
                   {v.nombre} {Number(v.precio).toFixed(2)}€
                 </span>
               ))}
@@ -95,7 +95,7 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
         <div className="flex-shrink-0">
           {totalQty === 0 ? (
             <button onClick={handleAnadir}
-              className="w-11 h-11 bg-accent text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg shadow-amber-200 active:scale-90 transition-transform">
+              className="w-11 h-11 bg-accent text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg shadow-forest/20 active:scale-90 transition-transform">
               +
             </button>
           ) : (

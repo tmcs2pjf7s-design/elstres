@@ -24,7 +24,7 @@ export default function MenuPage() {
   const filtrados = productos.filter(p => p.disponible && p.categoria_id === cat && (p as any).categoria_tipo !== 'suplemento')
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4">
           <div className="h-14 flex items-center gap-3">
@@ -69,7 +69,7 @@ export default function MenuPage() {
                 {p.variantes ? (
                   <div className="flex gap-1.5 mt-1.5 flex-wrap">
                     {p.variantes.map(v => (
-                      <span key={v.nombre} className="text-xs bg-orange-50 text-accent px-2 py-0.5 rounded-lg font-semibold">
+                      <span key={v.nombre} className="text-xs bg-forest/10 text-accent px-2 py-0.5 rounded-lg font-semibold">
                         {v.nombre} {v.precio.toFixed(2)}€
                       </span>
                     ))}

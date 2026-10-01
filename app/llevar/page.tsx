@@ -189,7 +189,7 @@ export default function LlevarPage() {
   // ── ELEGIR TIPO DE ENTREGA ────────────────────────────────────
   if (step === 'entrega') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-cream">
         <header className="bg-white border-b border-gray-100">
           <div className="max-w-lg mx-auto px-4 h-14 flex items-center gap-3">
             <button onClick={() => setStep('menu')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">{t('common.back')}</button>
@@ -245,7 +245,7 @@ export default function LlevarPage() {
 
           <button
             onClick={() => cliente ? setStep('datos') : setStep('auth')}
-            className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors shadow-lg shadow-amber-200">
+            className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors shadow-lg shadow-forest/20">
             {t('llevar.entrega.continue')} · {total.toFixed(2)}€
           </button>
         </main>
@@ -256,7 +256,7 @@ export default function LlevarPage() {
   // ── AUTH ──────────────────────────────────────────────────────
   if (step === 'auth') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-cream">
         <header className="bg-white border-b border-gray-100">
           <div className="max-w-lg mx-auto px-4 h-14 flex items-center gap-3">
             <button onClick={() => setStep('entrega')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">{t('common.back')}</button>
@@ -318,7 +318,7 @@ export default function LlevarPage() {
   // ── DATOS / CONFIRMAR ─────────────────────────────────────────
   if (step === 'datos') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-cream">
         <header className="bg-white border-b border-gray-100">
           <div className="max-w-lg mx-auto px-4 h-14 flex items-center gap-3">
             <button onClick={() => setStep('entrega')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">{t('common.back')}</button>
@@ -489,7 +489,7 @@ export default function LlevarPage() {
             </div>
 
             <button type="submit" disabled={loading || pago === 'online'}
-              className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-lg shadow-amber-200">
+              className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-lg shadow-forest/20">
               {loading ? t('common.sending') : `${t('llevar.datos.submit')} · ${total.toFixed(2)}€`}
             </button>
             {pago === 'online' && <p className="text-center text-xs text-gray-400">{t('llevar.datos.onlineNote')}</p>}
@@ -501,7 +501,7 @@ export default function LlevarPage() {
 
   // ── MENÚ (PRINCIPAL) ──────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <AvisoComanda />
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-2xl mx-auto px-4">

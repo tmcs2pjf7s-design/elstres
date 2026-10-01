@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-cream flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">⚙️</div>

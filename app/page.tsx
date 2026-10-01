@@ -48,7 +48,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="pt-14 min-h-screen flex items-center relative overflow-hidden bg-white">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-50/70 via-white to-white" />
+        <div className="absolute inset-0 bg-gradient-to-br from-beige/60 via-white to-white" />
         <div className="relative max-w-6xl mx-auto px-5 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
           <div>
             <p className="text-accent text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
@@ -56,7 +56,7 @@ export default function Home() {
             </p>
             <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-gray-900 mb-5 leading-[1.05]">
               Frankfurt<br />
-              <span className="text-accent">Els Tr3s.</span>
+              <span className="text-gold-dark">Els Tr3s.</span>
             </h1>
             <p className="text-base sm:text-xl text-gray-500 mb-2 max-w-md leading-relaxed">
               {t('home.hero.subtitle1')}
@@ -94,7 +94,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-16 sm:py-24 bg-gray-50">
+      <section className="py-16 sm:py-24 bg-beige">
         <div className="max-w-6xl mx-auto px-5">
           <h2 className="font-display font-bold text-2xl sm:text-3xl text-center mb-3">{t('home.features.title')}</h2>
           <p className="text-gray-500 text-center mb-10 sm:mb-14 max-w-xl mx-auto text-sm sm:text-base">
@@ -123,7 +123,7 @@ export default function Home() {
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/60 to-navy/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/60 to-forest/25" />
         <div className="relative max-w-3xl mx-auto px-5 text-center">
           <p className="text-accent text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
             {t('home.cerveceria.badge')}
@@ -145,7 +145,7 @@ export default function Home() {
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/45 to-navy/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/45 to-forest/10" />
         <div className="relative px-5 text-center">
           <p className="text-white/90 text-sm font-medium mb-3">{t('home.mobileCta.question')}</p>
           <span
@@ -157,7 +157,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-navy py-10 text-gray-400 text-sm">
+      <footer className="bg-forest py-10 text-gray-400 text-sm">
         <div className="max-w-6xl mx-auto px-5">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
             {/* Marca */}

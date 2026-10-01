@@ -7,7 +7,7 @@ export default function PrivacidadContent() {
   const { t } = useLanguage()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <header className="bg-white border-b border-gray-100">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center gap-3">
           <Link href="/" className="text-gray-400 text-sm font-medium hover:text-gray-700">{t('legal.backHome')}</Link>

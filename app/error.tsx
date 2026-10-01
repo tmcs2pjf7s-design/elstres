@@ -13,7 +13,7 @@ export default function GlobalError({
   }, [error])
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-cream flex items-center justify-center p-6">
       <div className="bg-white rounded-2xl border border-red-200 shadow-sm p-8 max-w-2xl w-full">
         <h1 className="text-xl font-black text-red-600 mb-4">Error detectado</h1>
         <div className="bg-red-50 rounded-xl p-4 mb-4 font-mono text-sm text-red-800 break-all whitespace-pre-wrap">

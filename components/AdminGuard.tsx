@@ -16,7 +16,7 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
 
   if (!checked) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-cream">
         <div className="text-gray-400 text-sm">Verificando acceso...</div>
       </div>
     )

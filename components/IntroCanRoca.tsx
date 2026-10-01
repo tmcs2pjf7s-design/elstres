@@ -67,7 +67,7 @@ export default function IntroCanRoca() {
               className="intro-anim-glow absolute pointer-events-none"
               style={{
                 left: '24%', width: '52%', top: '71%', height: '22%',
-                background: 'radial-gradient(ellipse at center, rgba(201,162,39,0.55) 0%, rgba(201,162,39,0.18) 55%, rgba(201,162,39,0) 80%)',
+                background: 'radial-gradient(ellipse at center, rgba(184,149,94,0.55) 0%, rgba(184,149,94,0.18) 55%, rgba(184,149,94,0) 80%)',
                 mixBlendMode: 'screen',
               }}
             />

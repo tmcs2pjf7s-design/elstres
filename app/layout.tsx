@@ -23,13 +23,13 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#0f2a47',
+  themeColor: '#0f2e24',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className={`${inter.className} ${baloo.variable} bg-gray-50 text-gray-900 antialiased`}>
+      <body className={`${inter.className} ${baloo.variable} bg-cream text-gray-900 antialiased`}>
         <LanguageProvider>
           <CartProvider>{children}</CartProvider>
         </LanguageProvider>

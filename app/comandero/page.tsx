@@ -165,7 +165,7 @@ export default function ComanderoPage() {
   const mesaLabel = (m: Mesa) => m.tipo === 'barra' ? `🍺 Barra ${m.numero}` : `Mesa ${m.numero}`
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-cream">
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">

@@ -138,7 +138,7 @@ export default function MesaPage() {
   // ── PANTALLA AUTH ─────────────────────────────────────────────
   if (step === 'auth') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-cream">
         <header className="bg-white border-b border-gray-100">
           <div className="max-w-lg mx-auto px-4 h-14 flex items-center gap-3">
             <button onClick={() => setStep('menu')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">{t('common.back')}</button>
@@ -211,7 +211,7 @@ export default function MesaPage() {
   // ── PANTALLA DATOS / CONFIRMAR ────────────────────────────────
   if (step === 'datos') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-cream">
         <header className="bg-white border-b border-gray-100">
           <div className="max-w-lg mx-auto px-4 h-14 flex items-center gap-3">
             <button onClick={() => setStep('menu')} className="text-gray-400 hover:text-gray-900 text-sm font-medium">{t('common.back')}</button>
@@ -282,7 +282,7 @@ export default function MesaPage() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-lg shadow-amber-200">
+              className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-lg hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-lg shadow-forest/20">
               {loading ? t('common.sending') : `${t('mesa.datos.submit')} · ${total.toFixed(2)}€`}
             </button>
           </form>
@@ -297,7 +297,7 @@ export default function MesaPage() {
 
   // ── PANTALLA MENÚ (PRINCIPAL) ─────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50 pb-28">
+    <div className="min-h-screen bg-cream pb-28">
       <AvisoComanda />
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-2xl mx-auto px-4">
