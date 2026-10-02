@@ -1,148 +1,84 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { getCategorias, getProductos } from '@/lib/data'
-import { Categoria, Producto } from '@/lib/types'
+import { getCategorias } from '@/lib/data'
+import { Categoria } from '@/lib/types'
 import { useLanguage } from '@/context/LanguageContext'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
-import AllergenBadges from '@/components/AllergenBadges'
 
-export default function MenuPage() {
+export default function MenuPortada() {
   const { t } = useLanguage()
   const [categorias, setCategorias] = useState<Categoria[]>([])
-  const [productos, setProductos] = useState<Producto[]>([])
-  const [cat, setCat] = useState('')
-  const scrollerRef = useRef<HTMLDivElement>(null)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(false)
 
   useEffect(() => {
-    Promise.all([getCategorias(), getProductos()]).then(([cats, prods]) => {
-      setCategorias(cats)
-      setProductos(prods)
-      if (cats.length) setCat(cats[0].id)
-    })
+    getCategorias().then(cats => setCategorias(cats.filter(c => c.tipo !== 'suplemento')))
   }, [])
 
-  const updateScrollState = () => {
-    const el = scrollerRef.current
-    if (!el) return
-    setCanScrollLeft(el.scrollLeft > 4)
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4)
-  }
-
-  useEffect(() => {
-    updateScrollState()
-    window.addEventListener('resize', updateScrollState)
-    return () => window.removeEventListener('resize', updateScrollState)
-  }, [categorias])
-
-  const scrollByAmount = (dir: 1 | -1) => {
-    scrollerRef.current?.scrollBy({ left: dir * 180, behavior: 'smooth' })
-  }
-
-  const selectCat = (id: string) => {
-    setCat(id)
-    const el = scrollerRef.current?.querySelector<HTMLElement>(`[data-cat="${id}"]`)
-    el?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
-  }
-
-  const categoriasVisibles = categorias.filter(c => c.tipo !== 'suplemento')
-  const filtrados = productos.filter(p => p.disponible && p.categoria_id === cat && (p as any).categoria_tipo !== 'suplemento')
-  const suplementos = productos.filter(p => p.disponible && (p as any).categoria_tipo === 'suplemento')
-
   return (
-    <div className="min-h-screen bg-cream">
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="h-14 flex items-center gap-3">
-            <Link href="/" className="text-gray-400 hover:text-gray-900 font-medium text-sm p-1">{t('menu.back')}</Link>
-            <span className="text-lg font-black">{t('menu.title')}</span>
-            <LanguageSwitcher className="ml-auto" />
+    <div className="min-h-screen bg-ink flex flex-col font-sans">
+      <div className="max-w-lg mx-auto w-full flex-1 flex flex-col px-6 py-6">
+        {/* Fila superior */}
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber flex-shrink-0" />
+            <span className="text-parchment text-sm font-bold">{t('menu.openLabel')} · {t('menu.hours')}</span>
           </div>
-          <div className="relative">
-            {canScrollLeft && (
-              <button onClick={() => scrollByAmount(-1)} aria-label={t('menu.scrollLeft')}
-                className="absolute left-0 top-0 bottom-3 z-10 flex items-center pl-0.5 pr-4 bg-gradient-to-r from-white via-white/95 to-transparent">
-                <span className="w-6 h-6 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center text-gray-500 text-sm leading-none">‹</span>
-              </button>
-            )}
-            <div
-              ref={scrollerRef}
-              onScroll={updateScrollState}
-              className="flex gap-2 overflow-x-auto scrollbar-hide pb-3 -mx-1 px-1 scroll-smooth snap-x snap-mandatory"
-            >
-              {categoriasVisibles.map(c => (
-                <button key={c.id} data-cat={c.id} onClick={() => selectCat(c.id)}
-                  className={`flex-shrink-0 snap-start flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap ${cat === c.id ? 'bg-accent text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}>
-                  <span>{c.icono}</span>
-                  <span>{c.nombre}</span>
-                </button>
-              ))}
-            </div>
-            {canScrollRight && (
-              <button onClick={() => scrollByAmount(1)} aria-label={t('menu.scrollRight')}
-                className="absolute right-0 top-0 bottom-3 z-10 flex items-center pr-0.5 pl-4 bg-gradient-to-l from-white via-white/95 to-transparent">
-                <span className="w-6 h-6 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center text-gray-500 text-sm leading-none">›</span>
-              </button>
-            )}
-          </div>
+          <LanguageSwitcher variant="dark" />
         </div>
-      </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-4 pb-8">
-        <p className="text-gray-400 text-[11px] leading-relaxed mb-3 px-0.5">
-          ℹ️ {t('menuCard.allergensNote')}
+        {/* Logo */}
+        <img src="/logo-els-tr3s-solo.png" alt="Els Tr3s" className="w-full h-auto mt-8" />
+
+        {/* Etiqueta LA CARTA */}
+        <span className="font-display text-[28px] leading-none bg-amber text-amber-ink px-3.5 py-1.5 self-start -rotate-2 mt-6 inline-block">
+          {t('menu.portada.badge')}
+        </span>
+
+        {/* Tagline */}
+        <p className="text-parchment text-[17px] font-medium leading-[1.4] mt-5 max-w-sm">
+          {t('menu.portada.tagline')}
         </p>
-        {cat === '' ? (
-          <div className="space-y-2">
-            {Array.from({ length: 7 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 px-4 py-3.5 animate-pulse">
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 rounded-lg w-2/5" />
-                  <div className="h-3 bg-gray-100 rounded-lg w-3/4" />
-                  <div className="h-4 bg-gray-100 rounded-lg w-14 mt-1" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-        <div className="space-y-2">
-          {filtrados.map(p => (
-            <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 px-4 py-3.5">
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-gray-900 text-[15px] leading-snug">{p.nombre}</h3>
-                {p.descripcion && (
-                  <p className="text-gray-400 text-xs mt-0.5 line-clamp-2 leading-relaxed">{p.descripcion}</p>
-                )}
-                {p.variantes ? (
-                  <div className="flex gap-1.5 mt-1.5 flex-wrap">
-                    {p.variantes.map(v => (
-                      <span key={v.nombre} className="text-xs bg-forest/10 text-accent px-2 py-0.5 rounded-lg font-semibold">
-                        {v.nombre} {v.precio.toFixed(2)}€
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="mt-1.5">
-                    <span className="text-xs bg-forest/10 text-accent px-2 py-0.5 rounded-lg font-semibold">
-                      {p.precio.toFixed(2)}€
-                    </span>
-                  </div>
-                )}
-                <AllergenBadges codigos={p.alergenos} className="mt-1.5" />
-              </div>
-            </div>
-          ))}
-        </div>
-        )}
 
-        {suplementos.length > 0 && (
-          <p className="text-[10px] text-gray-400 leading-relaxed mt-6 px-0.5">
-            {t('home.footer.suplementos')}: {suplementos.map(s => `${s.nombre} ${Number(s.precio).toFixed(2)}€`).join(' · ')}
-          </p>
-        )}
-      </main>
+        {/* Rejilla de categorías */}
+        <div className="grid grid-cols-2 gap-3 mt-7">
+          {categorias.length === 0
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-[88px] rounded-[14px] bg-surface animate-pulse" />
+              ))
+            : categorias.map((c, i) => (
+                <Link
+                  key={c.id}
+                  href={`/menu/${c.id}`}
+                  className={`h-[88px] rounded-[14px] p-3.5 flex items-end active:scale-[0.97] transition-transform ${
+                    i === 0 ? 'bg-amber' : 'bg-surface'
+                  }`}
+                >
+                  <span className={`font-display text-2xl leading-none uppercase ${i === 0 ? 'text-amber-ink' : 'text-parchment'}`}>
+                    {c.nombre}
+                  </span>
+                </Link>
+              ))}
+        </div>
+
+        {/* Ver toda la carta */}
+        <Link
+          href="/menu/todo"
+          className="h-14 rounded-full bg-parchment text-ink font-bold text-[17px] flex items-center justify-center mt-6 active:scale-95 transition-transform"
+        >
+          {t('menu.portada.viewAll')}
+        </Link>
+
+        <div className="flex-1 min-h-6" />
+
+        {/* Pie */}
+        <div className="flex items-end justify-between gap-3 mt-10 pt-5 border-t border-line text-sand text-sm font-medium">
+          <Link href="/alergenos" className="text-amber font-bold">{t('menu.portada.allergensLink')}</Link>
+          <div className="text-right leading-relaxed">
+            <p>Passeig de Lluís Muncunill, 9</p>
+            <a href="tel:930042165" className="text-sand">930 042 165</a>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

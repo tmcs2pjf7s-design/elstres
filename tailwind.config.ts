@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Paleta de RushSystems (rushsystems.es)
+        // Paleta de RushSystems (rushsystems.es) — herramientas internas (admin/comandero/cocina)
         accent: '#0f2e24',
         'accent-dark': '#0a211a',
         forest: '#0f2e24',
@@ -19,10 +19,20 @@ const config: Config = {
         cream: '#f7f4ef',
         beige: '#ede7df',
         stone: '#6b6a61',
-        ink: '#0b0b0b',
+
+        // Paleta "carta" (negro cálido + ámbar) — web pública de cara al cliente
+        ink: '#120D06',
+        surface: '#3A2408',
+        line: '#3A2A14',
+        amber: '#F2A93B',
+        'amber-dark': '#C9892C',
+        'amber-ink': '#120D06',
+        parchment: '#FBF3E4',
+        sand: '#CDBBA0',
       },
       fontFamily: {
-        display: ['var(--font-baloo)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-anton)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-dmsans)', 'system-ui', 'sans-serif'],
       },
     },
   },

@@ -35,7 +35,7 @@ export default function IntroCanRoca() {
       onClick={dismiss}
       role="button"
       aria-label="Cerrar presentación"
-      className={`fixed inset-0 z-[60] flex items-center justify-center bg-[#0b1420] cursor-pointer transition-opacity duration-[450ms] ease-out ${
+      className={`fixed inset-0 z-[60] flex items-center justify-center bg-[#120D06] cursor-pointer transition-opacity duration-[450ms] ease-out ${
         closing ? 'opacity-0' : 'opacity-100'
       }`}
     >
@@ -58,7 +58,7 @@ export default function IntroCanRoca() {
               className="intro-anim-reveal-mask absolute pointer-events-none"
               style={{
                 left: '30%', width: '40%', top: '39%', height: '20%',
-                background: 'radial-gradient(ellipse at center, rgba(10,16,28,0.92) 0%, rgba(10,16,28,0.6) 55%, rgba(10,16,28,0) 100%)',
+                background: 'radial-gradient(ellipse at center, rgba(18,13,6,0.92) 0%, rgba(18,13,6,0.6) 55%, rgba(18,13,6,0) 100%)',
               }}
             />
 
@@ -67,7 +67,7 @@ export default function IntroCanRoca() {
               className="intro-anim-glow absolute pointer-events-none"
               style={{
                 left: '24%', width: '52%', top: '71%', height: '22%',
-                background: 'radial-gradient(ellipse at center, rgba(184,149,94,0.55) 0%, rgba(184,149,94,0.18) 55%, rgba(184,149,94,0) 80%)',
+                background: 'radial-gradient(ellipse at center, rgba(242,169,59,0.55) 0%, rgba(242,169,59,0.18) 55%, rgba(242,169,59,0) 80%)',
                 mixBlendMode: 'screen',
               }}
             />

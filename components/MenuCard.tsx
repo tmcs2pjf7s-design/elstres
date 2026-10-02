@@ -69,53 +69,53 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
 
   return (
     <>
-      <div className={`bg-white rounded-2xl border shadow-sm flex items-center gap-4 p-4 transition-colors ${totalQty > 0 ? 'border-accent/30 bg-accent/[0.02]' : 'border-gray-100'}`}>
+      <div className={`bg-surface rounded-2xl border flex items-center gap-4 p-4 transition-colors ${totalQty > 0 ? 'border-amber/40 bg-amber/[0.04]' : 'border-line'}`}>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="font-bold text-gray-900 text-[15px] leading-snug">{producto.nombre}</h3>
+            <h3 className="font-bold text-parchment text-[15px] leading-snug">{producto.nombre}</h3>
             {totalQty > 0 && (
-              <span className="flex-shrink-0 bg-accent text-white text-xs font-bold px-2 py-0.5 rounded-full">{totalQty}</span>
+              <span className="flex-shrink-0 bg-amber text-amber-ink text-xs font-bold px-2 py-0.5 rounded-full">{totalQty}</span>
             )}
           </div>
           {producto.descripcion && (
-            <p className="text-gray-400 text-xs mt-0.5 line-clamp-2 leading-relaxed">{producto.descripcion}</p>
+            <p className="text-sand text-xs mt-0.5 line-clamp-2 leading-relaxed">{producto.descripcion}</p>
           )}
           {tieneVariantes ? (
             <div className="flex gap-1.5 mt-2 flex-wrap">
               {producto.variantes!.map(v => (
-                <span key={v.nombre} className="text-xs bg-forest/10 text-accent px-2 py-0.5 rounded-lg font-semibold">
+                <span key={v.nombre} className="text-xs bg-amber/15 text-amber px-2 py-0.5 rounded-lg font-semibold">
                   {v.nombre} {Number(v.precio).toFixed(2)}€
                 </span>
               ))}
             </div>
           ) : (
             <div className="mt-1.5">
-              <span className="text-xs bg-forest/10 text-accent px-2 py-0.5 rounded-lg font-semibold">
+              <span className="text-xs bg-amber/15 text-amber px-2 py-0.5 rounded-lg font-semibold">
                 {precioBase.toFixed(2)}€
               </span>
             </div>
           )}
-          <AllergenBadges codigos={producto.alergenos} className="mt-1.5" />
+          <AllergenBadges codigos={producto.alergenos} className="mt-1.5" variant="dark" />
         </div>
 
         <div className="flex-shrink-0">
           {totalQty === 0 ? (
             <button onClick={handleAnadir}
-              className="w-11 h-11 bg-accent text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg shadow-forest/20 active:scale-90 transition-transform">
+              className="w-11 h-11 bg-amber text-amber-ink rounded-full flex items-center justify-center text-2xl font-bold shadow-lg shadow-black/30 active:scale-90 transition-transform">
               +
             </button>
           ) : (
             <div className="flex flex-col items-end gap-1.5">
               {cartItems.map(item => (
                 <div key={item.variante?.nombre ?? 'base'} className="flex items-center gap-2">
-                  {item.variante && <span className="text-xs text-gray-500 font-medium">{item.variante.nombre}</span>}
+                  {item.variante && <span className="text-xs text-sand font-medium">{item.variante.nombre}</span>}
                   <button onClick={() => updateQty(producto.id, item.cantidad - 1, item.variante)}
-                    className="w-9 h-9 rounded-full border-2 border-gray-200 text-gray-600 flex items-center justify-center font-bold text-base active:scale-90 transition-transform">
+                    className="w-9 h-9 rounded-full border-2 border-line text-sand flex items-center justify-center font-bold text-base active:scale-90 transition-transform">
                     −
                   </button>
-                  <span className="w-5 text-center font-black text-sm">{item.cantidad}</span>
+                  <span className="w-5 text-center font-black text-sm text-parchment">{item.cantidad}</span>
                   <button onClick={() => tieneVariantes ? setShowVariantes(true) : tieneSups ? setShowSups(true) : addItem(producto)}
-                    className="w-9 h-9 rounded-full bg-accent text-white flex items-center justify-center font-bold text-base active:scale-90 transition-transform">
+                    className="w-9 h-9 rounded-full bg-amber text-amber-ink flex items-center justify-center font-bold text-base active:scale-90 transition-transform">
                     +
                   </button>
                 </div>
@@ -129,25 +129,25 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
       {showVariantes && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-end justify-center"
           onClick={() => setShowVariantes(false)}>
-          <div className="bg-white rounded-t-3xl p-6 w-full max-w-lg shadow-2xl"
+          <div className="bg-surface rounded-t-3xl p-6 w-full max-w-lg shadow-2xl"
             onClick={e => e.stopPropagation()}>
-            <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
-            <h3 className="font-black text-xl mb-1">{producto.nombre}</h3>
-            {producto.descripcion && <p className="text-gray-400 text-sm mb-2">{producto.descripcion}</p>}
-            <AllergenBadges codigos={producto.alergenos} className="mb-4" />
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">{t('menuCard.chooseSize')}</p>
+            <div className="w-10 h-1 bg-line rounded-full mx-auto mb-5" />
+            <h3 className="font-black text-xl mb-1 text-parchment">{producto.nombre}</h3>
+            {producto.descripcion && <p className="text-sand text-sm mb-2">{producto.descripcion}</p>}
+            <AllergenBadges codigos={producto.alergenos} className="mb-4" variant="dark" />
+            <p className="text-xs font-bold text-sand uppercase tracking-widest mb-3">{t('menuCard.chooseSize')}</p>
             <div className="space-y-3 mb-2">
               {producto.variantes!.map(v => (
                 <button key={v.nombre} onClick={() => handleVariante(v)}
-                  className="w-full flex items-center justify-between bg-gray-50 hover:bg-accent/5 active:bg-accent/10 border-2 border-transparent hover:border-accent rounded-2xl px-5 py-4 transition-all">
+                  className="w-full flex items-center justify-between bg-ink hover:bg-amber/5 active:bg-amber/10 border-2 border-transparent hover:border-amber rounded-2xl px-5 py-4 transition-all">
                   <div className="text-left">
-                    <p className="font-bold text-gray-900 text-base">{v.nombre}</p>
+                    <p className="font-bold text-parchment text-base">{v.nombre}</p>
                   </div>
-                  <span className="text-2xl font-black text-accent">{Number(v.precio).toFixed(2)}€</span>
+                  <span className="text-2xl font-black text-amber">{Number(v.precio).toFixed(2)}€</span>
                 </button>
               ))}
             </div>
-            <button onClick={() => setShowVariantes(false)} className="w-full py-4 text-gray-400 text-sm font-semibold">{t('menuCard.cancel')}</button>
+            <button onClick={() => setShowVariantes(false)} className="w-full py-4 text-sand text-sm font-semibold">{t('menuCard.cancel')}</button>
           </div>
         </div>
       )}
@@ -156,14 +156,14 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
       {showSups && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-end justify-center"
           onClick={() => { setShowSups(false); setSupsSel(new Set()) }}>
-          <div className="bg-white rounded-t-3xl p-6 w-full max-w-lg shadow-2xl max-h-[80vh] overflow-y-auto"
+          <div className="bg-surface rounded-t-3xl p-6 w-full max-w-lg shadow-2xl max-h-[80vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}>
-            <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
-            <h3 className="font-black text-xl mb-1">{producto.nombre}</h3>
+            <div className="w-10 h-1 bg-line rounded-full mx-auto mb-5" />
+            <h3 className="font-black text-xl mb-1 text-parchment">{producto.nombre}</h3>
             {variantePendiente && (
-              <span className="inline-block text-xs bg-accent/10 text-accent font-semibold px-2 py-0.5 rounded-lg mb-3">{variantePendiente.nombre}</span>
+              <span className="inline-block text-xs bg-amber/15 text-amber font-semibold px-2 py-0.5 rounded-lg mb-3">{variantePendiente.nombre}</span>
             )}
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{t('menuCard.addSupplements')}</p>
+            <p className="text-xs font-bold text-sand uppercase tracking-widest mb-4">{t('menuCard.addSupplements')}</p>
 
             <div className="space-y-2 mb-5">
               {suplementos.map(sup => {
@@ -171,34 +171,34 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
                 return (
                   <button key={sup.id} onClick={() => toggleSup(sup.id)}
                     className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl border-2 transition-all ${
-                      sel ? 'border-accent bg-accent/5' : 'border-gray-100 bg-gray-50 hover:border-gray-200'
+                      sel ? 'border-amber bg-amber/10' : 'border-line bg-ink hover:border-sand/40'
                     }`}>
                     <div className="flex items-center gap-3">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                        sel ? 'bg-accent border-accent' : 'border-gray-300'
+                        sel ? 'bg-amber border-amber' : 'border-line'
                       }`}>
-                        {sel && <span className="text-white text-xs font-black">✓</span>}
+                        {sel && <span className="text-amber-ink text-xs font-black">✓</span>}
                       </div>
-                      <span className="font-semibold text-sm text-gray-800">{sup.nombre}</span>
+                      <span className="font-semibold text-sm text-parchment">{sup.nombre}</span>
                     </div>
-                    <span className="text-sm font-bold text-accent">+{Number(sup.precio).toFixed(2)}€</span>
+                    <span className="text-sm font-bold text-amber">+{Number(sup.precio).toFixed(2)}€</span>
                   </button>
                 )
               })}
             </div>
 
             {supsSel.size > 0 && (
-              <p className="text-xs text-gray-500 text-center mb-3">
+              <p className="text-xs text-sand text-center mb-3">
                 +{suplementos.filter(s => supsSel.has(s.id)).reduce((sum, s) => sum + Number(s.precio), 0).toFixed(2)}€ {t('menuCard.supplementsTotal')}
               </p>
             )}
 
             <button onClick={() => confirmarConSups(variantePendiente)}
-              className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-base hover:bg-accent-dark transition-colors active:scale-95">
+              className="w-full bg-amber text-amber-ink py-4 rounded-2xl font-bold text-base hover:bg-amber-dark transition-colors active:scale-95">
               {supsSel.size > 0 ? t('menuCard.addWithSupplements') : t('menuCard.addWithoutSupplements')}
             </button>
             <button onClick={() => { setShowSups(false); setSupsSel(new Set()) }}
-              className="w-full py-3 text-gray-400 text-sm font-semibold mt-1">
+              className="w-full py-3 text-sand text-sm font-semibold mt-1">
               {t('menuCard.cancel')}
             </button>
           </div>

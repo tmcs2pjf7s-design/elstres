@@ -21,23 +21,23 @@ export default function Home() {
   ]
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-ink font-sans">
       <IntroCanRoca />
 
       {/* Navbar */}
-      <nav className="fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-gray-100 z-40">
+      <nav className="fixed top-0 inset-x-0 bg-ink/95 backdrop-blur-md border-b border-line z-40">
         <div className="max-w-6xl mx-auto px-4 min-h-14 py-2 flex items-center justify-between gap-2">
-          <span className="font-display font-bold text-base sm:text-xl text-gray-900 tracking-tight truncate">Frankfurt Els Tr3s</span>
+          <span className="font-bold text-base sm:text-xl text-parchment tracking-tight truncate">Frankfurt Els Tr3s</span>
           <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
             <LanguageSwitcher />
             <Link
               href="/menu"
-              className="text-sm text-gray-600 hover:text-gray-900 font-medium px-2.5 sm:px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors"
+              className="text-sm text-sand hover:text-parchment font-medium px-2.5 sm:px-3 py-2 rounded-xl hover:bg-surface transition-colors"
             >
               {t('home.nav.menu')}
             </Link>
             <span
-              className="hidden sm:inline-block text-sm bg-gray-200 text-gray-500 px-4 py-2 rounded-xl font-semibold cursor-not-allowed select-none"
+              className="hidden sm:inline-block text-sm bg-surface border border-line text-sand px-4 py-2 rounded-xl font-semibold cursor-not-allowed select-none"
               title={t('home.llevarBadge')}
             >
               {t('home.llevarBadge')}
@@ -47,33 +47,33 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="pt-14 lg:min-h-screen flex items-center relative overflow-hidden bg-white">
-        <div className="absolute inset-0 bg-gradient-to-br from-beige/60 via-white to-white" />
+      <section className="pt-14 lg:min-h-screen flex items-center relative overflow-hidden bg-ink">
+        <div className="absolute inset-0 bg-gradient-to-br from-surface/40 via-ink to-ink" />
         <div className="relative max-w-6xl mx-auto px-5 py-10 sm:py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
           <div>
-            <p className="text-accent text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
+            <p className="text-amber text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
               {t('home.hero.badge')}
             </p>
-            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-gray-900 mb-5 leading-[1.05]">
+            <h1 className="font-display uppercase font-normal text-4xl sm:text-5xl lg:text-6xl tracking-tight text-parchment mb-5 leading-[1.05]">
               Frankfurt<br />
-              <span className="text-gold-dark">Els Tr3s.</span>
+              <span className="text-amber">Els Tr3s.</span>
             </h1>
-            <p className="text-base sm:text-xl text-gray-500 mb-2 max-w-md leading-relaxed">
+            <p className="text-base sm:text-xl text-sand mb-2 max-w-md leading-relaxed">
               {t('home.hero.subtitle1')}
             </p>
-            <p className="text-sm sm:text-base text-gray-400 mb-8 max-w-md leading-relaxed">
+            <p className="text-sm sm:text-base text-sand/70 mb-8 max-w-md leading-relaxed">
               {t('home.hero.subtitle2')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <span
-                className="bg-gray-100 text-gray-400 px-7 py-4 rounded-2xl font-bold text-base text-center cursor-not-allowed select-none"
+                className="bg-surface border border-line text-sand px-7 py-4 rounded-2xl font-bold text-base text-center cursor-not-allowed select-none"
                 title={t('home.llevarBadge')}
               >
                 {t('home.llevarBadge')}
               </span>
               <Link
                 href="/menu"
-                className="bg-gray-100 text-gray-900 px-7 py-4 rounded-2xl font-bold text-base hover:bg-gray-200 transition-colors text-center active:scale-95"
+                className="bg-amber text-amber-ink px-7 py-4 rounded-2xl font-bold text-base hover:bg-amber-dark transition-colors text-center active:scale-95"
               >
                 {t('home.hero.ctaMenu')}
               </Link>
@@ -83,7 +83,7 @@ export default function Home() {
           <img
             src={HERO_IMAGES[0].src}
             alt={HERO_IMAGES[0].alt}
-            className="lg:hidden rounded-2xl object-cover w-full h-48 shadow-md"
+            className="lg:hidden rounded-2xl object-cover w-full h-48 shadow-md border border-line"
           />
 
           <div className="hidden lg:grid grid-cols-2 gap-4">
@@ -92,7 +92,7 @@ export default function Home() {
                 key={img.src}
                 src={img.src}
                 alt={img.alt}
-                className={`rounded-2xl object-cover w-full h-48 shadow-md${i === 1 ? ' mt-8' : ''}`}
+                className={`rounded-2xl object-cover w-full h-48 shadow-md border border-line${i === 1 ? ' mt-8' : ''}`}
               />
             ))}
           </div>
@@ -100,21 +100,21 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-16 sm:py-24 bg-beige">
+      <section className="py-16 sm:py-24 bg-surface">
         <div className="max-w-6xl mx-auto px-5">
-          <h2 className="font-display font-bold text-2xl sm:text-3xl text-center mb-3">{t('home.features.title')}</h2>
-          <p className="text-gray-500 text-center mb-10 sm:mb-14 max-w-xl mx-auto text-sm sm:text-base">
+          <h2 className="font-display uppercase font-normal text-2xl sm:text-3xl text-parchment text-center mb-3">{t('home.features.title')}</h2>
+          <p className="text-sand text-center mb-10 sm:mb-14 max-w-xl mx-auto text-sm sm:text-base">
             {t('home.features.subtitle')}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {FEATURES.map(f => (
               <div
                 key={f.title}
-                className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-ink rounded-3xl p-6 sm:p-8 border border-line hover:border-amber/40 transition-colors"
               >
                 <div className="text-4xl mb-3">{f.icon}</div>
-                <h3 className="text-base sm:text-lg font-bold mb-2">{f.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
+                <h3 className="text-base sm:text-lg font-bold mb-2 text-parchment">{f.title}</h3>
+                <p className="text-sand text-sm leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -129,15 +129,15 @@ export default function Home() {
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/60 to-forest/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/70 to-ink/20" />
         <div className="relative max-w-3xl mx-auto px-5 text-center">
-          <p className="text-accent text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
+          <p className="text-amber text-xs sm:text-sm font-bold tracking-widest uppercase mb-3">
             {t('home.cerveceria.badge')}
           </p>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-white mb-4">
+          <h2 className="font-display uppercase font-normal text-3xl sm:text-4xl text-parchment mb-4">
             {t('home.cerveceria.title')}
           </h2>
-          <p className="text-white/80 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-sand text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
             {t('home.cerveceria.desc')}
           </p>
         </div>
@@ -151,11 +151,11 @@ export default function Home() {
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/45 to-forest/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/50 to-ink/10" />
         <div className="relative px-5 text-center">
-          <p className="text-white/90 text-sm font-medium mb-3">{t('home.mobileCta.question')}</p>
+          <p className="text-parchment/90 text-sm font-medium mb-3">{t('home.mobileCta.question')}</p>
           <span
-            className="inline-block bg-white/85 text-gray-500 px-8 py-4 rounded-2xl font-black text-base w-full cursor-not-allowed select-none backdrop-blur-sm"
+            className="inline-block bg-surface/90 border border-line text-sand px-8 py-4 rounded-2xl font-black text-base w-full cursor-not-allowed select-none backdrop-blur-sm"
             title={t('home.llevarBadge')}
           >
             {t('home.llevarBadge')}
@@ -163,27 +163,27 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-forest py-10 text-gray-400 text-sm">
+      <footer className="bg-surface py-10 text-sand text-sm border-t border-line">
         <div className="max-w-6xl mx-auto px-5">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
             {/* Marca */}
             <div>
-              <p className="font-display font-bold text-white text-lg mb-2">Frankfurt Els Tr3s</p>
-              <p className="text-gray-400 text-xs leading-relaxed mb-3">
+              <p className="font-display uppercase font-normal text-parchment text-lg mb-2">Frankfurt Els Tr3s</p>
+              <p className="text-sand text-xs leading-relaxed mb-3">
                 {t('home.footer.tagline1')}<br />
                 {t('home.footer.tagline2')}
               </p>
               <a
                 href="tel:930042165"
-                className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white text-xs transition-colors"
+                className="inline-flex items-center gap-1.5 text-sand hover:text-amber text-xs transition-colors"
               >
                 <span>📞</span> 930 042 165
               </a>
             </div>
             {/* Dirección */}
             <div>
-              <p className="text-white font-semibold text-xs uppercase tracking-wider mb-2">{t('home.footer.whereTitle')}</p>
-              <address className="not-italic text-gray-400 text-xs leading-relaxed">
+              <p className="text-parchment font-semibold text-xs uppercase tracking-wider mb-2">{t('home.footer.whereTitle')}</p>
+              <address className="not-italic text-sand text-xs leading-relaxed">
                 Passeig de Lluís Muncunill, 9, local 6<br />
                 08225 Terrassa, Barcelona
               </address>
@@ -191,19 +191,19 @@ export default function Home() {
                 href="https://maps.google.com/?q=Passeig+de+Lluís+Muncunill+9+Terrassa"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-2 text-xs text-accent hover:underline"
+                className="inline-block mt-2 text-xs text-amber hover:underline"
               >
                 {t('home.footer.mapsLink')}
               </a>
 
-              <div className="mt-4 pt-4 border-t border-white/10">
-                <p className="text-white/90 text-xs font-semibold mb-1 flex items-center gap-1.5">
+              <div className="mt-4 pt-4 border-t border-line">
+                <p className="text-parchment/90 text-xs font-semibold mb-1 flex items-center gap-1.5">
                   {t('home.footer.location2Name')}
-                  <span className="bg-white/10 text-gray-400 text-[10px] font-semibold px-1.5 py-0.5 rounded-full normal-case tracking-normal">
+                  <span className="bg-amber/15 text-amber text-[10px] font-semibold px-1.5 py-0.5 rounded-full normal-case tracking-normal">
                     {t('home.footer.comingSoon')}
                   </span>
                 </p>
-                <address className="not-italic text-gray-400 text-xs leading-relaxed">
+                <address className="not-italic text-sand text-xs leading-relaxed">
                   Parc de les Nacions Unides, 18, local<br />
                   08225 Terrassa, Barcelona
                 </address>
@@ -211,7 +211,7 @@ export default function Home() {
                   href="https://maps.google.com/?q=Parc+de+les+Nacions+Unides+18+Terrassa"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-2 text-xs text-accent hover:underline"
+                  className="inline-block mt-2 text-xs text-amber hover:underline"
                 >
                   {t('home.footer.mapsLink')}
                 </a>
@@ -219,22 +219,22 @@ export default function Home() {
             </div>
             {/* Legal */}
             <div>
-              <p className="text-white font-semibold text-xs uppercase tracking-wider mb-2">{t('home.footer.legalTitle')}</p>
+              <p className="text-parchment font-semibold text-xs uppercase tracking-wider mb-2">{t('home.footer.legalTitle')}</p>
               <ul className="space-y-1.5">
                 <li>
-                  <Link href="/privacidad" className="text-gray-400 text-xs hover:text-white transition-colors">
+                  <Link href="/privacidad" className="text-sand text-xs hover:text-parchment transition-colors">
                     {t('home.footer.privacy')}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/cookies" className="text-gray-400 text-xs hover:text-white transition-colors">
+                  <Link href="/cookies" className="text-sand text-xs hover:text-parchment transition-colors">
                     {t('home.footer.cookies')}
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-white/10 pt-6 text-center text-gray-500 text-xs space-y-2">
+          <div className="border-t border-line pt-6 text-center text-sand/80 text-xs space-y-2">
             <p>{t('home.footer.copyright')}</p>
             <p>
               {t('home.footer.madeBy')}{' '}
@@ -242,7 +242,7 @@ export default function Home() {
                 href="https://rushsystems.es"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 font-semibold hover:text-white transition-colors"
+                className="text-sand font-semibold hover:text-parchment transition-colors"
               >
                 RushSystems
               </a>
@@ -251,13 +251,13 @@ export default function Home() {
                 href="https://nomecreo.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 font-semibold hover:text-white transition-colors"
+                className="text-sand font-semibold hover:text-parchment transition-colors"
               >
                 nomecreo.com
               </a>
             </p>
             <p>
-              <Link href="/admin/login" className="text-gray-500 hover:text-white transition-colors">
+              <Link href="/admin/login" className="text-sand/70 hover:text-parchment transition-colors">
                 {t('home.footer.adminLink')}
               </Link>
             </p>
