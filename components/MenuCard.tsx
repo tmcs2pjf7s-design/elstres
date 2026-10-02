@@ -81,11 +81,11 @@ export default function MenuCard({ producto, suplementos = [] }: Props) {
             <p className="text-gray-400 text-xs mt-0.5 line-clamp-2 leading-relaxed">{producto.descripcion}</p>
           )}
           {tieneVariantes ? (
-            <div className="flex gap-1.5 mt-2 flex-wrap">
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-0.5 mt-1.5">
               {producto.variantes!.map(v => (
-                <span key={v.nombre} className="text-xs bg-forest/10 text-accent px-2 py-0.5 rounded-lg font-semibold">
-                  {v.nombre} {Number(v.precio).toFixed(2)}€
-                </span>
+                <p key={v.nombre} className="text-accent font-black text-base">
+                  {Number(v.precio).toFixed(2)}€<span className="text-gray-400 font-semibold text-xs ml-1">{v.nombre}</span>
+                </p>
               ))}
             </div>
           ) : (
