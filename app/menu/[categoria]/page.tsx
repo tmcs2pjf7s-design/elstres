@@ -25,6 +25,7 @@ export default function CategoriaPage({ params }: { params: { categoria: string 
 
   const categoria = categorias.find(c => c.id === params.categoria)
   const productosCategoria = productos.filter(p => p.disponible && p.categoria_id === params.categoria)
+  const suplementos = productos.filter(p => p.disponible && (p as any).categoria_tipo === 'suplemento')
 
   return (
     <div className="min-h-screen bg-ink font-sans flex flex-col">
@@ -90,8 +91,15 @@ export default function CategoriaPage({ params }: { params: { categoria: string 
           ))
         )}
 
-        {categoria?.nombre === 'Cervezas' && (
-          <p className="text-sand/60 text-[11px] leading-relaxed mt-6">{t('menu.terraceSurcharge')}</p>
+        {loaded && (
+          <div className="mt-6 space-y-1.5">
+            {suplementos.length > 0 && (
+              <p className="text-sand/60 text-[11px] leading-relaxed">
+                {t('home.footer.suplementos')}: {suplementos.map(s => `${s.nombre} ${Number(s.precio).toFixed(2)}€`).join(' · ')}
+              </p>
+            )}
+            <p className="text-sand/60 text-[11px] leading-relaxed">{t('menu.terraceSurcharge')}</p>
+          </div>
         )}
       </main>
 

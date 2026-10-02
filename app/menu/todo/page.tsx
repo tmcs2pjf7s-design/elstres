@@ -27,7 +27,6 @@ export default function MenuTodoPage() {
   const categoriasVisibles = categorias.filter(c => c.tipo !== 'suplemento')
   const filtrados = productos.filter(p => p.disponible && p.categoria_id === cat && (p as any).categoria_tipo !== 'suplemento')
   const suplementos = productos.filter(p => p.disponible && (p as any).categoria_tipo === 'suplemento')
-  const categoriaActual = categoriasVisibles.find(c => c.id === cat)
 
   return (
     <div className="min-h-screen bg-ink font-sans">
@@ -93,9 +92,7 @@ export default function MenuTodoPage() {
           </p>
         )}
 
-        {categoriaActual?.nombre === 'Cervezas' && (
-          <p className="text-sand/60 text-[11px] leading-relaxed mt-6 px-0.5">{t('menu.terraceSurcharge')}</p>
-        )}
+        <p className="text-sand/60 text-[11px] leading-relaxed mt-6 px-0.5">{t('menu.terraceSurcharge')}</p>
 
         <CartaFooter />
       </main>
