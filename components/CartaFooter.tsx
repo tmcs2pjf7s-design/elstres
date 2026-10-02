@@ -15,6 +15,7 @@ export default function CartaFooter() {
           Passeig de Lluís Muncunill, 9, local 6<br />
           08225 Terrassa, Barcelona
         </address>
+        <p className="text-sand/70 text-[11px] mt-1">{t('menu.openLabel')} · {t('menu.hours')}</p>
         <a
           href="https://maps.google.com/?q=Passeig+de+Lluís+Muncunill+9+Terrassa"
           target="_blank"
