@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { getCategorias, getProductos } from '@/lib/data'
 import { Categoria, Producto } from '@/lib/types'
@@ -12,6 +12,9 @@ export default function MenuPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([])
   const [productos, setProductos] = useState<Producto[]>([])
   const [cat, setCat] = useState('')
+  const scrollerRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(false)
 
   useEffect(() => {
     Promise.all([getCategorias(), getProductos()]).then(([cats, prods]) => {
@@ -20,6 +23,29 @@ export default function MenuPage() {
       if (cats.length) setCat(cats[0].id)
     })
   }, [])
+
+  const updateScrollState = () => {
+    const el = scrollerRef.current
+    if (!el) return
+    setCanScrollLeft(el.scrollLeft > 4)
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4)
+  }
+
+  useEffect(() => {
+    updateScrollState()
+    window.addEventListener('resize', updateScrollState)
+    return () => window.removeEventListener('resize', updateScrollState)
+  }, [categorias])
+
+  const scrollByAmount = (dir: 1 | -1) => {
+    scrollerRef.current?.scrollBy({ left: dir * 180, behavior: 'smooth' })
+  }
+
+  const selectCat = (id: string) => {
+    setCat(id)
+    const el = scrollerRef.current?.querySelector<HTMLElement>(`[data-cat="${id}"]`)
+    el?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+  }
 
   const categoriasVisibles = categorias.filter(c => c.tipo !== 'suplemento')
   const filtrados = productos.filter(p => p.disponible && p.categoria_id === cat && (p as any).categoria_tipo !== 'suplemento')
@@ -34,14 +60,32 @@ export default function MenuPage() {
             <span className="text-lg font-black">{t('menu.title')}</span>
             <LanguageSwitcher className="ml-auto" />
           </div>
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3 -mx-1 px-1">
-            {categoriasVisibles.map(c => (
-              <button key={c.id} onClick={() => setCat(c.id)}
-                className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap ${cat === c.id ? 'bg-accent text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}>
-                <span>{c.icono}</span>
-                <span>{c.nombre}</span>
+          <div className="relative">
+            {canScrollLeft && (
+              <button onClick={() => scrollByAmount(-1)} aria-label={t('menu.scrollLeft')}
+                className="absolute left-0 top-0 bottom-3 z-10 flex items-center pl-0.5 pr-4 bg-gradient-to-r from-white via-white/95 to-transparent">
+                <span className="w-6 h-6 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center text-gray-500 text-sm leading-none">‹</span>
               </button>
-            ))}
+            )}
+            <div
+              ref={scrollerRef}
+              onScroll={updateScrollState}
+              className="flex gap-2 overflow-x-auto scrollbar-hide pb-3 -mx-1 px-1 scroll-smooth snap-x snap-mandatory"
+            >
+              {categoriasVisibles.map(c => (
+                <button key={c.id} data-cat={c.id} onClick={() => selectCat(c.id)}
+                  className={`flex-shrink-0 snap-start flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap ${cat === c.id ? 'bg-accent text-white shadow-sm' : 'bg-gray-100 text-gray-600'}`}>
+                  <span>{c.icono}</span>
+                  <span>{c.nombre}</span>
+                </button>
+              ))}
+            </div>
+            {canScrollRight && (
+              <button onClick={() => scrollByAmount(1)} aria-label={t('menu.scrollRight')}
+                className="absolute right-0 top-0 bottom-3 z-10 flex items-center pr-0.5 pl-4 bg-gradient-to-l from-white via-white/95 to-transparent">
+                <span className="w-6 h-6 rounded-full bg-white shadow-md border border-gray-200 flex items-center justify-center text-gray-500 text-sm leading-none">›</span>
+              </button>
+            )}
           </div>
         </div>
       </header>

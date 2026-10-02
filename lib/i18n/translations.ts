@@ -44,6 +44,8 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     'menu.back': '← Inicio',
     'menu.title': 'Menú',
+    'menu.scrollLeft': 'Ver categorías anteriores',
+    'menu.scrollRight': 'Ver más categorías',
 
     'alergeno.GLU': 'Gluten',
     'alergeno.CRU': 'Crustáceos',
@@ -292,6 +294,8 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     'menu.back': '← Inici',
     'menu.title': 'Carta',
+    'menu.scrollLeft': 'Veure categories anteriors',
+    'menu.scrollRight': 'Veure més categories',
 
     'alergeno.GLU': 'Gluten',
     'alergeno.CRU': 'Crustacis',
@@ -540,6 +544,8 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     'menu.back': '← Home',
     'menu.title': 'Menu',
+    'menu.scrollLeft': 'Show previous categories',
+    'menu.scrollRight': 'Show more categories',
 
     'alergeno.GLU': 'Gluten',
     'alergeno.CRU': 'Crustaceans',
