@@ -72,9 +72,8 @@ export default function MenuPortada() {
         <div className="flex-1 min-h-6" />
 
         {/* Pie */}
-        <div className="flex items-center justify-between gap-3 mt-10 pt-5 border-t border-line text-sand text-sm font-medium">
+        <div className="mt-10 pt-5 border-t border-line text-sand text-sm font-medium">
           <Link href="/alergenos" className="text-amber font-bold">{t('menu.portada.allergensLink')}</Link>
-          <a href="tel:930042165" className="text-sand">930 042 165</a>
         </div>
 
         <CartaFooter />
