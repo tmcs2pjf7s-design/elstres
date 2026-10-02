@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useLanguage } from '@/context/LanguageContext'
 import { ALERGENO_ICONOS } from '@/lib/alergenos'
+import CartaFooter from '@/components/CartaFooter'
 
 export default function AlergenosPage() {
   const { t } = useLanguage()
@@ -29,6 +30,8 @@ export default function AlergenosPage() {
             </div>
           ))}
         </div>
+
+        <CartaFooter />
       </main>
     </div>
   )

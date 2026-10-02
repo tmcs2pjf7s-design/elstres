@@ -5,6 +5,7 @@ import { getCategorias } from '@/lib/data'
 import { Categoria } from '@/lib/types'
 import { useLanguage } from '@/context/LanguageContext'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import CartaFooter from '@/components/CartaFooter'
 
 export default function MenuPortada() {
   const { t } = useLanguage()
@@ -78,6 +79,8 @@ export default function MenuPortada() {
             <a href="tel:930042165" className="text-sand">930 042 165</a>
           </div>
         </div>
+
+        <CartaFooter />
       </div>
     </div>
   )

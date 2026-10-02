@@ -7,6 +7,7 @@ import { useLanguage } from '@/context/LanguageContext'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import AllergenBadges from '@/components/AllergenBadges'
 import CategoryScroller from '@/components/CategoryScroller'
+import CartaFooter from '@/components/CartaFooter'
 
 export default function MenuTodoPage() {
   const { t } = useLanguage()
@@ -90,6 +91,8 @@ export default function MenuTodoPage() {
             {t('home.footer.suplementos')}: {suplementos.map(s => `${s.nombre} ${Number(s.precio).toFixed(2)}€`).join(' · ')}
           </p>
         )}
+
+        <CartaFooter />
       </main>
     </div>
   )
