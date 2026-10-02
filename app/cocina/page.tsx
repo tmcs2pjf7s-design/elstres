@@ -5,6 +5,7 @@ import { getPedidosActivos, updateEstadoPedido, getImpresoras } from '@/lib/data
 import { Pedido, EstadoPedido, Impresora } from '@/lib/types'
 import { imprimirPedido } from '@/lib/print'
 import PedidoCard from '@/components/PedidoCard'
+import { useStaffSession, logoutStaff } from '@/lib/useStaffSession'
 
 const COLS: { estado: EstadoPedido; label: string; color: string }[] = [
   { estado: 'confirmado',     label: '🔴 Nuevos',     color: 'border-red-500'    },
@@ -29,6 +30,7 @@ function beep() {
 }
 
 export default function CocinaPage() {
+  const session = useStaffSession()
   const [pedidos, setPedidos] = useState<Pedido[]>([])
   const [loading, setLoading] = useState(true)
   const [hora, setHora] = useState(new Date())
@@ -95,28 +97,34 @@ export default function CocinaPage() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white flex flex-col">
-      <header className="bg-gray-900 border-b border-white/10 px-6 py-3 flex items-center justify-between flex-shrink-0">
-        <div className="flex items-center gap-4">
-          <Link href="/admin" className="text-gray-500 hover:text-white text-sm transition-colors">← Admin</Link>
-          <span className="text-xl font-black">👨‍🍳 Cocina</span>
+      <header className="bg-gray-900 border-b border-white/10 px-3 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link href="/admin" className="text-gray-500 hover:text-white text-sm transition-colors hidden sm:inline">← Admin</Link>
+          <span className="text-lg sm:text-xl font-black">👨‍🍳 Cocina</span>
           {pendientes > 0 && (
             <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
               {pendientes} nuevo{pendientes > 1 ? 's' : ''}
             </span>
           )}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <button onClick={() => cargar()}
             className="text-gray-400 hover:text-white text-sm transition-colors px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg">
             ↻ Actualizar
           </button>
-          <div className="text-right">
+          <div className="text-right hidden sm:block">
             <p className="text-xl font-black tabular-nums">
               {hora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
             </p>
             <p className="text-gray-500 text-xs capitalize">
               {hora.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
             </p>
+          </div>
+          <div className="flex items-center gap-2 sm:pl-4 sm:border-l border-white/10">
+            <span className="text-gray-500 text-xs hidden md:block">{session?.nombre}</span>
+            <button onClick={() => logoutStaff()} className="text-gray-400 hover:text-white text-sm transition-colors px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg">
+              Salir
+            </button>
           </div>
         </div>
       </header>

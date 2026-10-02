@@ -61,7 +61,8 @@ create table if not exists usuarios (
   telefono text,
   password_hash text not null,
   salt text not null,
-  rol text not null default 'cliente' check (rol in ('admin','cliente')),
+  rol text not null default 'cliente' check (rol in ('admin','camarero','cocina','cliente')),
+  activo boolean not null default true,
   created_at timestamptz default now()
 );
 

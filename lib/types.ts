@@ -19,6 +19,18 @@ export interface Producto {
   alergenos?: string[]
 }
 
+export type StaffRol = 'admin' | 'camarero' | 'cocina'
+
+export interface Usuario {
+  id: string
+  nombre: string
+  email: string
+  telefono?: string
+  rol: StaffRol
+  activo: boolean
+  created_at: string
+}
+
 export interface Mesa {
   id: string
   numero: number

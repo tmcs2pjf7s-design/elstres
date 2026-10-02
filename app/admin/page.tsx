@@ -1,11 +1,11 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { getPedidosActivos, getProductos, getMesas } from '@/lib/data'
 import { Pedido, Producto, Mesa } from '@/lib/types'
 import AdminGuard from '@/components/AdminGuard'
 import EstadoBadge from '@/components/EstadoBadge'
+import { useStaffSession, logoutStaff } from '@/lib/useStaffSession'
 
 interface Stats {
   pedidos_hoy: number
@@ -16,16 +16,14 @@ interface Stats {
 }
 
 function AdminContent() {
-  const [adminEmail, setAdminEmail] = useState('')
+  const session = useStaffSession()
   const [stats, setStats] = useState<Stats | null>(null)
   const [pedidos, setPedidos] = useState<Pedido[]>([])
   const [productos, setProductos] = useState<Producto[]>([])
   const [mesas, setMesas] = useState<Mesa[]>([])
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
-    setAdminEmail(localStorage.getItem('adminSession') ?? '')
     Promise.all([
       fetch('/api/data/stats').then(r => r.ok ? r.json() : null).catch(() => null),
       getPedidosActivos(),
@@ -39,10 +37,7 @@ function AdminContent() {
     }).catch(() => {}).finally(() => setLoading(false))
   }, [])
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminSession')
-    router.replace('/admin/login')
-  }
+  const handleLogout = () => { logoutStaff() }
 
   const statCards = stats
     ? [
@@ -69,7 +64,7 @@ function AdminContent() {
               🧑‍💼 Comandero
             </Link>
             <div className="flex items-center gap-2 ml-2 pl-2 border-l border-gray-200">
-              <span className="text-xs text-gray-400 hidden sm:block">{adminEmail}</span>
+              <span className="text-xs text-gray-400 hidden sm:block">{session?.nombre}</span>
               <button onClick={handleLogout} className="text-sm bg-red-50 text-red-600 px-3 py-2 rounded-xl font-medium hover:bg-red-100 transition-colors">
                 Salir
               </button>
@@ -142,6 +137,13 @@ function AdminContent() {
             <div>
               <h3 className="font-bold">Historial y caja</h3>
               <p className="text-sm text-gray-500">Pedidos del día · Cierre de caja</p>
+            </div>
+          </Link>
+          <Link href="/admin/personal" className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+            <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-2xl">🧑‍🤝‍🧑</div>
+            <div>
+              <h3 className="font-bold">Personal</h3>
+              <p className="text-sm text-gray-500">Cuentas de camareros y cocina</p>
             </div>
           </Link>
         </div>

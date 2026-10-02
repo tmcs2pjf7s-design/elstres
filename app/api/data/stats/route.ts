@@ -1,7 +1,10 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { pool } from '@/lib/db'
+import { requireRole, isSessionPayload } from '@/lib/session'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const session = await requireRole(req, ['admin'])
+  if (!isSessionPayload(session)) return session
   try {
     const { rows } = await pool.query(`
       SELECT

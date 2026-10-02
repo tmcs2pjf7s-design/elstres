@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pool } from '@/lib/db'
+import { requireRole, isSessionPayload } from '@/lib/session'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const session = await requireRole(req, ['admin', 'cocina'])
+  if (!isSessionPayload(session)) return session
   try {
     const { rows } = await pool.query('SELECT * FROM impresoras ORDER BY created_at')
     return NextResponse.json(rows)
@@ -12,6 +15,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await requireRole(req, ['admin'])
+  if (!isSessionPayload(session)) return session
   try {
     const imp = await req.json()
     if (imp.id) {

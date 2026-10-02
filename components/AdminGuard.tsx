@@ -8,10 +8,13 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
   const router = useRouter()
 
   useEffect(() => {
-    const session = localStorage.getItem('adminSession')
-    if (session) setOk(true)
-    else router.replace('/admin/login')
-    setChecked(true)
+    fetch('/api/auth/me')
+      .then(res => {
+        if (res.ok) setOk(true)
+        else router.replace('/admin/login')
+      })
+      .catch(() => router.replace('/admin/login'))
+      .finally(() => setChecked(true))
   }, [router])
 
   if (!checked) {

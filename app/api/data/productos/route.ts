@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pool } from '@/lib/db'
+import { requireRole, isSessionPayload } from '@/lib/session'
 
 function parseProducto(row: any) {
   return {
@@ -27,6 +28,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await requireRole(req, ['admin'])
+  if (!isSessionPayload(session)) return session
   try {
     const p = await req.json()
     if (p.id) {

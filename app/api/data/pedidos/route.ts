@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pool } from '@/lib/db'
+import { requireRole, isSessionPayload } from '@/lib/session'
 
 function parsePedido(row: any) {
   return {
@@ -12,7 +13,9 @@ function parsePedido(row: any) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const session = await requireRole(req, ['admin', 'camarero', 'cocina'])
+  if (!isSessionPayload(session)) return session
   try {
     const { rows } = await pool.query(`
       SELECT p.*,

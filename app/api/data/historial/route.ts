@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pool } from '@/lib/db'
+import { requireRole, isSessionPayload } from '@/lib/session'
 
 export async function GET(req: NextRequest) {
+  // admin usa esto para el historial; camarero lo usa desde /comandero para
+  // calcular la cuenta del día (incluye pedidos ya entregados de la mesa).
+  const session = await requireRole(req, ['admin', 'camarero'])
+  if (!isSessionPayload(session)) return session
   const { searchParams } = new URL(req.url)
   const fecha = searchParams.get('fecha') ?? new Date().toISOString().slice(0, 10)
 

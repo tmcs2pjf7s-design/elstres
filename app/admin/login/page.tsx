@@ -1,9 +1,16 @@
 'use client'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function AdminLoginPage() {
+const LANDING: Record<string, string> = {
+  admin: '/admin',
+  camarero: '/comandero',
+  cocina: '/cocina',
+}
+
+function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -14,16 +21,16 @@ export default function AdminLoginPage() {
     setError('')
     setSubmitting(true)
     try {
-      const res = await fetch('/api/admin/login', {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       })
+      const data = await res.json()
       if (res.ok) {
-        localStorage.setItem('adminSession', email)
-        router.replace('/admin')
+        const next = searchParams.get('next')
+        router.replace(next || LANDING[data.rol] || '/admin')
       } else {
-        const data = await res.json()
         setError(data.error ?? 'Credenciales incorrectas')
       }
     } catch {
@@ -65,5 +72,13 @@ export default function AdminLoginPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   )
 }

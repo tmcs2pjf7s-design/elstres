@@ -49,10 +49,10 @@ export default function CookiesContent() {
                     <td className="p-3 border border-line">{t('cookies.table.sessionUntilClose')}</td>
                   </tr>
                   <tr className="bg-ink">
-                    <td className="p-3 border border-line font-mono">adminSession</td>
-                    <td className="p-3 border border-line">{t('cookies.table.localStorage')}</td>
+                    <td className="p-3 border border-line font-mono">staff_session</td>
+                    <td className="p-3 border border-line">{t('cookies.table.technicalCookie')}</td>
                     <td className="p-3 border border-line">{t('cookies.table.adminSessionPurpose')}</td>
-                    <td className="p-3 border border-line">{t('cookies.table.sessionUntilClose')}</td>
+                    <td className="p-3 border border-line">{t('cookies.table.staffSessionDuration')}</td>
                   </tr>
                   <tr>
                     <td className="p-3 border border-line font-mono">__next_*</td>

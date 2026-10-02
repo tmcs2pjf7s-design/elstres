@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getMesas, getPedidosActivos, getPedidosDelDia, getCategorias, getProductos, createPedido, updateEstadoPedido, updateMesaEstado } from '@/lib/data'
 import { Mesa, Pedido, EstadoPedido, Categoria, Producto } from '@/lib/types'
 import PedidoCard from '@/components/PedidoCard'
+import { useStaffSession, logoutStaff } from '@/lib/useStaffSession'
 
 type Vista = 'mesas' | 'pedidos' | 'nueva-comanda' | 'cuenta'
 
@@ -21,6 +22,7 @@ function beep(freq: number, dur: number) {
 }
 
 export default function ComanderoPage() {
+  const session = useStaffSession()
   const [mesas, setMesas] = useState<Mesa[]>([])
   const [pedidos, setPedidos] = useState<Pedido[]>([])
   const [pedidosHoy, setPedidosHoy] = useState<Pedido[]>([])
@@ -167,12 +169,12 @@ export default function ComanderoPage() {
   return (
     <div className="min-h-screen bg-cream">
       <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/admin" className="text-gray-400 text-sm font-medium">← Admin</Link>
-            <span className="font-black text-lg">🧑‍💼 Comandero</span>
+        <div className="max-w-2xl mx-auto px-4 min-h-14 py-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/admin" className="text-gray-400 text-sm font-medium hidden sm:inline">← Admin</Link>
+            <span className="font-black text-base sm:text-lg">🧑‍💼 Comandero</span>
           </div>
-          <div className="flex gap-1">
+          <div className="flex items-center gap-1 flex-wrap justify-end">
             <button onClick={() => setVista('mesas')}
               className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${vista === 'mesas' ? 'bg-accent text-white' : 'bg-gray-100 text-gray-600'}`}>
               🪑 Mesas
@@ -181,6 +183,12 @@ export default function ComanderoPage() {
               className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${vista === 'pedidos' && !mesaSel ? 'bg-accent text-white' : 'bg-gray-100 text-gray-600'}`}>
               📋 Pedidos
             </button>
+            <div className="flex items-center gap-2 ml-1 pl-2 border-l border-gray-200">
+              <span className="text-xs text-gray-400 hidden md:block">{session?.nombre}</span>
+              <button onClick={() => logoutStaff()} className="text-xs bg-red-50 text-red-600 px-2.5 py-1.5 rounded-lg font-medium hover:bg-red-100 transition-colors">
+                Salir
+              </button>
+            </div>
           </div>
         </div>
       </header>

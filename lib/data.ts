@@ -1,4 +1,4 @@
-import { Categoria, Producto, Mesa, Pedido, EstadoPedido, CartItem, Impresora } from './types'
+import { Categoria, Producto, Mesa, Pedido, EstadoPedido, CartItem, Impresora, Usuario, StaffRol } from './types'
 import { mockCategorias, mockProductos, mockMesas, mockPedidos } from './mockData'
 
 const BASE = '/api/data'
@@ -124,5 +124,34 @@ export async function upsertImpresora(imp: Partial<Impresora> & { nombre: string
 export async function deleteImpresora(id: string): Promise<void> {
   try {
     await fetch(`${BASE}/impresoras/${id}`, { method: 'DELETE' })
+  } catch {}
+}
+
+export async function getPersonal(): Promise<Usuario[]> {
+  return (await get<Usuario[]>('/personal')) ?? []
+}
+
+export async function createPersonal(data: { nombre: string; email: string; telefono?: string; password: string; rol: StaffRol }): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const res = await fetch(`${BASE}/personal`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    const body = await res.json()
+    if (!res.ok) return { ok: false, error: body.error }
+    return { ok: true }
+  } catch {
+    return { ok: false, error: 'Error de conexión' }
+  }
+}
+
+export async function setPersonalActivo(id: string, activo: boolean): Promise<void> {
+  try {
+    await fetch(`${BASE}/personal/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ activo }),
+    })
   } catch {}
 }
