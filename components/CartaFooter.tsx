@@ -36,6 +36,7 @@ export default function CartaFooter() {
             Parc de les Nacions Unides, 18, local<br />
             08225 Terrassa, Barcelona
           </address>
+          <p className="text-sand/70 text-[11px] mt-1">{t('menu.plannedHoursLabel')} · {t('menu.hours')}</p>
           <a
             href="https://maps.google.com/?q=Parc+de+les+Nacions+Unides+18+Terrassa"
             target="_blank"

@@ -22,7 +22,7 @@ export default function MenuPortada() {
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-amber flex-shrink-0" />
-            <span className="text-parchment text-sm font-bold">{t('menu.openLabel')} · {t('menu.hours')}</span>
+            <span className="text-parchment text-sm font-bold">{t('menu.openLabel')}</span>
           </div>
           <LanguageSwitcher variant="dark" />
         </div>
