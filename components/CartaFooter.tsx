@@ -9,10 +9,8 @@ export default function CartaFooter() {
     <footer className="border-t border-line mt-8 pt-6 text-sand text-xs">
       {/* Dirección */}
       <div>
-        <div className="flex items-center justify-between gap-3 mb-2">
-          <p className="text-parchment font-semibold uppercase tracking-wider">{t('home.footer.whereTitle')}</p>
-          <a href="tel:930042165" className="text-amber font-semibold normal-case tracking-normal">📞 930 042 165</a>
-        </div>
+        <p className="text-parchment font-semibold uppercase tracking-wider mb-2">{t('home.footer.whereTitle')}</p>
+        <a href="tel:930042165" className="block mb-2 text-amber font-semibold">📞 930 042 165</a>
         <address className="not-italic leading-relaxed">
           Passeig de Lluís Muncunill, 9, local 6<br />
           08225 Terrassa, Barcelona
