@@ -50,6 +50,8 @@ export default function CartaFooter() {
 
       {/* Legal */}
       <div className="flex items-center gap-3 mt-6 pt-5 border-t border-line">
+        <Link href="/alergenos" className="text-amber font-semibold hover:underline">{t('menu.portada.allergensLink')}</Link>
+        <span className="text-line">·</span>
         <Link href="/privacidad" className="hover:text-parchment transition-colors">{t('home.footer.privacy')}</Link>
         <span className="text-line">·</span>
         <Link href="/cookies" className="hover:text-parchment transition-colors">{t('home.footer.cookies')}</Link>
