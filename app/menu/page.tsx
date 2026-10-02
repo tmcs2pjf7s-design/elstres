@@ -116,15 +116,19 @@ export default function MenuPage() {
                   <p className="text-gray-400 text-xs mt-0.5 line-clamp-2 leading-relaxed">{p.descripcion}</p>
                 )}
                 {p.variantes ? (
-                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-0.5 mt-1">
+                  <div className="flex gap-1.5 mt-1.5 flex-wrap">
                     {p.variantes.map(v => (
-                      <p key={v.nombre} className="text-accent font-black text-base">
-                        {v.precio.toFixed(2)}€<span className="text-gray-400 font-semibold text-xs ml-1">{v.nombre}</span>
-                      </p>
+                      <span key={v.nombre} className="text-xs bg-forest/10 text-accent px-2 py-0.5 rounded-lg font-semibold">
+                        {v.nombre} {v.precio.toFixed(2)}€
+                      </span>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-accent font-black text-base mt-1">{p.precio.toFixed(2)}€</p>
+                  <div className="mt-1.5">
+                    <span className="text-xs bg-forest/10 text-accent px-2 py-0.5 rounded-lg font-semibold">
+                      {p.precio.toFixed(2)}€
+                    </span>
+                  </div>
                 )}
                 <AllergenBadges codigos={p.alergenos} className="mt-1.5" />
               </div>
