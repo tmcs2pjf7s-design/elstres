@@ -8,7 +8,7 @@ export const LOCALES: { code: Locale; label: string }[] = [
 
 export const translations: Record<Locale, Record<string, string>> = {
   es: {
-    'home.nav.menu': 'Menú',
+    'home.nav.menu': 'Carta',
     'home.llevarBadge': 'Para llevar · Próximamente',
     'home.hero.badge': 'Bienvenidos',
     'home.hero.subtitle1': 'Frankfurts, bocadillos y tapas al momento.',
@@ -43,7 +43,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'home.footer.suplementos': 'Suplementos',
 
     'menu.back': '← Inicio',
-    'menu.title': 'Menú',
+    'menu.title': 'Carta',
     'menu.scrollLeft': 'Ver categorías anteriores',
     'menu.scrollRight': 'Ver más categorías',
 
@@ -258,7 +258,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'privacidad.footerLink': 'Política de Cookies',
   },
   ca: {
-    'home.nav.menu': 'Menú',
+    'home.nav.menu': 'Carta',
     'home.llevarBadge': 'Per emportar · Properament',
     'home.hero.badge': 'Benvinguts',
     'home.hero.subtitle1': 'Frankfurts, entrepans i tapes al moment.',
