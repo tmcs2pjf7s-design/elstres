@@ -89,6 +89,10 @@ export default function CategoriaPage({ params }: { params: { categoria: string 
             </div>
           ))
         )}
+
+        {categoria?.nombre === 'Cervezas' && (
+          <p className="text-sand/60 text-[11px] leading-relaxed mt-6">{t('menu.terraceSurcharge')}</p>
+        )}
       </main>
 
       <div className="sticky bottom-0 bg-surface border-t border-line px-4 py-3.5">
