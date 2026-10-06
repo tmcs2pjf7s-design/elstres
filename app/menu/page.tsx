@@ -36,7 +36,7 @@ export default function MenuPortada() {
         </span>
 
         {/* Tagline */}
-        <p className="text-parchment text-[17px] font-medium leading-[1.4] mt-5 max-w-sm mx-auto text-center whitespace-pre-line">
+        <p className="text-parchment text-[13px] sm:text-base font-medium leading-[1.4] mt-5 text-center whitespace-pre-line">
           {t('menu.portada.tagline')}
         </p>
 
