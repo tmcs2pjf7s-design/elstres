@@ -26,17 +26,14 @@ export default function CartaFooter() {
         </a>
 
         <div className="mt-4 pt-4 border-t border-line">
-          <p className="text-parchment/90 font-semibold mb-1 flex items-center gap-1.5">
+          <p className="text-parchment/90 font-semibold mb-1">
             {t('home.footer.location2Name')}
-            <span className="bg-amber/15 text-amber text-[10px] font-semibold px-1.5 py-0.5 rounded-full normal-case tracking-normal">
-              {t('home.footer.comingSoon')}
-            </span>
           </p>
           <address className="not-italic leading-relaxed">
             Parc de les Nacions Unides, 18, local<br />
             08225 Terrassa, Barcelona
           </address>
-          <p className="text-sand/70 text-[11px] mt-1">{t('menu.plannedHoursLabel')} · {t('menu.hours')}</p>
+          <p className="text-sand/70 text-[11px] mt-1">{t('menu.openLabel')} · {t('menu.hours')}</p>
           <a
             href="https://maps.google.com/?q=Parc+de+les+Nacions+Unides+18+Terrassa"
             target="_blank"

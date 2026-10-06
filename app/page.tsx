@@ -2,7 +2,6 @@
 import Link from 'next/link'
 import { useLanguage } from '@/context/LanguageContext'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
-import IntroCanRoca from '@/components/IntroCanRoca'
 
 const HERO_IMAGES = [
   { src: '/hero/hero-bocadillo.jpg', alt: 'Bocadillo de calamares con mayonesa' },
@@ -22,8 +21,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-ink font-sans">
-      <IntroCanRoca />
-
       {/* Navbar */}
       <nav className="fixed top-0 inset-x-0 bg-ink/95 backdrop-blur-md border-b border-line z-40">
         <div className="max-w-6xl mx-auto px-4 min-h-14 py-2 flex items-center justify-between gap-2">
@@ -197,11 +194,8 @@ export default function Home() {
               </a>
 
               <div className="mt-4 pt-4 border-t border-line">
-                <p className="text-parchment/90 text-xs font-semibold mb-1 flex items-center gap-1.5">
+                <p className="text-parchment/90 text-xs font-semibold mb-1">
                   {t('home.footer.location2Name')}
-                  <span className="bg-amber/15 text-amber text-[10px] font-semibold px-1.5 py-0.5 rounded-full normal-case tracking-normal">
-                    {t('home.footer.comingSoon')}
-                  </span>
                 </p>
                 <address className="not-italic text-sand text-xs leading-relaxed">
                   Parc de les Nacions Unides, 18, local<br />
