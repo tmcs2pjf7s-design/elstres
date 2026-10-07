@@ -184,14 +184,24 @@ export default function Home() {
                 Passeig de Lluís Muncunill, 9, local 6<br />
                 08225 Terrassa, Barcelona
               </address>
-              <a
-                href="https://maps.google.com/?q=Passeig+de+Lluís+Muncunill+9+Terrassa"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-2 text-xs text-amber hover:underline"
-              >
-                {t('home.footer.mapsLink')}
-              </a>
+              <div className="flex items-center gap-3 mt-2">
+                <a
+                  href="https://maps.google.com/?q=Passeig+de+Lluís+Muncunill+9+Terrassa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-amber hover:underline"
+                >
+                  {t('home.footer.mapsLink')}
+                </a>
+                <a
+                  href="https://www.instagram.com/frankfurt_els_tr3s/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-amber hover:underline"
+                >
+                  {t('home.footer.instagramLink')}
+                </a>
+              </div>
 
               <div className="mt-4 pt-4 border-t border-line">
                 <p className="text-parchment/90 text-xs font-semibold mb-1">
@@ -201,14 +211,24 @@ export default function Home() {
                   Parc de les Nacions Unides, 18, local<br />
                   08225 Terrassa, Barcelona
                 </address>
-                <a
-                  href="https://maps.google.com/?q=Parc+de+les+Nacions+Unides+18+Terrassa"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-2 text-xs text-amber hover:underline"
-                >
-                  {t('home.footer.mapsLink')}
-                </a>
+                <div className="flex items-center gap-3 mt-2">
+                  <a
+                    href="https://maps.google.com/?q=Parc+de+les+Nacions+Unides+18+Terrassa"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-amber hover:underline"
+                  >
+                    {t('home.footer.mapsLink')}
+                  </a>
+                  <a
+                    href="https://www.instagram.com/elstr3scanroca/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-amber hover:underline"
+                  >
+                    {t('home.footer.instagramLink')}
+                  </a>
+                </div>
               </div>
             </div>
             {/* Legal */}
