@@ -146,6 +146,13 @@ function AdminContent() {
               <p className="text-sm text-gray-500">Cuentas de camareros y cocina</p>
             </div>
           </Link>
+          <Link href="/admin/contenidos" className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex items-center gap-4">
+            <div className="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center text-2xl">🎁</div>
+            <div>
+              <h3 className="font-bold">Sorteos y promociones</h3>
+              <p className="text-sm text-gray-500">Gestiona lo que ven los clientes</p>
+            </div>
+          </Link>
         </div>
 
         {/* Pedidos activos */}

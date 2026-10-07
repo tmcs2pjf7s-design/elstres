@@ -9,6 +9,8 @@ export const LOCALES: { code: Locale; label: string }[] = [
 export const translations: Record<Locale, Record<string, string>> = {
   es: {
     'home.nav.menu': 'Carta',
+    'home.nav.sorteos': 'Sorteos',
+    'home.nav.promociones': 'Promociones',
     'home.llevarBadge': 'Para llevar · Próximamente',
     'home.hero.badge': 'Bienvenidos',
     'home.hero.subtitle1': 'Frankfurts, bocadillos y tapas al momento.',
@@ -58,6 +60,14 @@ export const translations: Record<Locale, Record<string, string>> = {
     'menu.categoria.back': 'Volver',
     'menu.todo.title': 'Toda la carta',
     'menu.categoria.items': 'productos',
+
+    'sorteos.title': 'Sorteos',
+    'sorteos.subtitle': 'Participa en nuestros sorteos y gana premios de la casa.',
+    'sorteos.empty': 'No hay ningún sorteo activo ahora mismo. Síguenos en Instagram para no perderte el próximo.',
+    'promociones.title': 'Promociones',
+    'promociones.subtitle': 'Nuestras ofertas y promociones del momento.',
+    'promociones.empty': 'No hay ninguna promoción activa ahora mismo. Síguenos en Instagram para no perdértelas.',
+    'contenido.moreInfo': 'Más información →',
 
     'alergeno.GLU': 'Gluten',
     'alergeno.CRU': 'Crustáceos',
@@ -272,6 +282,8 @@ export const translations: Record<Locale, Record<string, string>> = {
   },
   ca: {
     'home.nav.menu': 'Carta',
+    'home.nav.sorteos': 'Sortejos',
+    'home.nav.promociones': 'Promocions',
     'home.llevarBadge': 'Per emportar · Properament',
     'home.hero.badge': 'Benvinguts',
     'home.hero.subtitle1': 'Frankfurts, entrepans i tapes al moment.',
@@ -321,6 +333,14 @@ export const translations: Record<Locale, Record<string, string>> = {
     'menu.categoria.back': 'Tornar',
     'menu.todo.title': 'Tota la carta',
     'menu.categoria.items': 'productes',
+
+    'sorteos.title': 'Sortejos',
+    'sorteos.subtitle': 'Participa en els nostres sortejos i guanya premis de la casa.',
+    'sorteos.empty': 'No hi ha cap sorteig actiu ara mateix. Segueix-nos a Instagram per no perdre\'t el proper.',
+    'promociones.title': 'Promocions',
+    'promociones.subtitle': 'Les nostres ofertes i promocions del moment.',
+    'promociones.empty': 'No hi ha cap promoció activa ara mateix. Segueix-nos a Instagram per no perdre-te-les.',
+    'contenido.moreInfo': 'Més informació →',
 
     'alergeno.GLU': 'Gluten',
     'alergeno.CRU': 'Crustacis',
@@ -535,6 +555,8 @@ export const translations: Record<Locale, Record<string, string>> = {
   },
   en: {
     'home.nav.menu': 'Menu',
+    'home.nav.sorteos': 'Giveaways',
+    'home.nav.promociones': 'Offers',
     'home.llevarBadge': 'Takeaway · Coming soon',
     'home.hero.badge': 'Welcome',
     'home.hero.subtitle1': 'Frankfurters, sandwiches and tapas made fresh.',
@@ -584,6 +606,14 @@ export const translations: Record<Locale, Record<string, string>> = {
     'menu.categoria.back': 'Back',
     'menu.todo.title': 'Full menu',
     'menu.categoria.items': 'items',
+
+    'sorteos.title': 'Giveaways',
+    'sorteos.subtitle': 'Enter our giveaways and win prizes on the house.',
+    'sorteos.empty': 'No active giveaways right now. Follow us on Instagram so you don\'t miss the next one.',
+    'promociones.title': 'Offers',
+    'promociones.subtitle': 'Our current deals and offers.',
+    'promociones.empty': 'No active offers right now. Follow us on Instagram so you don\'t miss them.',
+    'contenido.moreInfo': 'More info →',
 
     'alergeno.GLU': 'Gluten',
     'alergeno.CRU': 'Crustaceans',

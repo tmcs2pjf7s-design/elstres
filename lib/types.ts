@@ -1,3 +1,16 @@
+export type ContenidoTipo = 'sorteo' | 'promocion'
+
+export interface Contenido {
+  id: string
+  tipo: ContenidoTipo
+  titulo: string
+  descripcion: string
+  enlace?: string
+  activo: boolean
+  orden: number
+  created_at: string
+}
+
 export interface Categoria {
   id: string
   nombre: string

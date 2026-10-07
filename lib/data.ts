@@ -1,4 +1,4 @@
-import { Categoria, Producto, Mesa, Pedido, EstadoPedido, CartItem, Impresora, Usuario, StaffRol } from './types'
+import { Categoria, Producto, Mesa, Pedido, EstadoPedido, CartItem, Impresora, Usuario, StaffRol, Contenido, ContenidoTipo } from './types'
 import { mockCategorias, mockProductos, mockMesas, mockPedidos } from './mockData'
 
 const BASE = '/api/data'
@@ -153,5 +153,40 @@ export async function setPersonalActivo(id: string, activo: boolean): Promise<vo
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ activo }),
     })
+  } catch {}
+}
+
+export async function getContenidos(tipo: ContenidoTipo, soloActivos = true): Promise<Contenido[]> {
+  return (await get<Contenido[]>(`/contenidos?tipo=${tipo}&activos=${soloActivos}`)) ?? []
+}
+
+export async function createContenido(data: { tipo: ContenidoTipo; titulo: string; descripcion?: string; enlace?: string; orden?: number }): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const res = await fetch(`${BASE}/contenidos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    const body = await res.json()
+    if (!res.ok) return { ok: false, error: body.error }
+    return { ok: true }
+  } catch {
+    return { ok: false, error: 'Error de conexión' }
+  }
+}
+
+export async function updateContenido(id: string, data: Partial<Pick<Contenido, 'titulo' | 'descripcion' | 'enlace' | 'activo' | 'orden'>>): Promise<void> {
+  try {
+    await fetch(`${BASE}/contenidos/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+  } catch {}
+}
+
+export async function deleteContenido(id: string): Promise<void> {
+  try {
+    await fetch(`${BASE}/contenidos/${id}`, { method: 'DELETE' })
   } catch {}
 }

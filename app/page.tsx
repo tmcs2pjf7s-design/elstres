@@ -23,15 +23,27 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-ink font-sans">
       {/* Navbar */}
       <nav className="fixed top-0 inset-x-0 bg-ink/95 backdrop-blur-md border-b border-line z-40">
-        <div className="max-w-6xl mx-auto px-4 min-h-14 py-2 flex items-center justify-between gap-2">
-          <span className="font-bold text-base sm:text-xl text-parchment tracking-tight truncate">Frankfurt Els Tr3s</span>
-          <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <div className="max-w-6xl mx-auto px-4 min-h-14 py-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+          <span className="font-bold text-sm sm:text-xl text-parchment tracking-tight truncate">Frankfurt Els Tr3s</span>
+          <div className="flex flex-wrap items-center justify-end gap-0.5 sm:gap-2">
             <LanguageSwitcher />
             <Link
               href="/menu"
-              className="text-sm text-sand hover:text-parchment font-medium px-2.5 sm:px-3 py-2 rounded-xl hover:bg-surface transition-colors"
+              className="text-xs sm:text-sm text-sand hover:text-parchment font-medium px-1.5 sm:px-3 py-2 rounded-xl hover:bg-surface transition-colors"
             >
               {t('home.nav.menu')}
+            </Link>
+            <Link
+              href="/sorteos"
+              className="text-xs sm:text-sm text-sand hover:text-parchment font-medium px-1.5 sm:px-3 py-2 rounded-xl hover:bg-surface transition-colors"
+            >
+              {t('home.nav.sorteos')}
+            </Link>
+            <Link
+              href="/promociones"
+              className="text-xs sm:text-sm text-sand hover:text-parchment font-medium px-1.5 sm:px-3 py-2 rounded-xl hover:bg-surface transition-colors"
+            >
+              {t('home.nav.promociones')}
             </Link>
             <span
               className="hidden sm:inline-block text-sm bg-surface border border-line text-sand px-4 py-2 rounded-xl font-semibold cursor-not-allowed select-none"
