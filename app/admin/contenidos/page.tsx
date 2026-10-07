@@ -15,7 +15,7 @@ function ContenidosContent() {
   const [items, setItems] = useState<Contenido[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState({ titulo: '', descripcion: '', enlace: '' })
+  const [form, setForm] = useState({ titulo: '', descripcion: '', enlace: '', imagen: '' })
   const [creating, setCreating] = useState(false)
   const [formError, setFormError] = useState('')
 
@@ -33,7 +33,7 @@ function ContenidosContent() {
     setCreating(true)
     const res = await createContenido({ tipo, ...form })
     if (res.ok) {
-      setForm({ titulo: '', descripcion: '', enlace: '' })
+      setForm({ titulo: '', descripcion: '', enlace: '', imagen: '' })
       setShowForm(false)
       cargar(tipo)
     } else {
@@ -105,6 +105,13 @@ function ContenidosContent() {
                   placeholder="https://instagram.com/p/..."
                   className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-accent" />
               </div>
+              <div>
+                <label className="block text-xs font-semibold mb-1 text-gray-500">Imagen (ruta u URL, opcional)</label>
+                <input type="text" value={form.imagen}
+                  onChange={e => setForm(f => ({ ...f, imagen: e.target.value }))}
+                  placeholder="/sorteos/mi-flyer.png"
+                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-accent" />
+              </div>
 
               {formError && <p className="text-red-500 text-sm bg-red-50 rounded-xl px-4 py-3">{formError}</p>}
 
@@ -137,6 +144,10 @@ function ContenidosContent() {
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm divide-y divide-gray-50">
             {items.map(item => (
               <div key={item.id} className="flex flex-wrap items-start gap-x-4 gap-y-2 px-5 py-4">
+                {item.imagen && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={item.imagen} alt="" className="w-14 h-14 rounded-lg object-cover flex-shrink-0" />
+                )}
                 <div className="flex-1 min-w-[180px]">
                   <p className="font-bold text-sm">{item.titulo}</p>
                   {item.descripcion && <p className="text-xs text-gray-500 mt-0.5 whitespace-pre-line">{item.descripcion}</p>}

@@ -160,7 +160,7 @@ export async function getContenidos(tipo: ContenidoTipo, soloActivos = true): Pr
   return (await get<Contenido[]>(`/contenidos?tipo=${tipo}&activos=${soloActivos}`)) ?? []
 }
 
-export async function createContenido(data: { tipo: ContenidoTipo; titulo: string; descripcion?: string; enlace?: string; orden?: number }): Promise<{ ok: boolean; error?: string }> {
+export async function createContenido(data: { tipo: ContenidoTipo; titulo: string; descripcion?: string; enlace?: string; imagen?: string; orden?: number }): Promise<{ ok: boolean; error?: string }> {
   try {
     const res = await fetch(`${BASE}/contenidos`, {
       method: 'POST',
@@ -175,7 +175,7 @@ export async function createContenido(data: { tipo: ContenidoTipo; titulo: strin
   }
 }
 
-export async function updateContenido(id: string, data: Partial<Pick<Contenido, 'titulo' | 'descripcion' | 'enlace' | 'activo' | 'orden'>>): Promise<void> {
+export async function updateContenido(id: string, data: Partial<Pick<Contenido, 'titulo' | 'descripcion' | 'enlace' | 'imagen' | 'activo' | 'orden'>>): Promise<void> {
   try {
     await fetch(`${BASE}/contenidos/${id}`, {
       method: 'PATCH',

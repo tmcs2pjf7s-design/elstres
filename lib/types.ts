@@ -6,6 +6,7 @@ export interface Contenido {
   titulo: string
   descripcion: string
   enlace?: string
+  imagen?: string
   activo: boolean
   orden: number
   created_at: string

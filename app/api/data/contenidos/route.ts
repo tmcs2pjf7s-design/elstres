@@ -36,14 +36,14 @@ export async function POST(req: NextRequest) {
   const session = await requireRole(req, ['admin'])
   if (!isSessionPayload(session)) return session
   try {
-    const { tipo, titulo, descripcion, enlace, orden } = await req.json()
+    const { tipo, titulo, descripcion, enlace, imagen, orden } = await req.json()
     if (!TIPOS.includes(tipo) || !titulo) {
       return NextResponse.json({ error: 'Faltan datos' }, { status: 400 })
     }
     const { rows } = await pool.query(
-      `INSERT INTO contenidos (tipo, titulo, descripcion, enlace, orden)
-       VALUES ($1,$2,$3,$4,$5) RETURNING *`,
-      [tipo, titulo, descripcion ?? '', enlace || null, orden ?? 0]
+      `INSERT INTO contenidos (tipo, titulo, descripcion, enlace, imagen, orden)
+       VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
+      [tipo, titulo, descripcion ?? '', enlace || null, imagen || null, orden ?? 0]
     )
     return NextResponse.json(rows[0])
   } catch (e) {

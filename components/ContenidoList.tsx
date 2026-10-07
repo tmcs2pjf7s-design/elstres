@@ -54,17 +54,23 @@ export default function ContenidoList({ tipo, titleKey, subtitleKey, emptyKey, t
         ) : (
           <div className="space-y-3">
             {items.map(item => (
-              <div key={item.id} className="bg-surface rounded-2xl border border-line p-5">
-                <h3 className="text-parchment font-bold text-base leading-snug">{item.titulo}</h3>
-                {item.descripcion && (
-                  <p className="text-sand text-sm mt-1.5 leading-relaxed whitespace-pre-line">{item.descripcion}</p>
+              <div key={item.id} className="bg-surface rounded-2xl border border-line overflow-hidden">
+                {item.imagen && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={item.imagen} alt={item.titulo} className="w-full h-auto block" />
                 )}
-                {item.enlace && (
-                  <a href={item.enlace} target="_blank" rel="noopener noreferrer"
-                    className="inline-block mt-3 text-amber text-sm font-semibold hover:underline">
-                    {t('contenido.moreInfo')}
-                  </a>
-                )}
+                <div className="p-5">
+                  <h3 className="text-parchment font-bold text-base leading-snug">{item.titulo}</h3>
+                  {item.descripcion && (
+                    <p className="text-sand text-sm mt-1.5 leading-relaxed whitespace-pre-line">{item.descripcion}</p>
+                  )}
+                  {item.enlace && (
+                    <a href={item.enlace} target="_blank" rel="noopener noreferrer"
+                      className="inline-block mt-3 text-amber text-sm font-semibold hover:underline">
+                      {t('contenido.moreInfo')}
+                    </a>
+                  )}
+                </div>
               </div>
             ))}
           </div>

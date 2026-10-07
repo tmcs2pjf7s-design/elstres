@@ -9,7 +9,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const body = await req.json()
     const fields: string[] = []
     const values: any[] = []
-    for (const key of ['titulo', 'descripcion', 'enlace', 'activo', 'orden']) {
+    for (const key of ['titulo', 'descripcion', 'enlace', 'imagen', 'activo', 'orden']) {
       if (key in body) {
         values.push(body[key])
         fields.push(`${key} = $${values.length}`)
