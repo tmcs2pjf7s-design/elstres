@@ -69,6 +69,22 @@ export default function MenuPortada() {
           {t('menu.portada.viewAll')}
         </Link>
 
+        {/* Sorteos y promociones */}
+        <div className="grid grid-cols-2 gap-3 mt-3">
+          <Link
+            href="/sorteos"
+            className="h-11 rounded-full border-2 border-amber text-amber font-semibold text-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
+          >
+            🎁 {t('home.nav.sorteos')}
+          </Link>
+          <Link
+            href="/promociones"
+            className="h-11 rounded-full border-2 border-amber text-amber font-semibold text-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
+          >
+            🏷️ {t('home.nav.promociones')}
+          </Link>
+        </div>
+
         <div className="flex-1 min-h-6" />
 
         <CartaFooter />
