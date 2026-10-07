@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import jsQR from 'jsqr'
 import { buscarTarjeta, anadirSello, canjearPremio } from '@/lib/data'
 import { TarjetaFidelidad, SELLOS_PARA_PREMIO } from '@/lib/types'
 
@@ -13,14 +14,10 @@ export default function FidelidadScannerPage() {
   const [mensaje, setMensaje] = useState('')
   const [accionando, setAccionando] = useState(false)
   const [escaneando, setEscaneando] = useState(false)
-  const [soportaEscaneo, setSoportaEscaneo] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const rafRef = useRef<number>()
-
-  useEffect(() => {
-    setSoportaEscaneo(typeof window !== 'undefined' && 'BarcodeDetector' in window)
-  }, [])
 
   const buscar = useCallback(async (codigo: string) => {
     const cod = codigo.trim().toUpperCase()
@@ -46,6 +43,7 @@ export default function FidelidadScannerPage() {
   }, [])
 
   const iniciarCamara = async () => {
+    setMensaje('')
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
       streamRef.current = stream
@@ -54,18 +52,23 @@ export default function FidelidadScannerPage() {
         await videoRef.current.play()
       }
       setEscaneando(true)
-      const BarcodeDetectorCtor = (window as any).BarcodeDetector
-      const detector = new BarcodeDetectorCtor({ formats: ['qr_code'] })
-      const tick = async () => {
-        if (!videoRef.current) return
-        try {
-          const codes = await detector.detect(videoRef.current)
-          if (codes.length > 0) {
+      const canvas = canvasRef.current
+      const ctx = canvas?.getContext('2d', { willReadFrequently: true })
+      const tick = () => {
+        const video = videoRef.current
+        if (!video || !canvas || !ctx) return
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          canvas.width = video.videoWidth
+          canvas.height = video.videoHeight
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+          const frame = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const code = jsQR(frame.data, frame.width, frame.height, { inversionAttempts: 'dontInvert' })
+          if (code?.data) {
             detenerCamara()
-            buscar(codes[0].rawValue)
+            buscar(code.data)
             return
           }
-        } catch {}
+        }
         rafRef.current = requestAnimationFrame(tick)
       }
       rafRef.current = requestAnimationFrame(tick)
@@ -122,6 +125,7 @@ export default function FidelidadScannerPage() {
       <main className="max-w-lg mx-auto px-5 py-6">
         {!tarjeta ? (
           <>
+            <canvas ref={canvasRef} className="hidden" />
             {escaneando ? (
               <div className="rounded-2xl overflow-hidden bg-black relative mb-4">
                 <video ref={videoRef} className="w-full aspect-square object-cover" muted playsInline />
@@ -130,15 +134,11 @@ export default function FidelidadScannerPage() {
                   Cancelar
                 </button>
               </div>
-            ) : soportaEscaneo ? (
+            ) : (
               <button onClick={iniciarCamara}
                 className="w-full bg-accent text-white py-4 rounded-2xl font-bold text-base hover:bg-accent-dark transition-colors mb-4">
                 📷 Escanear código QR
               </button>
-            ) : (
-              <p className="text-xs text-gray-400 mb-4 text-center">
-                Tu navegador no soporta escaneo de QR aquí — introduce el código a mano.
-              </p>
             )}
 
             <form onSubmit={e => { e.preventDefault(); buscar(codigoInput) }} className="flex gap-2">
