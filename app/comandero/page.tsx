@@ -183,6 +183,10 @@ export default function ComanderoPage() {
               className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${vista === 'pedidos' && !mesaSel ? 'bg-accent text-white' : 'bg-gray-100 text-gray-600'}`}>
               📋 Pedidos
             </button>
+            <Link href="/comandero/fidelidad"
+              className="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200">
+              ☕ Fidelidad
+            </Link>
             <div className="flex items-center gap-2 ml-1 pl-2 border-l border-gray-200">
               <span className="text-xs text-gray-400 hidden md:block">{session?.nombre}</span>
               <button onClick={() => logoutStaff()} className="text-xs bg-red-50 text-red-600 px-2.5 py-1.5 rounded-lg font-medium hover:bg-red-100 transition-colors">

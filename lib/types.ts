@@ -11,6 +11,17 @@ export interface Contenido {
   created_at: string
 }
 
+export const SELLOS_PARA_PREMIO = 10
+
+export interface TarjetaFidelidad {
+  id: string
+  cliente_id: string
+  codigo: string
+  sellos: number
+  premios_canjeados: number
+  cliente_nombre?: string
+}
+
 export interface Categoria {
   id: string
   nombre: string

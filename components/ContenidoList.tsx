@@ -11,9 +11,10 @@ interface Props {
   titleKey: string
   subtitleKey: string
   emptyKey: string
+  topContent?: React.ReactNode
 }
 
-export default function ContenidoList({ tipo, titleKey, subtitleKey, emptyKey }: Props) {
+export default function ContenidoList({ tipo, titleKey, subtitleKey, emptyKey, topContent }: Props) {
   const { t } = useLanguage()
   const [items, setItems] = useState<Contenido[]>([])
   const [loaded, setLoaded] = useState(false)
@@ -33,6 +34,8 @@ export default function ContenidoList({ tipo, titleKey, subtitleKey, emptyKey }:
 
       <main className="max-w-lg mx-auto w-full px-4 py-6 flex-1">
         <p className="text-sand text-sm leading-relaxed mb-6">{t(subtitleKey)}</p>
+
+        {topContent}
 
         {!loaded ? (
           <div className="space-y-3">

@@ -1,4 +1,4 @@
-import { Categoria, Producto, Mesa, Pedido, EstadoPedido, CartItem, Impresora, Usuario, StaffRol, Contenido, ContenidoTipo } from './types'
+import { Categoria, Producto, Mesa, Pedido, EstadoPedido, CartItem, Impresora, Usuario, StaffRol, Contenido, ContenidoTipo, TarjetaFidelidad } from './types'
 import { mockCategorias, mockProductos, mockMesas, mockPedidos } from './mockData'
 
 const BASE = '/api/data'
@@ -189,4 +189,59 @@ export async function deleteContenido(id: string): Promise<void> {
   try {
     await fetch(`${BASE}/contenidos/${id}`, { method: 'DELETE' })
   } catch {}
+}
+
+export async function getMiTarjeta(clienteId: string): Promise<TarjetaFidelidad | null> {
+  try {
+    const res = await fetch(`${BASE}/fidelidad/mi-tarjeta`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cliente_id: clienteId }),
+    })
+    if (!res.ok) return null
+    return res.json()
+  } catch {
+    return null
+  }
+}
+
+export async function buscarTarjeta(codigo: string): Promise<TarjetaFidelidad | { error: string }> {
+  try {
+    const res = await fetch(`${BASE}/fidelidad/buscar?codigo=${encodeURIComponent(codigo)}`)
+    const body = await res.json()
+    if (!res.ok) return { error: body.error ?? 'Error' }
+    return body
+  } catch {
+    return { error: 'Error de conexión' }
+  }
+}
+
+export async function anadirSello(codigo: string): Promise<TarjetaFidelidad | { error: string }> {
+  try {
+    const res = await fetch(`${BASE}/fidelidad/sello`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codigo }),
+    })
+    const body = await res.json()
+    if (!res.ok) return { error: body.error ?? 'Error' }
+    return body
+  } catch {
+    return { error: 'Error de conexión' }
+  }
+}
+
+export async function canjearPremio(codigo: string): Promise<TarjetaFidelidad | { error: string }> {
+  try {
+    const res = await fetch(`${BASE}/fidelidad/canjear`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codigo }),
+    })
+    const body = await res.json()
+    if (!res.ok) return { error: body.error ?? 'Error' }
+    return body
+  } catch {
+    return { error: 'Error de conexión' }
+  }
 }
