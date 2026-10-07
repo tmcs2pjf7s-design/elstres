@@ -7,22 +7,39 @@ import { useLanguage } from '@/context/LanguageContext'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import CartaFooter from '@/components/CartaFooter'
 
+interface Cliente { id: string; nombre: string; email: string; telefono: string }
+
 export default function MenuPortada() {
   const { t } = useLanguage()
   const [categorias, setCategorias] = useState<Categoria[]>([])
+  const [cliente, setCliente] = useState<Cliente | null>(null)
 
   useEffect(() => {
     getCategorias().then(cats => setCategorias(cats.filter(c => c.tipo !== 'suplemento')))
+    try {
+      const saved = localStorage.getItem('clienteSession')
+      if (saved) setCliente(JSON.parse(saved))
+    } catch {}
   }, [])
 
   return (
     <div className="min-h-screen bg-ink flex flex-col font-sans">
       <div className="max-w-lg mx-auto w-full flex-1 flex flex-col px-6 py-6">
         {/* Fila superior */}
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
+          <div className="flex items-center gap-2 min-w-0 max-w-full">
             <span className="w-2.5 h-2.5 rounded-full bg-amber flex-shrink-0" />
-            <span className="text-parchment text-sm font-bold">{t('menu.openLabel')}</span>
+            <span className="text-parchment text-sm font-bold whitespace-nowrap">{t('menu.openLabel')}</span>
+            <span className="text-line flex-shrink-0">·</span>
+            {cliente ? (
+              <Link href="/promociones" className="text-amber text-sm font-semibold truncate hover:underline">
+                👤 {cliente.nombre}
+              </Link>
+            ) : (
+              <Link href="/promociones" className="text-amber text-sm font-semibold whitespace-nowrap hover:underline">
+                {t('common.loginShort')}
+              </Link>
+            )}
           </div>
           <LanguageSwitcher variant="dark" />
         </div>
