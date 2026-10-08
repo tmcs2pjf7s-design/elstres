@@ -2,11 +2,44 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { getMesas, getPedidosActivos, getPedidosDelDia, getCategorias, getProductos, createPedido, updateEstadoPedido, updateMesaEstado } from '@/lib/data'
-import { Mesa, Pedido, EstadoPedido, Categoria, Producto } from '@/lib/types'
+import { Mesa, Pedido, EstadoPedido, Categoria, Producto, Variante } from '@/lib/types'
+import { CATEGORIAS_TPV, CATEGORIAS_BD_CUBIERTAS, COLOR, CAT_MOD_LABEL, GrupoMods, ModTpv, claveProducto, colorBoton, indexarProductos, modsDeGrupo } from '@/lib/comanderoTpv'
 import PedidoCard from '@/components/PedidoCard'
 import { useStaffSession, logoutStaff } from '@/lib/useStaffSession'
 
 type Vista = 'mesas' | 'pedidos' | 'nueva-comanda' | 'cuenta'
+
+// Una línea de la comanda: mismo producto + formato + modificadores se agrupan.
+interface LineaComanda {
+  key: string
+  label: string
+  producto: Producto
+  variante?: Variante
+  mods: string[]
+  qty: number
+}
+
+// Botón de la botonera TPV, ya resuelto contra los productos de la BD.
+interface BotonResuelto {
+  key: string
+  label: string
+  formato?: string
+  color: string
+  grupo?: GrupoMods
+  producto?: Producto
+  variante?: Variante
+}
+
+const precioLinea = (l: { producto: Producto; variante?: Variante }) => Number(l.variante?.precio ?? l.producto.precio)
+
+// Botones por variante: Viena/Flauta toman su color TPV, el resto el de la categoría.
+function botonesDeProducto(p: Producto, color: string, grupo?: GrupoMods): BotonResuelto[] {
+  if (!p.variantes?.length) return [{ key: p.id, label: p.nombre, color, grupo, producto: p }]
+  return p.variantes.map(v => ({
+    key: `${p.id}|${v.nombre}`, label: p.nombre, formato: v.nombre, grupo, producto: p, variante: v,
+    color: v.nombre === 'Flauta' || v.nombre === 'Viena' ? colorBoton({ formato: v.nombre }, color) : color,
+  }))
+}
 
 function beep(freq: number, dur: number) {
   try {
@@ -31,7 +64,8 @@ export default function ComanderoPage() {
   const [vista, setVista] = useState<Vista>('mesas')
   const [mesaSel, setMesaSel] = useState<Mesa | null>(null)
   const [cat, setCat] = useState('')
-  const [carrito, setCarrito] = useState<{ producto: Producto; qty: number }[]>([])
+  const [carrito, setCarrito] = useState<LineaComanda[]>([])
+  const [popup, setPopup] = useState<{ boton: BotonResuelto; mods: string[] } | null>(null)
   const [enviando, setEnviando] = useState(false)
   const [hora, setHora] = useState(new Date())
   const idsConocidos = useRef<Set<string>>(new Set())
@@ -55,13 +89,13 @@ export default function ComanderoPage() {
   }, [])
 
   useEffect(() => {
-    Promise.all([getMesas(), getPedidosActivos(), getCategorias(), getProductos()])
+    Promise.all([getMesas(), getPedidosActivos(), getCategorias(), getProductos({ incluirSoloComandero: true })])
       .then(([ms, ps, cats, prods]) => {
         setMesas(ms)
         setPedidos(ps)
         setCategorias(cats)
         setProductos(prods)
-        if (cats.length) setCat(cats[0].id)
+        setCat(CATEGORIAS_TPV[0].id)
         ps.forEach(p => {
           idsConocidos.current.add(p.id)
           estadosConocidos.current.set(p.id, p.estado)
@@ -133,20 +167,37 @@ export default function ComanderoPage() {
     return ok
   }
 
-  const agregarCarrito = (p: Producto) => {
-    setCarrito(prev => {
-      const found = prev.find(i => i.producto.id === p.id)
-      return found
-        ? prev.map(i => i.producto.id === p.id ? { ...i, qty: i.qty + 1 } : i)
-        : [...prev, { producto: p, qty: 1 }]
-    })
+  const agregarLinea = (b: BotonResuelto, mods: string[]) => {
+    if (!b.producto) return
+    const producto = b.producto
+    const key = [producto.id, b.variante?.nombre ?? '', ...mods].join('|')
+    setCarrito(prev => prev.some(l => l.key === key)
+      ? prev.map(l => l.key === key ? { ...l, qty: l.qty + 1 } : l)
+      : [...prev, { key, label: b.label, producto, variante: b.variante, mods, qty: 1 }])
   }
+
+  const cambiarQty = (key: string, delta: number) =>
+    setCarrito(prev => prev.map(l => l.key === key ? { ...l, qty: l.qty + delta } : l).filter(l => l.qty > 0))
+
+  const pulsarBoton = (b: BotonResuelto) => {
+    if (b.grupo) setPopup({ boton: b, mods: [] })
+    else agregarLinea(b, [])
+  }
+
+  const toggleMod = (nombre: string) =>
+    setPopup(prev => prev && {
+      ...prev,
+      mods: prev.mods.includes(nombre) ? prev.mods.filter(m => m !== nombre) : [...prev.mods, nombre],
+    })
 
   const enviarComanda = async () => {
     if (!mesaSel || carrito.length === 0) return
     setEnviando(true)
     try {
-      const items = carrito.map(i => ({ producto: i.producto, cantidad: i.qty, variante: undefined as undefined }))
+      const items = carrito.map(l => ({
+        producto: l.producto, cantidad: l.qty, variante: l.variante,
+        notas: l.mods.length ? l.mods.join(', ') : undefined,
+      }))
       await createPedido('mesa', items, { mesa_id: mesaSel.id })
       // El servidor marca la mesa como 'ocupada' al crear el pedido; reflejarlo también aquí
       setMesas(prev => prev.map(m => m.id === mesaSel.id ? { ...m, estado: 'ocupada' } : m))
@@ -160,8 +211,41 @@ export default function ComanderoPage() {
     }
   }
 
-  const productosFiltrados = productos.filter(p => p.disponible && p.categoria_id === cat)
-  const totalCarrito = carrito.reduce((s, i) => s + Number(i.producto.variantes?.[0]?.precio ?? i.producto.precio) * i.qty, 0)
+  // ── Botonera TPV ──────────────────────────────────────────
+  // Pestañas: las del Excel primero y después las categorías de la BD que
+  // no cubren (bebidas, cervezas, postres...).
+  const nombreCategoria = (id: string) => categorias.find(c => c.id === id)?.nombre
+  const idxProductos = indexarProductos(productos, nombreCategoria)
+  const tpvActiva = CATEGORIAS_TPV.find(c => c.id === cat)
+  const pestanasBD = categorias.filter(c => !CATEGORIAS_BD_CUBIERTAS.has(c.nombre))
+
+  const idsEnTpv = new Set<string>()
+  const botonesTpv = new Map(CATEGORIAS_TPV.map(c => [c.id, c.botones.map((b, i): BotonResuelto => {
+    const producto = idxProductos.get(claveProducto(b.categoriaBD, b.productoBD))
+    if (producto) idsEnTpv.add(producto.id)
+    return {
+      key: `${c.id}-${i}`, label: b.label, formato: b.formato,
+      color: colorBoton(b, c.color), grupo: b.grupo ?? c.grupo, producto,
+      variante: b.formato ? producto?.variantes?.find(v => v.nombre === b.formato) : undefined,
+    }
+  })]))
+
+  const botones: BotonResuelto[] = tpvActiva
+    ? botonesTpv.get(tpvActiva.id) ?? []
+    : productos.filter(p => p.categoria_id === cat).flatMap(p => botonesDeProducto(p, COLOR.otros))
+  // Productos de la carta que el Excel no lista: se añaden al final de su pestaña
+  const botonesOtros: BotonResuelto[] = tpvActiva
+    ? productos
+        .filter(p => !idsEnTpv.has(p.id) && tpvActiva.otrosDe.includes(nombreCategoria(p.categoria_id) ?? ''))
+        .flatMap(p => botonesDeProducto(p, COLOR.otros, tpvActiva.grupo))
+    : []
+
+  const qtyEnComanda = (b: BotonResuelto) => carrito
+    .filter(l => l.producto.id === b.producto?.id && l.variante?.nombre === b.variante?.nombre)
+    .reduce((s, l) => s + l.qty, 0)
+
+  const modsPopup = popup?.boton.grupo ? modsDeGrupo(popup.boton.grupo) : null
+  const totalCarrito = carrito.reduce((s, l) => s + precioLinea(l) * l.qty, 0)
   const itemsCarrito = carrito.reduce((s, i) => s + i.qty, 0)
 
   const mesaLabel = (m: Mesa) => m.tipo === 'barra' ? `🍺 Barra ${m.numero}` : `Mesa ${m.numero}`
@@ -497,43 +581,79 @@ export default function ComanderoPage() {
               </h2>
             </div>
             <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-3 mb-4">
-              {categorias.map(c => (
+              {CATEGORIAS_TPV.map(c => (
+                <button key={c.id} onClick={() => setCat(c.id)}
+                  style={cat === c.id ? undefined : { backgroundColor: c.color }}
+                  className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap ${cat === c.id ? 'bg-accent text-white' : 'text-gray-800'}`}>
+                  {c.icono} {c.nombre}
+                </button>
+              ))}
+              {pestanasBD.map(c => (
                 <button key={c.id} onClick={() => setCat(c.id)}
                   className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap ${cat === c.id ? 'bg-accent text-white' : 'bg-gray-100 text-gray-600'}`}>
                   {c.icono} {c.nombre}
                 </button>
               ))}
             </div>
-            <div className="space-y-2">
-              {productosFiltrados.map(p => {
-                const qty = carrito.find(i => i.producto.id === p.id)?.qty ?? 0
-                const precio = Number(p.variantes?.[0]?.precio ?? p.precio)
-                return (
-                  <div key={p.id} className="bg-white rounded-xl px-4 py-3 border border-gray-100 flex items-center gap-3">
+
+            {carrito.length > 0 && (
+              <div className="bg-white rounded-xl border border-gray-100 mb-4 divide-y divide-gray-50">
+                {carrito.map(l => (
+                  <div key={l.key} className="px-3 py-2 flex items-center gap-3">
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm truncate">{p.nombre}</p>
-                      <p className="text-accent text-sm font-bold">
-                        {precio.toFixed(2)}€{p.variantes ? <span className="text-gray-400 font-normal text-xs"> +vars</span> : ''}
+                      <p className="text-sm font-semibold truncate">
+                        {l.label}{l.variante && <span className="text-gray-400 font-normal"> · {l.variante.nombre}</span>}
                       </p>
+                      {l.mods.length > 0 && <p className="text-xs text-gray-500">{l.mods.join(', ')}</p>}
                     </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      {qty > 0 && (
-                        <>
-                          <button onClick={() => setCarrito(prev => prev.map(i => i.producto.id === p.id ? { ...i, qty: i.qty - 1 } : i).filter(i => i.qty > 0))}
-                            className="w-8 h-8 rounded-full border-2 border-gray-200 text-gray-600 flex items-center justify-center font-bold active:scale-90 transition-transform">−</button>
-                          <span className="w-5 text-center font-black text-sm">{qty}</span>
-                        </>
-                      )}
-                      <button onClick={() => agregarCarrito(p)}
-                        className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center font-bold active:scale-90 transition-transform">+</button>
+                    <span className="text-xs font-bold text-accent flex-shrink-0">{(precioLinea(l) * l.qty).toFixed(2)}€</span>
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                      <button onClick={() => cambiarQty(l.key, -1)}
+                        className="w-7 h-7 rounded-full border-2 border-gray-200 text-gray-600 flex items-center justify-center font-bold active:scale-90 transition-transform">−</button>
+                      <span className="w-5 text-center font-black text-sm">{l.qty}</span>
+                      <button onClick={() => cambiarQty(l.key, 1)}
+                        className="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center font-bold active:scale-90 transition-transform">+</button>
                     </div>
                   </div>
-                )
-              })}
-            </div>
+                ))}
+              </div>
+            )}
+
+            <BotoneraTpv botones={botones} qty={qtyEnComanda} onPulsar={pulsarBoton} />
+            {botonesOtros.length > 0 && (
+              <>
+                <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mt-5 mb-2">Otros de la carta</p>
+                <BotoneraTpv botones={botonesOtros} qty={qtyEnComanda} onPulsar={pulsarBoton} />
+              </>
+            )}
           </div>
         )}
       </main>
+
+      {popup && modsPopup && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-end sm:items-center justify-center" onClick={() => setPopup(null)}>
+          <div className="bg-white w-full max-w-2xl rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="p-4 border-b border-gray-100 flex items-center gap-3">
+              <div className="flex-1 min-w-0">
+                <p className="font-black text-base truncate">
+                  {popup.boton.label}{popup.boton.formato && <span className="text-gray-400 font-semibold"> · {popup.boton.formato}</span>}
+                </p>
+                <p className="text-xs text-gray-500 truncate">
+                  {popup.mods.length ? popup.mods.join(', ') : 'Sin modificaciones'}
+                </p>
+              </div>
+              <button onClick={() => setPopup(null)}
+                className="px-3 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600">Cancelar</button>
+              <button onClick={() => { agregarLinea(popup.boton, popup.mods); setPopup(null) }}
+                className="px-4 py-2 rounded-xl text-sm font-bold bg-accent text-white">Añadir</button>
+            </div>
+            <div className="overflow-y-auto p-4 space-y-4">
+              <ModsSeccion titulo="CON" mods={modsPopup.con} seleccion={popup.mods} onToggle={toggleMod} />
+              <ModsSeccion titulo="SIN" mods={modsPopup.sin} seleccion={popup.mods} onToggle={toggleMod} />
+            </div>
+          </div>
+        </div>
+      )}
 
       {vista === 'nueva-comanda' && carrito.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-gray-50 to-transparent">
@@ -546,6 +666,70 @@ export default function ComanderoPage() {
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function BotoneraTpv({ botones, qty, onPulsar }: {
+  botones: BotonResuelto[]
+  qty: (b: BotonResuelto) => number
+  onPulsar: (b: BotonResuelto) => void
+}) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+      {botones.map(b => {
+        const activo = !!b.producto?.disponible
+        const n = qty(b)
+        return (
+          <button key={b.key} onClick={() => onPulsar(b)} disabled={!activo}
+            style={{ backgroundColor: b.color }}
+            className="relative text-left rounded-xl px-3 py-2.5 min-h-[64px] border border-black/5 text-gray-900 active:scale-95 transition-transform disabled:opacity-40 disabled:active:scale-100">
+            <p className="font-bold text-sm leading-tight">{b.label}</p>
+            <p className="text-xs text-gray-600 mt-0.5">
+              {b.formato && <span className="font-semibold">{b.formato} · </span>}
+              {!b.producto ? 'No disponible' : !activo ? 'Agotado' : `${Number(b.variante?.precio ?? b.producto.precio).toFixed(2)}€`}
+            </p>
+            {n > 0 && (
+              <span className="absolute top-1.5 right-1.5 min-w-6 h-6 px-1.5 rounded-full bg-accent text-white text-xs font-black flex items-center justify-center">{n}</span>
+            )}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function ModsSeccion({ titulo, mods, seleccion, onToggle }: {
+  titulo: string
+  mods: ModTpv[]
+  seleccion: string[]
+  onToggle: (nombre: string) => void
+}) {
+  const grupos = Object.entries(CAT_MOD_LABEL)
+    .map(([cat, label]) => ({ label, mods: mods.filter(m => m.cat === cat) }))
+    .filter(g => g.mods.length)
+  return (
+    <div>
+      <p className="font-black text-sm mb-2">{titulo}</p>
+      <div className="space-y-3">
+        {grupos.map(g => (
+          <div key={g.label}>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-gray-400 mb-1.5">{g.label}</p>
+            <div className="flex flex-wrap gap-1.5">
+              {g.mods.map(m => {
+                const sel = seleccion.includes(m.nombre)
+                return (
+                  <button key={m.id} onClick={() => onToggle(m.nombre)}
+                    style={{ backgroundColor: m.color }}
+                    className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold text-gray-900 border transition-transform active:scale-95 ${sel ? 'border-gray-900 ring-2 ring-gray-900' : 'border-black/5'}`}>
+                    {sel && '✓ '}{m.nombre}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

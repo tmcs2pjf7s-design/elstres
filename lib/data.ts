@@ -27,8 +27,11 @@ export async function getCategorias(): Promise<Categoria[]> {
   return (await get<Categoria[]>('/categorias')) ?? mockCategorias
 }
 
-export async function getProductos(): Promise<Producto[]> {
-  return (await get<Producto[]>('/productos')) ?? mockProductos
+// Por defecto excluye los productos solo_comandero para que la carta del
+// cliente no los muestre. El comandero y el admin piden { incluirSoloComandero: true }.
+export async function getProductos(opts: { incluirSoloComandero?: boolean } = {}): Promise<Producto[]> {
+  const productos = (await get<Producto[]>('/productos')) ?? mockProductos
+  return opts.incluirSoloComandero ? productos : productos.filter(p => !p.solo_comandero)
 }
 
 export async function getMesas(): Promise<Mesa[]> {

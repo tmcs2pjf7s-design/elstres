@@ -64,7 +64,8 @@ export async function POST(req: NextRequest) {
         `INSERT INTO pedido_items (pedido_id, producto_id, cantidad, precio, notas)
          VALUES ($1,$2,$3,$4,$5)`,
         [pedido.id, item.producto.id, item.cantidad,
-         item.variante?.precio ?? item.producto.precio, item.variante?.nombre ?? null]
+         item.variante?.precio ?? item.producto.precio,
+         [item.variante?.nombre, item.notas].filter(Boolean).join(' · ') || null]
       )
     }
     if (tipo === 'mesa' && mesa_id) {

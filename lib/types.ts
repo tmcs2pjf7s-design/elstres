@@ -42,6 +42,7 @@ export interface Producto {
   tiempo_prep: number
   variantes?: Variante[]
   alergenos?: string[]
+  solo_comandero?: boolean
 }
 
 export type StaffRol = 'admin' | 'camarero' | 'cocina'

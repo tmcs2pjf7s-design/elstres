@@ -22,7 +22,7 @@ function AdminMenuContent() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    Promise.all([getCategorias(), getProductos()]).then(([cats, prods]) => {
+    Promise.all([getCategorias(), getProductos({ incluirSoloComandero: true })]).then(([cats, prods]) => {
       setCategorias(cats)
       setProductos(prods)
     })
@@ -41,7 +41,7 @@ function AdminMenuContent() {
     setSaving(true)
     const data = editando ? { ...form, id: editando.id } : form
     await upsertProducto(data as Producto)
-    const prods = await getProductos()
+    const prods = await getProductos({ incluirSoloComandero: true })
     setProductos(prods)
     cancelar()
     setSaving(false)
@@ -178,7 +178,10 @@ function AdminMenuContent() {
                 return (
                   <tr key={p.id} className={`border-b border-gray-50 ${!p.disponible ? 'opacity-50' : ''}`}>
                     <td className="px-5 py-3">
-                      <p className="font-semibold">{p.nombre}</p>
+                      <p className="font-semibold">
+                        {p.nombre}
+                        {p.solo_comandero && <span className="ml-2 text-[10px] font-bold uppercase bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Solo comandero</span>}
+                      </p>
                       <p className="text-gray-400 text-xs line-clamp-1">{p.descripcion}</p>
                     </td>
                     <td className="px-5 py-3 text-gray-500 hidden sm:table-cell">{cat?.icono} {cat?.nombre}</td>
