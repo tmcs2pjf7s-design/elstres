@@ -10,13 +10,16 @@ const STAFF_ROLES: StaffRol[] = ['admin', 'camarero', 'cocina']
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json()
+    const body = await req.json()
+    const email = typeof body.email === 'string' ? body.email.trim() : ''
+    const password = body.password
     if (!email || !password) {
       return NextResponse.json({ error: 'Credenciales incorrectas' }, { status: 401 })
     }
 
+    // Sin distinguir mayúsculas: los móviles suelen capitalizar la primera letra
     const { rows } = await pool.query(
-      'SELECT id, nombre, rol, activo, password_hash, salt FROM usuarios WHERE email=$1',
+      'SELECT id, nombre, rol, activo, password_hash, salt FROM usuarios WHERE lower(email)=lower($1)',
       [email]
     )
 

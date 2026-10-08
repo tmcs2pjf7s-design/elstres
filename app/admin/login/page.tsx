@@ -28,8 +28,13 @@ function LoginForm() {
       })
       const data = await res.json()
       if (res.ok) {
+        // Solo se respeta ?next= si el rol puede entrar ahí; si no, un
+        // camarero que llega desde /admin volvería al login en bucle.
         const next = searchParams.get('next')
-        router.replace(next || LANDING[data.rol] || '/admin')
+        const landing = LANDING[data.rol] || '/admin'
+        const nextValido = !!next && next.startsWith('/') && !next.startsWith('//') &&
+          (data.rol === 'admin' || next === landing || next.startsWith(`${landing}/`))
+        router.replace(nextValido ? next : landing)
       } else {
         setError(data.error ?? 'Credenciales incorrectas')
       }
