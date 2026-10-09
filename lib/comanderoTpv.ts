@@ -219,18 +219,18 @@ const uno = (categoriaBD: string, label: string, productoBD = label): BotonTpv =
 export const CATEGORIAS_TPV: CategoriaTpv[] = [
   {
     id: 'tpv-boc-esp', nombre: 'Bocadillos especiales', icono: '🥖', color: COLOR.flauta, grupo: 'bocadillo',
-    otrosDe: ['Bocadillos'],
+    otrosDe: ['Bocadillos Especiales'],
     botones: [
-      ...boc('Bocadillos', 'Apetitoso'),
-      ...boc('Bocadillos', 'Bomba'),
-      ...boc('Bocadillos', 'Capricho'),
-      ...boc('Bocadillos', 'Madrileño'),
-      ...boc('Bocadillos', 'Milanesa'),
-      ...boc('Bocadillos', 'Muntanyes', 'Muntañes'),
-      ...boc('Bocadillos', 'Porquet', 'Cerdito'),
-      ...boc('Bocadillos', 'Submarino'),
-      ...boc('Bocadillos', 'Traidor'),
-      ...boc('Bocadillos', 'Vegetal'),
+      ...boc('Bocadillos Especiales', 'Apetitoso'),
+      ...boc('Bocadillos Especiales', 'Bomba'),
+      ...boc('Bocadillos Especiales', 'Capricho'),
+      ...boc('Bocadillos Especiales', 'Madrileño'),
+      ...boc('Bocadillos Especiales', 'Milanesa'),
+      ...boc('Bocadillos Especiales', 'Muntanyes', 'Muntañes'),
+      ...boc('Bocadillos Especiales', 'Porquet', 'Cerdito'),
+      ...boc('Bocadillos Especiales', 'Submarino'),
+      ...boc('Bocadillos Especiales', 'Traidor'),
+      ...boc('Bocadillos Especiales', 'Vegetal'),
     ],
   },
   {
@@ -271,13 +271,13 @@ export const CATEGORIAS_TPV: CategoriaTpv[] = [
     id: 'tpv-boc-fri', nombre: 'Bocadillos fríos', icono: '🥪', color: COLOR.viena, grupo: 'bocadillo',
     otrosDe: [],
     botones: [
-      ...boc('Bocadillos', 'Atún'),
-      ...boc('Bocadillos', 'Jamón dulce', 'Jamón Dulce'),
-      ...boc('Bocadillos', 'Jamón ibérico', 'Jamón Ibérico'),
-      ...boc('Bocadillos', 'Jamón serrano', 'Jamón Serrano'),
-      ...boc('Bocadillos', 'Longaniza'),
-      ...boc('Bocadillos', 'Pimiento'),
-      ...boc('Bocadillos', 'Queso'),
+      ...boc('Bocadillos Especiales', 'Atún'),
+      ...boc('Bocadillos Especiales', 'Jamón dulce', 'Jamón Dulce'),
+      ...boc('Bocadillos Especiales', 'Jamón ibérico', 'Jamón Ibérico'),
+      ...boc('Bocadillos Especiales', 'Jamón serrano', 'Jamón Serrano'),
+      ...boc('Bocadillos Especiales', 'Longaniza'),
+      ...boc('Bocadillos Especiales', 'Pimiento'),
+      ...boc('Bocadillos Especiales', 'Queso'),
     ],
   },
   {
@@ -330,11 +330,19 @@ export const CATEGORIAS_TPV: CategoriaTpv[] = [
   },
 ]
 
+const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase()
+
+// Nombres antiguos de categorías de la BD → nombre actual
+const ALIAS_CATEGORIA: Record<string, string> = { bocadillos: 'bocadillos especiales' }
+const normCategoria = (s: string) => ALIAS_CATEGORIA[norm(s)] ?? norm(s)
+
 // Categorías de la BD que ya quedan cubiertas por las pestañas TPV.
-export const CATEGORIAS_BD_CUBIERTAS = new Set(CATEGORIAS_TPV.flatMap(c => [
+const CUBIERTAS = new Set(CATEGORIAS_TPV.flatMap(c => [
   ...c.otrosDe,
   ...c.botones.map(b => b.categoriaBD).filter(n => n !== 'Suplementos'),
-]))
+].map(normCategoria)))
+export const categoriaCubierta = (nombre: string) => CUBIERTAS.has(normCategoria(nombre))
+export const mismaCategoria = (a: string, b: string) => normCategoria(a) === normCategoria(b)
 
 export function colorBoton(b: { formato?: Formato; color?: string }, colorCategoria: string): string {
   if (b.color) return b.color
@@ -343,9 +351,7 @@ export function colorBoton(b: { formato?: Formato; color?: string }, colorCatego
   return colorCategoria
 }
 
-const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase()
-
-export const claveProducto = (categoria: string, nombre: string) => `${norm(categoria)}|${norm(nombre)}`
+export const claveProducto = (categoria: string, nombre: string) => `${normCategoria(categoria)}|${norm(nombre)}`
 
 // Índice categoría+nombre → producto para resolver los botones contra la BD.
 export function indexarProductos(productos: Producto[], nombreCategoria: (id: string) => string | undefined) {

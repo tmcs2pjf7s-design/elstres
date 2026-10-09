@@ -1,7 +1,7 @@
 import { Categoria, Producto, Mesa, Pedido } from './types'
 
 export const mockCategorias: Categoria[] = [
-  { id: 'cat-1', nombre: 'Bocadillos', orden: 1, icono: '🥖', tipo: 'normal' },
+  { id: 'cat-1', nombre: 'Bocadillos Especiales', orden: 1, icono: '🥖', tipo: 'normal' },
   { id: 'cat-2', nombre: 'Bocadillos Calientes', orden: 2, icono: '🌭', tipo: 'normal' },
   { id: 'cat-3', nombre: 'Al Plato', orden: 3, icono: '🍽️', tipo: 'normal' },
   { id: 'cat-4', nombre: 'Tapas Calientes', orden: 4, icono: '🍟', tipo: 'normal' },

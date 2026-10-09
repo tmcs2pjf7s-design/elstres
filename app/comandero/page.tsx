@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { getMesas, getPedidosActivos, getPedidosDelDia, getCategorias, getProductos, createPedido, updateEstadoPedido, updateMesaEstado } from '@/lib/data'
 import { Mesa, Pedido, EstadoPedido, Categoria, Producto, Variante } from '@/lib/types'
-import { CATEGORIAS_TPV, CATEGORIAS_BD_CUBIERTAS, COLOR, CAT_MOD_LABEL, GrupoMods, ModTpv, claveProducto, colorBoton, indexarProductos, modsDeGrupo } from '@/lib/comanderoTpv'
+import { CATEGORIAS_TPV, categoriaCubierta, mismaCategoria, COLOR, CAT_MOD_LABEL, GrupoMods, ModTpv, claveProducto, colorBoton, indexarProductos, modsDeGrupo } from '@/lib/comanderoTpv'
 import PedidoCard from '@/components/PedidoCard'
 import InstalarApp from '@/components/InstalarApp'
 import { useStaffSession, logoutStaff } from '@/lib/useStaffSession'
@@ -218,7 +218,7 @@ export default function ComanderoPage() {
   const nombreCategoria = (id: string) => categorias.find(c => c.id === id)?.nombre
   const idxProductos = indexarProductos(productos, nombreCategoria)
   const tpvActiva = CATEGORIAS_TPV.find(c => c.id === cat)
-  const pestanasBD = categorias.filter(c => !CATEGORIAS_BD_CUBIERTAS.has(c.nombre))
+  const pestanasBD = categorias.filter(c => !categoriaCubierta(c.nombre))
 
   const idsEnTpv = new Set<string>()
   const botonesTpv = new Map(CATEGORIAS_TPV.map(c => [c.id, c.botones.map((b, i): BotonResuelto => {
@@ -237,7 +237,7 @@ export default function ComanderoPage() {
   // Productos de la carta que el Excel no lista: se añaden al final de su pestaña
   const botonesOtros: BotonResuelto[] = tpvActiva
     ? productos
-        .filter(p => !idsEnTpv.has(p.id) && tpvActiva.otrosDe.includes(nombreCategoria(p.categoria_id) ?? ''))
+        .filter(p => !idsEnTpv.has(p.id) && tpvActiva.otrosDe.some(n => mismaCategoria(n, nombreCategoria(p.categoria_id) ?? '')))
         .flatMap(p => botonesDeProducto(p, COLOR.otros, tpvActiva.grupo))
     : []
 
